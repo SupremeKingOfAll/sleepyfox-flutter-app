@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "299629767442",
+    "project_id": "elarosgp4",
+    "storage_bucket": "elarosgp4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:299629767442:android:c2657096ae6c8c26c061cb",
+        "android_client_info": {
+          "package_name": "com.example.elaros_gp4"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlRsISKbHjYWBTH1Mj9VPK_Q3hQKxLeGo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
