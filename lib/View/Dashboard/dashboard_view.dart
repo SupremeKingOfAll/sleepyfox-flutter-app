@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'dashboard_viewlist_resources.dart';
 
 class DashboardView extends StatefulWidget {
@@ -10,136 +9,263 @@ class DashboardView extends StatefulWidget {
 }
 
 class _DashboardViewState extends State<DashboardView> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    if (index != 2) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        appBar: AppBar(
-          leading: Icon(
-            Icons.menu,
-            color: const Color.fromARGB(255, 202, 126, 33)
-            ),
-          backgroundColor: const Color.fromARGB(255, 234, 235, 235),
-          title: Text("Dashboard"),
-          actions: [
-            Padding(
-              padding: 
-                EdgeInsets.only(right: 16),
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Text("Sleepy fox"),
-                )
-            )
-          ],
+    return Scaffold(
+      appBar: AppBar(
+        leading: Icon(
+          Icons.menu,
+          color: const Color.fromARGB(255, 202, 126, 33),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              // SLIDING FIRST PART OF DASHBOARD
-              Container(
-                color: Colors.white, // White background
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: const [
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: InfoContainer(
-                          title: 'Sleep Hygiene',
-                          subtitle: 'Sleeping Techniques',
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: InfoContainer(
-                          title: 'Sleep Cycle',
-                          subtitle: 'Deep & REM Sleep',
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: InfoContainer(
-                          title: 'Healthy Habits',
-                          subtitle: 'Better Rest Routine',
-                        ),
-                      ),
-                    ],
+        backgroundColor: const Color.fromARGB(255, 234, 235, 235),
+        title: Text("Dashboard"),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 16),
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Text("Sleepy fox"),
+            ),
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // LOGO+NAME 
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Row(            
+                children: [
+                  Image.asset(
+                    'Assets/SleepyFoxLogo512.png', // Path to your image
+                    width: 40, // Adjust the size as needed
+                    height: 40,
                   ),
-                ),
-              ),
-              
-              // SLEEPYFOX FEATURES PART
-              Container(
-                height: 200, // Fixed height (adjust as needed)
-                color: Colors.red,
-                child: const Center(
-                  child: Text(
-                    'SleepyFox Features',
+                  SizedBox(width: 10), // Space between image and text
+                  Text(
+                    'Ben Smith', // Name text
                     style: TextStyle(
-                      color: Colors.white,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
+                      color: Colors.black,
                     ),
                   ),
+                ],
+              ),
+            ),
+            // SLIDING FIRST PART OF DASHBOARD
+            Container(
+              color: Colors.white,
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: InfoContainer(
+                        title: 'Sleep Hygiene',
+                        subtitle: 'Sleeping Techniques',
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: InfoContainer(
+                        title: 'Sleep Cycle',
+                        subtitle: 'Deep & REM Sleep',
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: InfoContainer(
+                        title: 'Healthy Habits',
+                        subtitle: 'Better Rest Routine',
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              
-              // SLEEP ANALYSIS PART  
-              Container(
-                height: 200,
-                color: Colors.blue,
-                child: const Center(
-                  child: Text(
+            ),
+
+            // SLEEPYFOX FEATURES PART
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Sleepy Fox Features',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.amber,
+                    ),
+                  ),
+                  _featureItem('Manage Profiles'),
+                  _featureItem('Sleep'),
+                  _featureItem('Education'),
+                  _featureItem('Analytics'),
+                  _featureItem('Sleep Tracking'),
+                ],
+              ),
+            ),
+
+            // Sleep Analysis Section
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
                     'Sleep Analysis',
                     style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight:
-        FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-              
-              // LEARN MORE , START TRACKING
-              Container(
-                height: 100,
-                color: Colors.red,
-                child: const Center(
-                  child: Text(
-                    'Learn More, Start Tracking',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
+                      fontSize: 22,
                       fontWeight: FontWeight.bold,
+                      color: Colors.amber,
                     ),
                   ),
+                  SizedBox(height: 10),
+                  Container(
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text('Average Sleep Duration',
+                            style: TextStyle(fontSize: 16, color: Colors.black54)),
+                        SizedBox(height: 5),
+                        Text('7.5 hours',
+                            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                        SizedBox(height: 15),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            _infoBox('Sleep Quality', 'Good'),
+                            _infoBox('Profile', 'Alex', isButton: true),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Buttons Section with SizedBox for proper layout
+            SizedBox(
+              width: double.infinity,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.amber,
+                        minimumSize: Size(double.infinity, 50),
+                      ),
+                      child: Text('Learn More'),
+                    ),
+                    SizedBox(height: 10),
+                    ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        minimumSize: Size(double.infinity, 50),
+                      ),
+                      child: Text('Start Tracking Sleep', style: TextStyle(color: Colors.white)),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: "home",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: "home",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: "home",
             ),
           ],
         ),
       ),
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 8.0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildNavItem(Icons.home, "Home", 0),
+            _buildNavItem(Icons.nightlight_round, "Sleep", 1),
+            const SizedBox(width: 48), // Space for floating button
+            _buildNavItem(Icons.settings, "Settings", 3),
+            _buildNavItem(Icons.logout, "Sign Out", 4),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        backgroundColor: const Color.fromARGB(255, 233, 166, 90),
+        shape: const CircleBorder(),
+        child: Image.asset(
+          "Assets/SleepyFoxLogo512.png",
+          width: 40,
+          height: 40,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+    );
+  }
+
+  Widget _featureItem(String title) {
+    return Card(
+      child: ListTile(
+        title: Text(title, style: TextStyle(fontSize: 16)),
+        trailing: Icon(Icons.arrow_forward_ios, size: 16),
+      ),
+    );
+  }
+
+  Widget _infoBox(String label, String value, {bool isButton = false}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label, style: TextStyle(fontSize: 14, color: Colors.black54)),
+        SizedBox(height: 4),
+        isButton
+            ? ElevatedButton(
+                onPressed: () {},
+                child: Text(value),
+              )
+            : Text(value, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+      ],
+    );
+  }
+
+  Widget _buildNavItem(IconData icon, String label, int index) {
+    return GestureDetector(
+      onTap: () => _onItemTapped(index),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: _selectedIndex == index ? Colors.orange : Colors.black),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              color: _selectedIndex == index ? Colors.orange : Colors.black,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
-
