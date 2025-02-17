@@ -1,4 +1,5 @@
 import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
+import 'package:elaros_gp4/View/Login/welcome_screen_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -19,10 +20,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Firebase App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
+      
       home: const LoginPage(), // Set LoginPage as the home widget
       routes: {
         '/Dashboard': (context) => const DashboardView(),
