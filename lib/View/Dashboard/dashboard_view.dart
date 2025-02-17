@@ -32,52 +32,111 @@ class _DashboardViewState extends State<DashboardView> {
             )
           ],
         ),
-        body: SingleChildScrollView(  // Wrap the entire body in a SingleChildScrollView to make it scrollable
-          child: Column(
-            children: [
-              // SLIDING FIRST PART OF DASHBOARD (Horizontal Scroll)
-              Container(
-                height: 150, // Fixed height for the horizontally scrolling part
-                color: Colors.blue,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                  shrinkWrap: true,  // Ensures the ListView only takes up necessary space
+        body: Column(
+          children: [
+            // SLIDING FIRST PART OF DASHBOARD
+            Expanded(
+              flex: 2,
+              child: Container(
+                color: Colors.white, // White background
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      width: 350,
-                      color: Colors.amber,
+                    // Box 1
+                    Column(
+                      children: [
+                        Container(
+                          width: 100,
+                          height: 65,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300], // Light grey box
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        const SizedBox(height: 8), // Spacing
+                        const Text(
+                          "Label 1",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
                     ),
-                    Container(
-                      width: 350,
+                    const SizedBox(width: 20), // Space between boxes
+        // Box 2
+                    Column(
+                      children: [
+                        Container(
+                          width: 100,
+                          height: 65,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300], // Light grey box
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        const SizedBox(height: 8), // Spacing
+                        const Text(
+                          "Label 2",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
                     ),
-                    Container(
-                      width: 350,
-                      color: Colors.indigoAccent,
+                    const SizedBox(width: 20), // Space between boxes
+                    // Box 3
+                    Column(
+                      children: [
+                        Container(
+                          width: 100,
+                          height: 65,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[300], // Light grey box
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        const SizedBox(height: 8), // Spacing
+                        const Text(
+                          "Label 3",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
-
-              // SLEEPYFOX FEATURES PART (Vertical Scroll)
-              Container(
-                height: 200,  // Height for this part
+            ),
+            // SLEEPYFOX FEATURES PART
+            Expanded(
+              flex: 3,
+              child: Container(
                 color: Colors.red,
               ),
-
-              // SLEEP ANALYSIS PART  
-              Container(
-                height: 150,  // Height for this part
+            ),
+            // SLEEP ANALYSIS PART  
+            Expanded(
+              flex: 2,
+              child: Container(
                 color: Colors.blue,
               ),
-
-              // LEARN MORE, START TRACKING
-              Container(
-                height: 100,  // Height for this part
-                color: Colors.green,
+            ),
+            // LEARN MORE , START TRACKING
+            Expanded(
+              flex: 1,
+              child: Container(
+                color: Colors.red,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
         bottomNavigationBar: BottomNavigationBar(
           items: [
