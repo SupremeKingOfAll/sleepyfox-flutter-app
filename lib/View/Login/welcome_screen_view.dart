@@ -48,7 +48,6 @@ class _WelcomeScreenViewState extends State<WelcomeScreenView> {
               SizedBox(height: 0),
               Container(
                 color: Colors.white10,
-                decoration: DecoratedBox(),
                 child: Column(
                   children: [
                     Text(
