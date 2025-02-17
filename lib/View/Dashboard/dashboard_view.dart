@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'dashboard_viewlist_resources.dart';
 
 class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
@@ -31,111 +33,94 @@ class _DashboardViewState extends State<DashboardView> {
             )
           ],
         ),
-        body: Column(
-          children: [
-            // SLIDING FIRST PART OF DASHBOARD
-            Expanded(
-              flex: 2,
-              child: Container(
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // SLIDING FIRST PART OF DASHBOARD
+              Container(
                 color: Colors.white, // White background
                 padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Box 1
-                    Column(
-                      children: [
-                        Container(
-                          width: 100,
-                          height: 65,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300], // Light grey box
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: const [
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: InfoContainer(
+                          title: 'Sleep Hygiene',
+                          subtitle: 'Sleeping Techniques',
                         ),
-                        const SizedBox(height: 8), // Spacing
-                        const Text(
-                          "Label 1",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                          ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: InfoContainer(
+                          title: 'Sleep Cycle',
+                          subtitle: 'Deep & REM Sleep',
                         ),
-                      ],
-                    ),
-                    const SizedBox(width: 20), // Space between boxes
-        // Box 2
-                    Column(
-                      children: [
-                        Container(
-                          width: 100,
-                          height: 65,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300], // Light grey box
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: InfoContainer(
+                          title: 'Healthy Habits',
+                          subtitle: 'Better Rest Routine',
                         ),
-                        const SizedBox(height: 8), // Spacing
-                        const Text(
-                          "Label 2",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 20), // Space between boxes
-                    // Box 3
-                    Column(
-                      children: [
-                        Container(
-                          width: 100,
-                          height: 65,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[300], // Light grey box
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        const SizedBox(height: 8), // Spacing
-                        const Text(
-                          "Label 3",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            // SLEEPYFOX FEATURES PART
-            Expanded(
-              flex: 3,
-              child: Container(
+              
+              // SLEEPYFOX FEATURES PART
+              Container(
+                height: 200, // Fixed height (adjust as needed)
                 color: Colors.red,
+                child: const Center(
+                  child: Text(
+                    'SleepyFox Features',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
-            ),
-            // SLEEP ANALYSIS PART  
-            Expanded(
-              flex: 2,
-              child: Container(
+              
+              // SLEEP ANALYSIS PART  
+              Container(
+                height: 200,
                 color: Colors.blue,
+                child: const Center(
+                  child: Text(
+                    'Sleep Analysis',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight:
+        FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
-            ),
-            // LEARN MORE , START TRACKING
-            Expanded(
-              flex: 1,
-              child: Container(
+              
+              // LEARN MORE , START TRACKING
+              Container(
+                height: 100,
                 color: Colors.red,
+                child: const Center(
+                  child: Text(
+                    'Learn More, Start Tracking',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         bottomNavigationBar: BottomNavigationBar(
           items: [
