@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class StrokeTextDark extends StatelessWidget {
+class StrokeTextLight extends StatelessWidget {
   final String text;
   final TextStyle textStyle;
 
-  const StrokeTextDark({
+  const StrokeTextLight({
     required this.text,
     required this.textStyle,
   });
@@ -26,7 +26,7 @@ class StrokeTextDark extends StatelessWidget {
         // Fill
         Text(
           text,
-          style: textStyle.copyWith(color: Colors.orange), // Fill color
+          style: textStyle.copyWith(color: Colors.brown), // Fill color
         ),
       ],
     );
