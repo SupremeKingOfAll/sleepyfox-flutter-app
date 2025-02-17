@@ -16,12 +16,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Firebase App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: WelcomeScreenView(), // Set LoginPage as the home widget
-      routes: {},
+      
+      home: DashboardView(),
     );
   }
 }
