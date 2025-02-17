@@ -32,10 +32,12 @@ class LoginPageState extends State<LoginPage> {
       backgroundColor: const Color.fromARGB(255, 249, 217, 130),
       body: Column(
         children: [
-          const SizedBox(height: 200),
+          const SizedBox(height: 100),
+          Image.asset('Assets/SleepyFoxLogo512.png', width: 150, height: 150),
+          const SizedBox(height: 35),
           const Text(
             'Welcome to Sleepy Fox',
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 30),
           ),
           const SizedBox(height: 30),
           Padding(
@@ -47,6 +49,9 @@ class LoginPageState extends State<LoginPage> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
                 ),
+                prefixIcon: Icon(Icons.email),
+                filled: true,
+                fillColor: Colors.white,
               ),
             ),
           ),
@@ -59,19 +64,26 @@ class LoginPageState extends State<LoginPage> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
                 ),
+                prefixIcon: Icon(Icons.lock),
+                filled: true,
+                fillColor: Colors.white,
               ),
               obscureText: true,
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 30),
           ElevatedButton(
             onPressed: _handleLogin,
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(200, 50),
+              side: const BorderSide(color: Colors.black, width: 0.5),
             ),
-            child: const Text('Login'),
+            child: const Text(
+              'Login',
+              style: TextStyle(fontSize: 17),
+            ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 35),
           GestureDetector(
             onTap: () => Navigator.pushReplacementNamed(context, '/Register'),
             child: const Text(
