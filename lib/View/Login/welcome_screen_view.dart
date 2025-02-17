@@ -13,7 +13,36 @@ class _WelcomeScreenViewState extends State<WelcomeScreenView> {
     return  Scaffold(
       body: Column(
         children: [
-
+          Expanded(
+              child: Row(
+            children: [
+              Container(
+                child: Text('Sleepy Fox'),
+              ),
+              Container(
+                child: Text('Sleepy Fox'),
+              ),
+            ],
+          )
+          ),
+          Expanded(
+            child: Container(
+              child: Column(
+                children: [
+                  Text('Quick Quide'),
+                  Container(
+                    child: Text('Quide example'),
+                  ),
+                  Row(
+                    children: [
+                      ElevatedButton(onPressed: (){}, child: Text("Back")),
+                      ElevatedButton(onPressed: (){}, child: Text("Next"))
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
         ],
       ),
       
