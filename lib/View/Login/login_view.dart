@@ -22,7 +22,7 @@ class LoginPageState extends State<LoginPage> {
 
     if (success) {
       if (!mounted) return;
-      Navigator.pushReplacementNamed(context, '/home');
+      Navigator.pushReplacementNamed(context, '/Dashboard');
     }
   }
 
@@ -42,25 +42,38 @@ class LoginPageState extends State<LoginPage> {
             padding: const EdgeInsets.all(20),
             child: TextField(
               controller: _emailController,
-              decoration: const InputDecoration(hintText: 'Email'),
+              decoration: const InputDecoration(
+                hintText: 'Email',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                ),
+              ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(20),
             child: TextField(
               controller: _passwordController,
-              decoration: const InputDecoration(hintText: 'Password'),
+              decoration: const InputDecoration(
+                hintText: 'Password',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                ),
+              ),
               obscureText: true,
             ),
           ),
           const SizedBox(height: 20),
           ElevatedButton(
             onPressed: _handleLogin,
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size(200, 50),
+            ),
             child: const Text('Login'),
           ),
           const SizedBox(height: 20),
           GestureDetector(
-            onTap: () => Navigator.pushReplacementNamed(context, '/sign-up'),
+            onTap: () => Navigator.pushReplacementNamed(context, '/Register'),
             child: const Text(
               'Don\'t have an account? Sign Up',
               style: TextStyle(
