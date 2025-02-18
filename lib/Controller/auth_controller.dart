@@ -17,18 +17,43 @@ class AuthController {
     }
   }
 
+
+
   /// Handles user login
-  Future<bool> loginUser(
-      String email, String password, BuildContext context) async {
+  Future<bool> loginUser(String email, String password, BuildContext context) async {
+    //Checks if email or password is empty BEFORE calling Firebase
+    if (email.trim().isEmpty || password.trim().isEmpty) {
+      _showErrorMessage(context, "Email and password cannot be empty.");
+      return false;
+    }
+
     String? errorMessage = await _authService.login(email, password);
 
     if (errorMessage == null) {
       return true; // Login successful
     } else {
-      _showErrorMessage(context, "Login failed: $errorMessage");
+      final customMessage = _FormatErrorMessage(errorMessage.trim());
+      _showErrorMessage(context, customMessage);
       return false;
     }
   }
+
+
+  String _FormatErrorMessage(String errorCode) {
+    errorCode = errorCode.trim().toLowerCase(); //Ensures proper matching
+
+    switch (errorCode) {
+      case "invalid-email":
+        return "Please enter a valid email address.";
+      case "invalid-credential": // This error code is returned for incorrect email or password
+        return "Incorrect email or password. Please try again.";
+      default:
+        print(" DEBUG: Unhandled Error Code → $errorCode");
+        return "An unexpected error occurred. Please try again.";
+    }
+  }
+
+
 
   /// Shows an error message using Snackbar
   void _showErrorMessage(BuildContext context, String message) {
