@@ -2,6 +2,7 @@ import 'package:elaros_gp4/View/Education/education_view.dart';
 import 'package:elaros_gp4/View/Profiles/select_profile_view.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_guide_stule.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_start_track_style.dart';
+import 'package:elaros_gp4/Widgets/Buttons/logout_function.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dashboard_viewlist_resources.dart';
@@ -17,6 +18,11 @@ class _DashboardViewState extends State<DashboardView> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
+    if(index == 4){
+    setState(() {
+      logout(context);
+    });
+    }
     if (index != 2) {
       setState(() {
         _selectedIndex = index;
@@ -220,7 +226,7 @@ class _DashboardViewState extends State<DashboardView> {
             _buildNavItem(Icons.nightlight_round, "Sleep", 1),
             const SizedBox(width: 48), // Space for floating button
             _buildNavItem(Icons.settings, "Settings", 3),
-            _buildNavItem(Icons.logout, "Sign Out", 4, () => _logout(context)),
+            _buildNavItem(Icons.logout, "Sign Out", 4),
           ],
         ),
       ),
@@ -309,7 +315,7 @@ class _DashboardViewState extends State<DashboardView> {
       child: AnimatedContainer(
         duration: Duration(milliseconds: 300),
         curve: Curves.easeInOut,
-        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: isSelected ? Colors.amber.withOpacity(0.2) : Colors.transparent,
