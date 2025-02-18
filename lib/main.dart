@@ -27,12 +27,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       
-      home: const LoginPage(), // Set LoginPage as the home widget
-      routes: {
-        '/Dashboard': (context) => const DashboardView(),
-        '/Register': (context) => const SignUpPage(),
-        '/Login': (context) => const LoginPage(),
-      },
+      home: const DashboardView(),
     );
   }
 }

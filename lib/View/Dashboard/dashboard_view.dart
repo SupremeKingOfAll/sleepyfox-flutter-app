@@ -1,3 +1,4 @@
+import 'package:elaros_gp4/View/Education/education_view.dart';
 import 'package:flutter/material.dart';
 import 'dashboard_viewlist_resources.dart';
 
@@ -113,11 +114,16 @@ class _DashboardViewState extends State<DashboardView> {
                       color: Colors.amber,
                     ),
                   ),
-                  _featureItem('Manage Profiles'),
-                  _featureItem('Sleep'),
-                  _featureItem('Education'),
-                  _featureItem('Analytics'),
-                  _featureItem('Sleep Tracking'),
+                  _featureItem('Manage Profiles',null), // CHANGE NULL INTO NAVIGATOR PUSH TO THE FILE, education example
+                  _featureItem('Sleep',null),
+                  _featureItem('Education',() {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => EducationView()),
+                      );
+                    }),
+                  _featureItem('Analytics',null),
+                  _featureItem('Sleep Tracking',null),
                 ],
               ),
             ),
@@ -225,11 +231,12 @@ class _DashboardViewState extends State<DashboardView> {
     );
   }
 
-  Widget _featureItem(String title) {
+  Widget _featureItem(String title, VoidCallback? onTap) {
     return Card(
       child: ListTile(
         title: Text(title, style: TextStyle(fontSize: 16)),
         trailing: Icon(Icons.arrow_forward_ios, size: 16),
+        onTap: onTap,
       ),
     );
   }
