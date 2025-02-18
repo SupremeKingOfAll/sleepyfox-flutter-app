@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'View/Login/login_view.dart';
-import 'View/Dashboard/dashboard_view.dart';
 import 'View/Register/register_view.dart';
 
 void main() async {
@@ -27,7 +26,14 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       
-      home: const DashboardView(),
+
+      home: const LoginPage(), // Set LoginPage as the home widget
+      routes: {
+        '/WelcomeView' : (context) => const WelcomeScreenView(),
+        '/Dashboard': (context) => const DashboardView(),
+        '/Register': (context) => const SignUpPage(),
+        '/Login': (context) => const LoginPage(),
+      },
     );
   }
 }
