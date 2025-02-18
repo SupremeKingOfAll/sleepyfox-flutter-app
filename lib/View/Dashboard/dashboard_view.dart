@@ -1,6 +1,8 @@
 import 'package:elaros_gp4/View/Education/education_view.dart';
+import 'package:elaros_gp4/View/Profiles/select_profile_view.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_guide_stule.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_start_track_style.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dashboard_viewlist_resources.dart';
 
@@ -19,6 +21,17 @@ class _DashboardViewState extends State<DashboardView> {
       setState(() {
         _selectedIndex = index;
       });
+    }
+  }
+
+//logout function
+  void _logout(BuildContext context) async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      Navigator.pushReplacementNamed(context, "/Login");
+      print("User logged out");
+    } catch (e) {
+      print("Error logging out: $e");
     }
   }
 
@@ -46,10 +59,10 @@ class _DashboardViewState extends State<DashboardView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // LOGO+NAME 
+            // LOGO+NAME
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Row(            
+              child: Row(
                 children: [
                   Image.asset(
                     'Assets/SleepyFoxLogo512.png', // Path to your image
@@ -116,11 +129,13 @@ class _DashboardViewState extends State<DashboardView> {
                       color: Colors.amber,
                     ),
                   ),
+                  
                   _featureItem('Manage Profiles',null), // CHANGE NULL INTO NAVIGATOR PUSH TO THE FILE, education example
                   _featureItem('Sleep',null),
                   _featureItem('Education', EducationView()),
                   _featureItem('Analytics',null),
                   _featureItem('Sleep Tracking',null),
+
                 ],
               ),
             ),
@@ -150,10 +165,12 @@ class _DashboardViewState extends State<DashboardView> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text('Average Sleep Duration',
-                            style: TextStyle(fontSize: 16, color: Colors.black54)),
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.black54)),
                         SizedBox(height: 5),
                         Text('7.5 hours',
-                            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                            style: TextStyle(
+                                fontSize: 24, fontWeight: FontWeight.bold)),
                         SizedBox(height: 15),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -173,14 +190,19 @@ class _DashboardViewState extends State<DashboardView> {
             SizedBox(
               width: double.infinity,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Column(
                   children: [
                     //Widget is inside ./widget/buttons
-                    GuideButton(text: "LearnMore", onPressed: (){},),
+                    GuideButton(
+                      text: "LearnMore",
+                      onPressed: () {},
+                    ),
                     SizedBox(height: 10),
                     //Widget is inside ./widget/buttons
-                    StartTrackingSleepButton(text: "Start Tracking", onPressed: (){}),
+                    StartTrackingSleepButton(
+                        text: "Start Tracking", onPressed: () {}),
                   ],
                 ),
               ),
@@ -198,7 +220,7 @@ class _DashboardViewState extends State<DashboardView> {
             _buildNavItem(Icons.nightlight_round, "Sleep", 1),
             const SizedBox(width: 48), // Space for floating button
             _buildNavItem(Icons.settings, "Settings", 3),
-            _buildNavItem(Icons.logout, "Sign Out", 4),
+            _buildNavItem(Icons.logout, "Sign Out", 4, () => _logout(context)),
           ],
         ),
       ),
@@ -273,7 +295,8 @@ class _DashboardViewState extends State<DashboardView> {
                 onPressed: () {},
                 child: Text(value),
               )
-            : Text(value, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            : Text(value,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
       ],
     );
   }
