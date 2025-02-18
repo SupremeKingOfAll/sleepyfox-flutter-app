@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       ),
       
 
-      home: const LoginPage(), // Set LoginPage as the home widget
+      home: const DashboardView(), // Set LoginPage as the home widget
       routes: {
         '/WelcomeView' : (context) => const WelcomeScreenView(),
         '/Dashboard': (context) => const DashboardView(),
