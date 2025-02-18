@@ -1,3 +1,5 @@
+import 'package:elaros_gp4/Widgets/Buttons/button_guide_stule.dart';
+import 'package:elaros_gp4/Widgets/Buttons/button_start_track_style.dart';
 import 'package:flutter/material.dart';
 import 'dashboard_viewlist_resources.dart';
 
@@ -173,23 +175,11 @@ class _DashboardViewState extends State<DashboardView> {
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Column(
                   children: [
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.amber,
-                        minimumSize: Size(double.infinity, 50),
-                      ),
-                      child: Text('Learn More'),
-                    ),
+                    //Widget is inside ./widget/buttons
+                    GuideButton(text: "LearnMore", onPressed: (){},),
                     SizedBox(height: 10),
-                    ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        minimumSize: Size(double.infinity, 50),
-                      ),
-                      child: Text('Start Tracking Sleep', style: TextStyle(color: Colors.white)),
-                    ),
+                    //Widget is inside ./widget/buttons
+                    StartTrackingSleepButton(text: "Start Tracking", onPressed: (){}),
                   ],
                 ),
               ),
