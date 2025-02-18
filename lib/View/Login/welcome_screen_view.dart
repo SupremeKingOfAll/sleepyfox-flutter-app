@@ -19,7 +19,9 @@ class _WelcomeScreenViewState extends State<WelcomeScreenView> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: 200,),
+              SizedBox(
+                height: 200,
+              ),
               Container(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -48,7 +50,6 @@ class _WelcomeScreenViewState extends State<WelcomeScreenView> {
               SizedBox(height: 0),
               Container(
                 color: Colors.white10,
-                decoration: DecoratedBox(),
                 child: Column(
                   children: [
                     Text(
