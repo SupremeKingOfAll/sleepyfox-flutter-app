@@ -118,12 +118,7 @@ class _DashboardViewState extends State<DashboardView> {
                   ),
                   _featureItem('Manage Profiles',null), // CHANGE NULL INTO NAVIGATOR PUSH TO THE FILE, education example
                   _featureItem('Sleep',null),
-                  _featureItem('Education',() {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => EducationView()),
-                      );
-                    }),
+                  _featureItem('Education', EducationView()),
                   _featureItem('Analytics',null),
                   _featureItem('Sleep Tracking',null),
                 ],
@@ -221,12 +216,48 @@ class _DashboardViewState extends State<DashboardView> {
     );
   }
 
-  Widget _featureItem(String title, VoidCallback? onTap) {
+    Widget _featureItem(String title, Widget? nextPage) {
     return Card(
-      child: ListTile(
-        title: Text(title, style: TextStyle(fontSize: 16)),
-        trailing: Icon(Icons.arrow_forward_ios, size: 16),
-        onTap: onTap,
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: InkWell(
+        onTap: nextPage != null
+            ? () {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionDuration: Duration(milliseconds: 750),
+                    pageBuilder: (_, __, ___) => nextPage,
+                    transitionsBuilder: (_, animation, __, child) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      );
+                    },
+                  ),
+                );
+              }
+            : null, // Prevents taps if nextPage is null
+        borderRadius: BorderRadius.circular(10),
+        splashColor: nextPage != null ? Colors.amber.withOpacity(0.2) : Colors.transparent,
+        child: Padding(
+          padding: EdgeInsets.all(8),
+          child: ListTile(
+            leading: Hero(
+              tag: title,
+              child: Icon(Icons.star, color: nextPage != null ? Colors.amber : Colors.grey),
+            ),
+            title: Text(
+              title,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: nextPage != null ? Colors.black : Colors.grey,
+              ),
+            ),
+            trailing: Icon(Icons.arrow_forward_ios, size: 16, color: nextPage != null ? Colors.black : Colors.grey),
+          ),
+        ),
       ),
     );
   }
@@ -248,20 +279,49 @@ class _DashboardViewState extends State<DashboardView> {
   }
 
   Widget _buildNavItem(IconData icon, String label, int index) {
+    bool isSelected = _selectedIndex == index;
+
     return GestureDetector(
       onTap: () => _onItemTapped(index),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: _selectedIndex == index ? Colors.orange : Colors.black),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              color: _selectedIndex == index ? Colors.orange : Colors.black,
-            ),
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: isSelected ? Colors.amber.withOpacity(0.2) : Colors.transparent,
+        ),
+        child: SizedBox( 
+          height: 56, // OVERFLOW FIX
+          width: 60, // same width on all devices
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Positioned(
+                top: isSelected ? 0 : 4, // Moves up when selected
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.easeOut,
+                  height: isSelected ? 28 : 24, // Adjusts size without scaling
+                  child: Icon(icon, color: isSelected ? Colors.amber.shade700 : Colors.black, size: isSelected ? 28 : 24),
+                ),
+              ),
+              Positioned(
+                bottom: 0, // Fixes text position
+                child: AnimatedDefaultTextStyle(
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                    color: isSelected ? Colors.amber.shade700 : Colors.black,
+                  ),
+                  child: Text(label),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

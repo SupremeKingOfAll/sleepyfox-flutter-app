@@ -1,3 +1,4 @@
+import 'package:elaros_gp4/Widgets/custom_bottom_nav_bar.dart';
 import 'package:elaros_gp4/Widgets/education_container.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +24,16 @@ class _EducationViewState extends State<EducationView> {
       duration: Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
+  }
+
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    if (index != 2) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   @override
@@ -212,6 +223,21 @@ class _EducationViewState extends State<EducationView> {
           ),
         ],
       ),
-    );
+      bottomNavigationBar: CustomBottomNavBar(
+              selectedIndex: _selectedIndex,
+              onItemTapped: _onItemTapped,
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {},
+              backgroundColor: const Color.fromARGB(255, 233, 166, 90),
+              shape: const CircleBorder(),
+              child: Image.asset(
+                "Assets/SleepyFoxLogo512.png",
+                width: 40,
+                height: 40,
+              ),
+            ),
+            floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          );
   }
 }
