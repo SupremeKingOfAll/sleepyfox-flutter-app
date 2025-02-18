@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       
+
       home: const LoginPage(), // Set LoginPage as the home widget
       routes: {
         '/WelcomeView' : (context) => const WelcomeScreenView(),
