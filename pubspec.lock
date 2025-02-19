@@ -76,7 +76,10 @@ packages:
       sha256: cb6d7f03e1de671e34607e909a7213e31d7752be4fb66a86d29fe1eb14bfb5cf
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.1"
+
+    version: "1.1.2"
+
+
   cloud_firestore:
     dependency: "direct main"
     description:
@@ -132,7 +135,9 @@ packages:
       sha256: "5091ed6771c886c9a93b1ec1ffa61770056210f1a3312095a73a5a4bab0c6a9f"
       url: "https://pub.dev"
     source: hosted
+
     version: "4.4.4"
+
 
   collection:
     dependency: transitive
