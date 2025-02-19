@@ -13,11 +13,10 @@ class AuthController {
     return password.length >= 6 && password.length <= 50;
   }
 
-
   /// Handles user sign-up
-  Future<bool> signUp(String email, String password, BuildContext context) async {
-    if (email.trim().isEmpty || password.trim().isEmpty) {
-      _showErrorMessage(context, "Email or password cannot be empty.");
+  Future<bool> signUp(String username, String email, String password, BuildContext context) async {
+    if (username.trim().isEmpty || email.trim().isEmpty || password.trim().isEmpty) {
+      _showErrorMessage(context, "Username, email, or password cannot be empty.");
       return false;
     }
 
@@ -34,6 +33,8 @@ class AuthController {
     String? errorMessage = await _authService.signUp(email, password);
 
     if (errorMessage == null) {
+      // Store the username in Firestore or your chosen database
+      await _authService.storeUserProfile(username, email);
       return true; // Sign-up successful
     }
     else
@@ -44,7 +45,6 @@ class AuthController {
       return false;
     }
   }
-
 
   String _SignUpFormatErrorMessage(String errorCode) {
     errorCode = errorCode.trim().toLowerCase();
@@ -58,8 +58,6 @@ class AuthController {
         return "An unexpected error occurred. Please try again.";
     }
   }
-
-
 
   /// Handles user login
   Future<bool> loginUser(String email, String password, BuildContext context) async {
@@ -106,4 +104,8 @@ class AuthController {
       );
     }
   }
+}
+
+extension on AuthService {
+  storeUserProfile(String username, String email) {}
 }

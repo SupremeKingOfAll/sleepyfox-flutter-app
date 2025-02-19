@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
 
       home: const LoginPage(),
       routes: {
-        '/WelcomeView' : (context) => const WelcomeScreenView(),
+        '/WelcomeView': (context) => const WelcomeScreenView(),
         '/Dashboard': (context) => const DashboardView(),
         '/WelcomeScreen': (context) => const WelcomeScreenView(),
         '/Register': (context) => const SignUpPage(),
