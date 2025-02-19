@@ -21,20 +21,20 @@ class QuestionnaireController {
       questionText: [
         'Does Your Child Engage in Regular Physical Activity?',
         'Does Your Child Have a Set Wake-up Time Each Morning?',
-        'For Young Children: Are Nap Times Appropriatetly Times and Not Too Close to Bedtime?',
+        'For Young Children: Are Nap Times Appropriately Times and Not Too Close to Bedtime?',
         'For Older Children (5-6 Years and Above): Does Your Child Avoid Daytime Naps?'
       ],
       answers: [
         ['Yes', 'Sometimes', 'No'],
         ['Yes', 'Sometimes', 'No'],
-        ['Yes', 'Sometimes', 'No'],
-        ['Yes', 'Sometimes', 'No']
+        ['Yes', 'No', 'N/A'],
+        ['Yes', 'No', 'N/A']
       ],
     ),
     Question(
       questionTitle: 'Question 4. Circadian Rhythm Alignment:',
       questionText: [
-        'Do You Keep Consistant Sleep and Wake Times for Your Child Everyday Including Weekends?',
+        'Do You Keep Consistent Sleep and Wake Times for Your Child Everyday Including Weekends?',
         'Is Your Child Exposed to Natural Daylight Shortly After Waking Up?',
         'Do You Limit Exposure to Bright Light a Few Hours Before Bed?',
       ],
@@ -48,13 +48,61 @@ class QuestionnaireController {
       questionTitle: 'Question 5. Diet and Nutrition:',
       questionText: [
         'Does Your Child Eat a Large Meal Before Bedtime?',
-        'Does Your Child Consume Food and/or Drink Containing Caffiene in the evening?',
+        'Does Your Child Consume Food and/or Drink Containing Caffeine in the evening?',
         'Do You Offer Sleep-Friendly Snacks Before Bed (e.g. Cheese, Banana, Oats, Yoghurt, Milk)?',
       ],
       answers: [
         ['Yes', 'Sometimes', 'No'],
         ['Yes', 'Sometimes', 'No'],
         ['Yes', 'Sometimes', 'No']
+      ],
+    ),
+    Question(
+      questionTitle: 'Question 6. Physical Activity:',
+      questionText: [
+        'Does Your Child Participate in Sports/Physical Activities Throughout the Day?',
+        'If Not Involved in Sports, Does Your Child Participate in Other Outdoor Activities Like Walking?'
+      ],
+      answers: [
+        ['Yes', 'Sometimes', 'No'],
+        ['Yes', 'Sometimes', 'No']
+      ],
+    ),
+    Question(
+      questionTitle: 'Question 7. Relaxation Techniques:',
+      questionText: [
+        "Have You Introduced Relaxation Techniques to Your Child's Bedtime Routine?",
+        'Does Your Child Practice Any Muscle Relaxation or Stretching Exercises Before Bed?'
+      ],
+      answers: [
+        ['Yes', 'Sometimes', 'No'],
+        ['Yes', 'Sometimes', 'No']
+      ],
+    ),
+    Question(
+      questionTitle: 'Question 8. Sleep Environment:',
+      questionText: [
+        "Is Your Child's Bedroom Used Exclusively for Sleeping?",
+        'Is the Bedroom Free from Distractions (e.g. Toys, Devices, Excessive Noise)?',
+        'Does Your Child Prefer Total Darkness in the Room, a Nightlight, or Does it Vary?',
+        'Is the Room Temperature Good for Sleeping?',
+      ],
+      answers: [
+        ['Yes', 'Sometimes', 'No'],
+        ['Yes', 'Sometimes', 'No'],
+        ['Total Darkness', 'Nightlight', 'Varies'],
+        ['Yes', 'Sometimes', 'No']
+      ],
+    ),
+    Question(
+      questionTitle: 'Question 9. Technology Use:',
+      questionText: [
+        'Does Your Child Use Electronic Devices 1-2 Hours Before Bedtime?',
+        'If So, are These Devices Used to Help them Fall Asleep?'
+      ],
+      answers: [
+        ['Yes', 'Sometimes', 'No'],
+        ['Yes', 'No', 'N/A']
       ],
     ),
   ];
