@@ -69,7 +69,9 @@ packages:
     dependency: transitive
     description:
       name: clock
+
       sha256: fddb70d9b5277016c77a80201021d40a2247104d9f4aa7bab7157b7e3f05b84b
+
       url: "https://pub.dev"
     source: hosted
     version: "1.1.2"
@@ -96,7 +98,9 @@ packages:
       sha256: "5091ed6771c886c9a93b1ec1ffa61770056210f1a3312095a73a5a4bab0c6a9f"
       url: "https://pub.dev"
     source: hosted
+
     version: "4.4.4"
+
   collection:
     dependency: transitive
     description:
