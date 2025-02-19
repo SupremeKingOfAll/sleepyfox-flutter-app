@@ -68,7 +68,7 @@ class _DashboardViewState extends State<DashboardView> {
           children: [
             // LOGO+NAME
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5,),
               child: Row(
                 children: [
                   Image.asset(
@@ -137,8 +137,8 @@ class _DashboardViewState extends State<DashboardView> {
                     ),
                   ),
                   
-                  _featureItem('Manage Profiles',null), // CHANGE NULL INTO NAVIGATOR PUSH TO THE FILE, education example
-                  _featureItem('Sleep',null),
+                  _featureItem('Manage Profiles',SelectProfileView()), // CHANGE NULL INTO NAVIGATOR PUSH TO THE FILE, education example
+                  _featureItem('Sleep',SleepTracking()),
                   _featureItem('Education', EducationView()),
                   _featureItem('Analytics',null),
                   _featureItem('Sleep Tracking',SleepTracking()),
@@ -321,7 +321,7 @@ class _DashboardViewState extends State<DashboardView> {
           borderRadius: BorderRadius.circular(10),
           color: isSelected ? Colors.amber.withOpacity(0.2) : Colors.transparent,
         ),
-        child: SizedBox( 
+        child: SizedBox(
           height: 56, // OVERFLOW FIX
           width: 60, // same width on all devices
           child: Stack(
