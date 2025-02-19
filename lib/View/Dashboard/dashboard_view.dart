@@ -1,6 +1,10 @@
 import 'package:elaros_gp4/View/Education/education_view.dart';
+import 'package:elaros_gp4/View/Profiles/select_profile_view.dart';
+import 'package:elaros_gp4/View/Sleep%20Tracker/sleep_tracker_view.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_guide_stule.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_start_track_style.dart';
+import 'package:elaros_gp4/Widgets/Buttons/logout_function.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dashboard_viewlist_resources.dart';
 
@@ -15,10 +19,26 @@ class _DashboardViewState extends State<DashboardView> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
+    if(index == 4){
+    setState(() {
+      logout(context);
+    });
+    }
     if (index != 2) {
       setState(() {
         _selectedIndex = index;
       });
+    }
+  }
+
+//logout function
+  void _logout(BuildContext context) async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      Navigator.pushReplacementNamed(context, "/Login");
+      print("User logged out");
+    } catch (e) {
+      print("Error logging out: $e");
     }
   }
 
@@ -46,10 +66,10 @@ class _DashboardViewState extends State<DashboardView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // LOGO+NAME 
+            // LOGO+NAME
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: Row(            
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5,),
+              child: Row(
                 children: [
                   Image.asset(
                     'Assets/SleepyFoxLogo512.png', // Path to your image
@@ -116,16 +136,13 @@ class _DashboardViewState extends State<DashboardView> {
                       color: Colors.amber,
                     ),
                   ),
-                  _featureItem('Manage Profiles',null), // CHANGE NULL INTO NAVIGATOR PUSH TO THE FILE, education example
-                  _featureItem('Sleep',null),
-                  _featureItem('Education',() {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => EducationView()),
-                      );
-                    }),
+                  
+                  _featureItem('Manage Profiles',SelectProfileView()), // CHANGE NULL INTO NAVIGATOR PUSH TO THE FILE, education example
+                  _featureItem('Sleep',SleepTracking()),
+                  _featureItem('Education', EducationView()),
                   _featureItem('Analytics',null),
-                  _featureItem('Sleep Tracking',null),
+                  _featureItem('Sleep Tracking',SleepTracking()),
+
                 ],
               ),
             ),
@@ -155,10 +172,12 @@ class _DashboardViewState extends State<DashboardView> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text('Average Sleep Duration',
-                            style: TextStyle(fontSize: 16, color: Colors.black54)),
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.black54)),
                         SizedBox(height: 5),
                         Text('7.5 hours',
-                            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                            style: TextStyle(
+                                fontSize: 24, fontWeight: FontWeight.bold)),
                         SizedBox(height: 15),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -178,14 +197,19 @@ class _DashboardViewState extends State<DashboardView> {
             SizedBox(
               width: double.infinity,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Column(
                   children: [
                     //Widget is inside ./widget/buttons
-                    GuideButton(text: "LearnMore", onPressed: (){},),
+                    GuideButton(
+                      text: "LearnMore",
+                      onPressed: () {},
+                    ),
                     SizedBox(height: 10),
                     //Widget is inside ./widget/buttons
-                    StartTrackingSleepButton(text: "Start Tracking", onPressed: (){}),
+                    StartTrackingSleepButton(
+                        text: "Start Tracking", onPressed: () {}),
                   ],
                 ),
               ),
@@ -221,12 +245,48 @@ class _DashboardViewState extends State<DashboardView> {
     );
   }
 
-  Widget _featureItem(String title, VoidCallback? onTap) {
+    Widget _featureItem(String title, Widget? nextPage) {
     return Card(
-      child: ListTile(
-        title: Text(title, style: TextStyle(fontSize: 16)),
-        trailing: Icon(Icons.arrow_forward_ios, size: 16),
-        onTap: onTap,
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      child: InkWell(
+        onTap: nextPage != null
+            ? () {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionDuration: Duration(milliseconds: 750),
+                    pageBuilder: (_, __, ___) => nextPage,
+                    transitionsBuilder: (_, animation, __, child) {
+                      return FadeTransition(
+                        opacity: animation,
+                        child: child,
+                      );
+                    },
+                  ),
+                );
+              }
+            : null, // Prevents taps if nextPage is null
+        borderRadius: BorderRadius.circular(10),
+        splashColor: nextPage != null ? Colors.amber.withOpacity(0.2) : Colors.transparent,
+        child: Padding(
+          padding: EdgeInsets.all(8),
+          child: ListTile(
+            leading: Hero(
+              tag: title,
+              child: Icon(Icons.star, color: nextPage != null ? Colors.amber : Colors.grey),
+            ),
+            title: Text(
+              title,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: nextPage != null ? Colors.black : Colors.grey,
+              ),
+            ),
+            trailing: Icon(Icons.arrow_forward_ios, size: 16, color: nextPage != null ? Colors.black : Colors.grey),
+          ),
+        ),
       ),
     );
   }
@@ -242,26 +302,56 @@ class _DashboardViewState extends State<DashboardView> {
                 onPressed: () {},
                 child: Text(value),
               )
-            : Text(value, style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            : Text(value,
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
       ],
     );
   }
 
   Widget _buildNavItem(IconData icon, String label, int index) {
+    bool isSelected = _selectedIndex == index;
+
     return GestureDetector(
       onTap: () => _onItemTapped(index),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: _selectedIndex == index ? Colors.orange : Colors.black),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              color: _selectedIndex == index ? Colors.orange : Colors.black,
-            ),
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: isSelected ? Colors.amber.withOpacity(0.2) : Colors.transparent,
+        ),
+        child: SizedBox(
+          height: 56, // OVERFLOW FIX
+          width: 60, // same width on all devices
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Positioned(
+                top: isSelected ? 0 : 4, // Moves up when selected
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.easeOut,
+                  height: isSelected ? 28 : 24, // Adjusts size without scaling
+                  child: Icon(icon, color: isSelected ? Colors.amber.shade700 : Colors.black, size: isSelected ? 28 : 24),
+                ),
+              ),
+              Positioned(
+                bottom: 0, // Fixes text position
+                child: AnimatedDefaultTextStyle(
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                    color: isSelected ? Colors.amber.shade700 : Colors.black,
+                  ),
+                  child: Text(label),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

@@ -343,6 +343,7 @@ class _WelcomeScreenViewState extends State<WelcomeScreenView> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              
               SizedBox(height: 150),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -369,6 +370,7 @@ class _WelcomeScreenViewState extends State<WelcomeScreenView> {
               ),
               SizedBox(height: 20),
               Container(
+
                 height: 300,
                 child: _cards[_currentIndex], // Display the current card based on the index
               ),
