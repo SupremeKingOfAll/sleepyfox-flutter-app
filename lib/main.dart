@@ -26,10 +26,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-
       home: const LoginPage(),
       routes: {
-        '/WelcomeView' : (context) => const WelcomeScreenView(),
+        '/WelcomeView': (context) => const WelcomeScreenView(),
         '/Dashboard': (context) => const DashboardView(),
         '/WelcomeScreen': (context) => const WelcomeScreenView(),
         '/Register': (context) => const SignUpPage(),

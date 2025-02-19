@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elaros_gp4/Controller/questionnaire_controller.dart';
 
 class QuestionnaireView extends StatefulWidget {
@@ -12,9 +13,24 @@ class QuestionnaireViewState extends State<QuestionnaireView> {
   final QuestionnaireController _controller = QuestionnaireController();
   final Map<int, Map<int, String>> _answers = {};
 
-  void _handleSubmit() {
-    // Handle form submission
+  void _handleSubmit() async {
     print('User answers: $_answers');
+
+    Map<String, dynamic> answersToStore = {};
+    _answers.forEach((questionIndex, answers) {
+      answers.forEach((subQuestionIndex, answer) {
+        answersToStore[
+                'Question ${questionIndex + 1} - SubQuestion ${subQuestionIndex + 1}'] =
+            answer;
+      });
+    });
+
+    await FirebaseFirestore.instance
+        .collection('questionnaire_answers')
+        .add(answersToStore);
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Answers submitted successfully!')),
+    );
   }
 
   @override
@@ -22,6 +38,7 @@ class QuestionnaireViewState extends State<QuestionnaireView> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 249, 217, 130),
       appBar: AppBar(
+        elevation: 4,
         title: Row(
           children: [
             Image.asset('Assets/SleepyFoxLogo512.png', width: 45, height: 45),
