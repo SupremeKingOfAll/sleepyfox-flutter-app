@@ -9,6 +9,10 @@ class AuthController {
     return emailChecker.hasMatch(email);
   }
 
+  bool isValidPassword(String password) {
+    return password.length >= 6 && password.length <= 50;
+  }
+
 
   /// Handles user sign-up
   Future<bool> signUp(String email, String password, BuildContext context) async {
@@ -17,12 +21,24 @@ class AuthController {
       return false;
     }
 
+    if (!IfValidEmail(email)) {
+      _showErrorMessage(context, "Please enter a valid email address.");
+      return false;
+    }
+    if (!isValidPassword(password)) {
+      _showErrorMessage(context, "Password must be between 6 and 50 characters.");
+      return false;
+    }
+
+
     String? errorMessage = await _authService.signUp(email, password);
 
     if (errorMessage == null) {
       return true; // Sign-up successful
-    } else {
-      print("DEBUG: Firebase Sign-up Error Received → '$errorMessage'"); // ✅ Print error
+    }
+    else
+    {
+
       final signUpCustomMessage = _SignUpFormatErrorMessage(errorMessage.trim());
       _showErrorMessage(context, signUpCustomMessage);
       return false;
@@ -31,19 +47,14 @@ class AuthController {
 
 
   String _SignUpFormatErrorMessage(String errorCode) {
-    print("DEBUG: Received Firebase Error Code → '$errorCode'"); // ✅ Print error for debugging
-
-    if (errorCode.startsWith("auth/")) {
-      errorCode = errorCode.replaceFirst("auth/", ""); // ✅ Remove "auth/" prefix
-    }
+    errorCode = errorCode.trim().toLowerCase();
 
     switch (errorCode) {
-      case "invalid-email":
-        return "Please enter a valid email address.";
-      case "email-already-exists": // ✅ Check correct Firebase error case
+      case "email-already-in-use":
+        return "This email is already registered. Try logging in.";
+      case "email-already-exists":
         return "This email is already registered. Try logging in.";
       default:
-        print("DEBUG: Unhandled Sign-up Error Code → $errorCode"); // ✅ Debugging unknown errors
         return "An unexpected error occurred. Please try again.";
     }
   }
@@ -80,10 +91,9 @@ class AuthController {
     switch (errorCode) {
       case "user-not-found":
         return "Looks like either your email address or password were incorrect. Wanna try again?";
-      case "wrong-password":
+      case "invalid-credential":
         return "Looks like either your email address or password were incorrect. Wanna try again?";
       default:
-        print("DEBUG: Unhandled Login Error Code → $errorCode");
         return "An unexpected error occurred. Please try again.";
     }
   }
