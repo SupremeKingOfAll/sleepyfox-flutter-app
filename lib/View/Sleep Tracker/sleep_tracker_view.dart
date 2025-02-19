@@ -50,6 +50,23 @@ class _SleepTrackingState extends State<SleepTracking> {
       final User? user = FirebaseAuth.instance.currentUser;
       if (user == null) throw Exception("User not logged in");
 
+      // Debugging: Print the naps list before filtering
+      print("Before filtering: $naps");
+
+      // Filter out empty naps (Ensure valid start and end times)
+      List<Map<String, dynamic>> formattedNaps = naps
+          .where((nap) => nap['start'] != '' && nap['end'] != '')
+          .toList();
+
+      // Debugging: Print the naps list after filtering
+      print("After filtering: $formattedNaps");
+
+      // Ensure naps is not empty (Firestore does not store empty lists)
+      if (formattedNaps.isEmpty) {
+        formattedNaps.add({'start': 'N/A', 'end': 'N/A'}); // Placeholder data
+      }
+
+      // Save to Firestore
       await FirebaseFirestore.instance.collection('dailyTracking').add({
         'email': user.email,
         'profileId': widget.profileId,
@@ -57,14 +74,18 @@ class _SleepTrackingState extends State<SleepTracking> {
         'bedtime': _bedtimeController.text,
         'wakeUp': _wakeUpController.text,
         'awakenings': awakenings,
-        'naps': naps,
+        'naps': formattedNaps, 
         'notes': _notesController.text,
         'timestamp': FieldValue.serverTimestamp(),
       });
 
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Sleep record saved successfully')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Sleep record saved successfully'))
+      );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to save: $e')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to save: $e'))
+      );
     }
   }
 
@@ -76,7 +97,7 @@ class _SleepTrackingState extends State<SleepTracking> {
 
   void _addNap() {
     setState(() {
-      naps.add({});
+      naps.add({'start': '', 'end': ''});
     });
   }
 
@@ -88,9 +109,11 @@ class _SleepTrackingState extends State<SleepTracking> {
 
   void _updateNap(int index, Map<String, dynamic> data) {
     setState(() {
-      naps[index] = data;
+      print("Updating nap at index $index: $data"); // Debugging
+      naps[index] = data; // Ensure correct index update
     });
   }
+
 
     int _selectedIndex = 0;
 
@@ -127,7 +150,10 @@ class _SleepTrackingState extends State<SleepTracking> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("Sleep Quality", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.amber)),
+            const Text(
+              "Sleep Quality",
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.amber),
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -140,42 +166,33 @@ class _SleepTrackingState extends State<SleepTracking> {
             _timeInputField("Bedtime", _bedtimeController),
             _timeInputField("Wake Up", _wakeUpController),
             const SizedBox(height: 16),
-            _buildSectionHeader("Night Awakenings", _addAwakening),
-            Container(
-              padding: const EdgeInsets.all(16),
-              margin: const EdgeInsets.only(top: 8),
-              decoration: BoxDecoration(
-                color: Colors.white, // Grey background
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
-                children: List.generate(
-                  awakenings.length,
-                  (index) => AwakeningEntry(
-                    onChanged: (data) => _updateAwakening(index, data),
-                  ),
-                ),
-              ),
-            ),
 
-            // Naps Section
-            _buildSectionHeader("Naps", _addNap),
-            Container(
-              padding: const EdgeInsets.all(16),
-              margin: const EdgeInsets.only(top: 8),
-              decoration: BoxDecoration(
-                color: Colors.white, // Grey background
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
-                children: List.generate(
-                  naps.length,
-                  (index) => NapEntry(
-                    onChanged: (data) => _updateNap(index, data),
+            _buildSectionHeader("Night Awakenings", _addAwakening),
+            if (awakenings.isNotEmpty)
+              _greyContainer(
+                Column(
+                  children: List.generate(
+                    awakenings.length,
+                    (index) => AwakeningEntry(
+                      onChanged: (data) => _updateAwakening(index, data),
+                    ),
                   ),
                 ),
               ),
-            ),
+
+            _buildSectionHeader("Naps", _addNap),
+            if (naps.isNotEmpty)
+              _greyContainer(
+                Column(
+                  children: List.generate(
+                    naps.length,
+                    (index) => NapEntry(
+                      onChanged: (data) => _updateNap(index, data),
+                    ),
+                  ),
+                ),
+              ),
+
             const SizedBox(height: 16),
             TextField(
               controller: _notesController,
@@ -186,13 +203,23 @@ class _SleepTrackingState extends State<SleepTracking> {
               maxLines: 3,
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _saveSleepRecord,
-              child: const Text("Save Sleep Record"),
+            Center(
+              child: ElevatedButton(
+                onPressed: _saveSleepRecord,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.amber,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                ),
+                child: const Text(
+                  "Save Sleep Record",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                ),
+              ),
             ),
           ],
         ),
       ),
+
       bottomNavigationBar: CustomBottomNavBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
@@ -368,28 +395,44 @@ class NapEntry extends StatefulWidget {
   _NapEntryState createState() => _NapEntryState();
 }
 
-class _NapEntryState extends State<NapEntry> {
-  final TextEditingController startController = TextEditingController();
-  final TextEditingController endController = TextEditingController();
+  class _NapEntryState extends State<NapEntry> {
+    final TextEditingController startController = TextEditingController();
+    final TextEditingController endController = TextEditingController();
 
-  void _update() {
-    widget.onChanged({
-      'start': startController.text,
-      'end': endController.text,
-    });
+    @override
+    void initState() {
+      super.initState();
+      startController.addListener(_update);
+      endController.addListener(_update);
+    }
+
+    @override
+    void dispose() {
+      startController.removeListener(_update);
+      endController.removeListener(_update);
+      startController.dispose();
+      endController.dispose();
+      super.dispose();
+    }
+
+    void _update() {
+      widget.onChanged({
+        'start': startController.text.isNotEmpty ? startController.text : 'N/A',
+        'end': endController.text.isNotEmpty ? endController.text : 'N/A',
+      });
+    }
+
+    @override
+    Widget build(BuildContext context) {
+      return Column(
+        children: [
+          TimeInputField(label: "Start", controller: startController),
+          TimeInputField(label: "End", controller: endController),
+          const Divider(),
+        ],
+      );
+    }
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        TimeInputField(label: "Start", controller: startController),
-        TimeInputField(label: "End", controller: endController),
-        const Divider(),
-      ],
-    );
-  } 
-}
 
   Widget _greyContainer(Widget child) {
     return Container(
