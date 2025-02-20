@@ -1,4 +1,5 @@
 import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
+import 'package:elaros_gp4/View/Login/reset_password_view.dart';
 import 'package:elaros_gp4/View/Login/welcome_screen_view.dart';
 import 'package:elaros_gp4/View/Profiles/select_profile_view.dart';
 import 'package:elaros_gp4/View/Questionaire/questionaire_view.dart';
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         '/WelcomeScreen': (context) => const WelcomeScreenView(),
         '/Register': (context) => const SignUpPage(),
         '/Login': (context) => const LoginPage(),
+        '/ResetPassword': (context) => const ResetPassword(),
       },
     );
   }

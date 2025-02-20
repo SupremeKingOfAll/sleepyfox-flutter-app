@@ -72,6 +72,18 @@ class LoginPageState extends State<LoginPage> {
                 obscureText: true,
               ),
             ),
+            GestureDetector(
+              onTap: () =>
+                  Navigator.pushReplacementNamed(context, '/ResetPassword'),
+              child: const Text(
+                'Forgot Password?',
+                style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: 13,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
             const SizedBox(height: 30),
             ElevatedButton(
               onPressed: _handleLogin,
