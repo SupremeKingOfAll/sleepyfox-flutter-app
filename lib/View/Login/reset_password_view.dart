@@ -13,6 +13,19 @@ class ResetPasswordState extends State<ResetPassword> {
 
   void _handlePasswordReset() async {
     try {
+      // Check if the email exists
+      final signInMethods = await FirebaseAuth.instance
+          .fetchSignInMethodsForEmail(_emailController.text);
+      if (signInMethods.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Error: Email does not exist.'),
+          ),
+        );
+        return;
+      }
+
+      // Sends Email
       await FirebaseAuth.instance
           .sendPasswordResetEmail(email: _emailController.text);
       if (!mounted) return;
