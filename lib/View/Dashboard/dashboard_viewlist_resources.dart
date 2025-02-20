@@ -3,35 +3,63 @@ import 'package:flutter/material.dart';
 class InfoContainer extends StatelessWidget {
   final String title;
   final String subtitle;
+  final String imagePath;
 
-  const InfoContainer({super.key, required this.title, required this.subtitle});
+  const InfoContainer(
+      {super.key,
+      required this.title,
+      required this.subtitle,
+      required this.imagePath});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 200,
-      height: 250,
-      color: Colors.grey,
+      height: 210,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(14),
+        color: Colors.grey,
+      ),
       child: Column(
         children: [
+          ClipRRect(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(14),
+              topRight: Radius.circular(14),
+            ),
+            child: Image.asset(
+              imagePath,
+              width: double.infinity,
+              height: 150,
+              fit: BoxFit.cover,
+            ),
+          ),
           const Spacer(),
           Container(
             color: Colors.white70,
-            height: 50,
+            height: 60,
             width: double.infinity,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title),
+                // Add padding around title
+                Padding(
+                  padding: const EdgeInsets.only(left: 10.0, top: 4.0),
+                  child: Text(title),
+                ),
+                // Add padding around subtitle
                 Expanded(
-                  child: Text(
-                    subtitle,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 18.0, top: 4.0),
+                    child: Text(
+                      subtitle,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: true,
                     ),
-                    overflow: TextOverflow.ellipsis,
-                    softWrap: true,
                   ),
                 ),
               ],
@@ -42,16 +70,3 @@ class InfoContainer extends StatelessWidget {
     );
   }
 }
-
-//This is how it should look:
-// SingleChildScrollView(
-// scrollDirection: Axis.horizontal,
-// child: Row(
-// children: [
-// Padding(
-// padding: const EdgeInsets.all(8.0),
-// child: InfoContainer(
-// title: 'Sleep Hygiene',
-// subtitle: 'Sleeping Techniques',
-// ),
-// ),
