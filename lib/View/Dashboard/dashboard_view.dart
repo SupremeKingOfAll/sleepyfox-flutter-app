@@ -1,6 +1,7 @@
+import 'package:elaros_gp4/Controller/user_data_retrieve.dart';
 import 'package:elaros_gp4/View/Education/education_view.dart';
 import 'package:elaros_gp4/View/Profiles/select_profile_view.dart';
-import 'package:elaros_gp4/View/Sleep%20Tracker/trackerskeleton.dart';
+import 'package:elaros_gp4/View/Sleep%20Tracker/sleep_tracker_view.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_guide_stule.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_start_track_style.dart';
 import 'package:elaros_gp4/Widgets/Buttons/logout_function.dart';
@@ -77,14 +78,7 @@ class _DashboardViewState extends State<DashboardView> {
                     height: 40,
                   ),
                   SizedBox(width: 10), // Space between image and text
-                  Text(
-                    'Ben Smith', // Name text
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
+                  UserNameDisplay(), 
                 ],
               ),
             ),
@@ -138,10 +132,11 @@ class _DashboardViewState extends State<DashboardView> {
                   ),
                   
                   _featureItem('Manage Profiles',SelectProfileView()), // CHANGE NULL INTO NAVIGATOR PUSH TO THE FILE, education example
-                  _featureItem('Sleep',SleepTracking()),
+                  _featureItem('Sleep',null),
                   _featureItem('Education', EducationView()),
                   _featureItem('Analytics',null),
-                  _featureItem('Sleep Tracking',SleepTracking()),
+                  _featureItem('Sleep Tracking', SleepTracking(profileId: 'Moo')),
+
 
                 ],
               ),
