@@ -1,7 +1,10 @@
+import 'package:elaros_gp4/Controller/user_data_retrieve.dart';
 import 'package:elaros_gp4/View/Education/education_view.dart';
 import 'package:elaros_gp4/View/Profiles/select_profile_view.dart';
-import 'package:elaros_gp4/View/Sleep%20Tracker/trackerskeleton.dart';
-import 'package:elaros_gp4/Widgets/Buttons/button_guide_stule.dart';
+import 'package:elaros_gp4/View/Questionaire/questionaire_view.dart';
+import 'package:elaros_gp4/View/Sleep%20Tracker/sleep_tracker_view.dart';
+import 'package:elaros_gp4/View/Sleep%20Review/sleep_review_view.dart';
+import 'package:elaros_gp4/Widgets/Buttons/button_guide_style.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_start_track_style.dart';
 import 'package:elaros_gp4/Widgets/Buttons/logout_function.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,10 +22,10 @@ class _DashboardViewState extends State<DashboardView> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
-    if(index == 4){
-    setState(() {
-      logout(context);
-    });
+    if (index == 4) {
+      setState(() {
+        logout(context);
+      });
     }
     if (index != 2) {
       setState(() {
@@ -68,7 +71,10 @@ class _DashboardViewState extends State<DashboardView> {
           children: [
             // LOGO+NAME
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5,),
+              padding: const EdgeInsets.symmetric(
+                vertical: 10,
+                horizontal: 5,
+              ),
               child: Row(
                 children: [
                   Image.asset(
@@ -77,14 +83,7 @@ class _DashboardViewState extends State<DashboardView> {
                     height: 40,
                   ),
                   SizedBox(width: 10), // Space between image and text
-                  Text(
-                    'Ben Smith', // Name text
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
+                  UserNameDisplay(),
                 ],
               ),
             ),
@@ -101,6 +100,7 @@ class _DashboardViewState extends State<DashboardView> {
                       child: InfoContainer(
                         title: 'Sleep Hygiene',
                         subtitle: 'Sleeping Techniques',
+                        imagePath: 'Assets/GirlSleep.jpeg',
                       ),
                     ),
                     Padding(
@@ -108,6 +108,7 @@ class _DashboardViewState extends State<DashboardView> {
                       child: InfoContainer(
                         title: 'Sleep Cycle',
                         subtitle: 'Deep & REM Sleep',
+                        imagePath: '',
                       ),
                     ),
                     Padding(
@@ -115,6 +116,7 @@ class _DashboardViewState extends State<DashboardView> {
                       child: InfoContainer(
                         title: 'Healthy Habits',
                         subtitle: 'Better Rest Routine',
+                        imagePath: '',
                       ),
                     ),
                   ],
@@ -136,13 +138,14 @@ class _DashboardViewState extends State<DashboardView> {
                       color: Colors.amber,
                     ),
                   ),
+
                   
                   _featureItem('Manage Profiles',SelectProfileView()), // CHANGE NULL INTO NAVIGATOR PUSH TO THE FILE, education example
-                  _featureItem('Sleep',SleepTracking()),
+                  _featureItem('Sleep History',SleepTrackingOverview()),
                   _featureItem('Education', EducationView()),
-                  _featureItem('Analytics',null),
-                  _featureItem('Sleep Tracking',SleepTracking()),
-
+                  _featureItem('Analytics', null),
+                  _featureItem('Sleep Tracking', SleepTracking()),
+                  _featureItem('Questionnaire', QuestionnaireView()),
                 ],
               ),
             ),
@@ -245,7 +248,7 @@ class _DashboardViewState extends State<DashboardView> {
     );
   }
 
-    Widget _featureItem(String title, Widget? nextPage) {
+  Widget _featureItem(String title, Widget? nextPage) {
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -268,13 +271,16 @@ class _DashboardViewState extends State<DashboardView> {
               }
             : null, // Prevents taps if nextPage is null
         borderRadius: BorderRadius.circular(10),
-        splashColor: nextPage != null ? Colors.amber.withOpacity(0.2) : Colors.transparent,
+        splashColor: nextPage != null
+            ? Colors.amber.withOpacity(0.2)
+            : Colors.transparent,
         child: Padding(
           padding: EdgeInsets.all(8),
           child: ListTile(
             leading: Hero(
               tag: title,
-              child: Icon(Icons.star, color: nextPage != null ? Colors.amber : Colors.grey),
+              child: Icon(Icons.star,
+                  color: nextPage != null ? Colors.amber : Colors.grey),
             ),
             title: Text(
               title,
@@ -284,7 +290,8 @@ class _DashboardViewState extends State<DashboardView> {
                 color: nextPage != null ? Colors.black : Colors.grey,
               ),
             ),
-            trailing: Icon(Icons.arrow_forward_ios, size: 16, color: nextPage != null ? Colors.black : Colors.grey),
+            trailing: Icon(Icons.arrow_forward_ios,
+                size: 16, color: nextPage != null ? Colors.black : Colors.grey),
           ),
         ),
       ),
@@ -319,7 +326,8 @@ class _DashboardViewState extends State<DashboardView> {
         padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: isSelected ? Colors.amber.withOpacity(0.2) : Colors.transparent,
+          color:
+              isSelected ? Colors.amber.withOpacity(0.2) : Colors.transparent,
         ),
         child: SizedBox(
           height: 56, // OVERFLOW FIX
@@ -333,7 +341,9 @@ class _DashboardViewState extends State<DashboardView> {
                   duration: Duration(milliseconds: 300),
                   curve: Curves.easeOut,
                   height: isSelected ? 28 : 24, // Adjusts size without scaling
-                  child: Icon(icon, color: isSelected ? Colors.amber.shade700 : Colors.black, size: isSelected ? 28 : 24),
+                  child: Icon(icon,
+                      color: isSelected ? Colors.amber.shade700 : Colors.black,
+                      size: isSelected ? 28 : 24),
                 ),
               ),
               Positioned(
@@ -343,7 +353,8 @@ class _DashboardViewState extends State<DashboardView> {
                   curve: Curves.easeInOut,
                   style: TextStyle(
                     fontSize: 12,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                    fontWeight:
+                        isSelected ? FontWeight.bold : FontWeight.normal,
                     color: isSelected ? Colors.amber.shade700 : Colors.black,
                   ),
                   child: Text(label),

@@ -1,8 +1,10 @@
-import 'package:elaros_gp4/Widgets/Buttons/button_guide_stule.dart';
+import 'package:elaros_gp4/Widgets/Buttons/button_guide_style.dart';
+import 'package:elaros_gp4/Widgets/Text%20Styles/text_input_style.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../Widgets/Buttons/logout_function.dart';
 import 'package:elaros_gp4/Services/profile_services.dart';
+
 class SelectProfileView extends StatefulWidget {
   const SelectProfileView({super.key});
 
@@ -10,13 +12,10 @@ class SelectProfileView extends StatefulWidget {
   State<SelectProfileView> createState() => _SelectProfileViewState();
 }
 
-
-
 class _SelectProfileViewState extends State<SelectProfileView> {
-  //Bottom Nav Bar
   int _selectedIndex = 0;
   void _onItemTapped(int index) {
-    if(index == 4){
+    if (index == 4) {
       setState(() {
         logout(context);
       });
@@ -28,7 +27,6 @@ class _SelectProfileViewState extends State<SelectProfileView> {
     }
   }
 
-//logout function
   void _logout(BuildContext context) async {
     try {
       await FirebaseAuth.instance.signOut();
@@ -39,8 +37,7 @@ class _SelectProfileViewState extends State<SelectProfileView> {
     }
   }
 
-  //Profile Info Update
-
+  @override
   void initState() {
     super.initState();
     _fetchProfiles();
@@ -54,14 +51,9 @@ class _SelectProfileViewState extends State<SelectProfileView> {
 
   Future<void> _fetchProfiles() async {
     try {
-      List<Map<String, dynamic>> profiles = await _profileServices.fetchChildProfiles();
+      List<Map<String, dynamic>> profiles = await _profileServices.fetchChildProfilesForCurrentUser();
       setState(() {
-        _profiles = profiles.map((profile) {
-          return {
-            'name': profile['name'] ?? 'Name',
-            'age': profile['age'] ?? 0,
-          };
-        }).toList();
+        _profiles = profiles;
         _isLoading = false;
       });
     } catch (error) {
@@ -72,11 +64,10 @@ class _SelectProfileViewState extends State<SelectProfileView> {
     }
   }
 
-
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white70,
-      //Appbar
       appBar: AppBar(
         leading: Icon(
           Icons.menu,
@@ -98,64 +89,70 @@ class _SelectProfileViewState extends State<SelectProfileView> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            //New Profile Button
             Container(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    SizedBox(height: 50,),
+                    SizedBox(height: 50),
                     GuideButton(
-                        text: "Create a New Profile", onPressed: () {
-                      final String name = nameController.text;
-                      final String ageText = ageController.text;
-                      if (name.isEmpty || ageText.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text("Name and Age are required"),
-                          ),
-                        );
-                        return;
-                      }
-                      final int? age = int.tryParse(ageText);
-                      if (age == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
+                      text: "Create a New Profile",
+                      onPressed: () async {
+                        final String name = nameController.text;
+                        final String ageText = ageController.text;
+                        if (name.isEmpty || ageText.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                                content: Text('Age has to be a number!')));
-                        return;
-                      }
-                      _profileServices.addChildProfile(name, age);
-                      _fetchProfiles();
+                              content: Text("Name and Age are required"),
+                            ),
+                          );
+                          return;
+                        }
+                        final int? age = int.tryParse(ageText);
+                        if (age == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Age has to be a number!')),
+                          );
+                          return;
+                        }
 
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Profile created successfully!')));
-                    }),
-                    SizedBox(height: 50,),
-                    TextField(
-                      controller: nameController,
-                      decoration: InputDecoration(labelText: "Name"),
+                        final String? email = FirebaseAuth.instance.currentUser?.email;
+                        if (email == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('User not logged in.')),
+                          );
+                          return;
+                        }
+
+                        await _profileServices.addChildProfile(name, age, email);
+                        await _fetchProfiles();
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Profile created successfully!')),
+                        );
+                      },
                     ),
-                    TextField(
-                      controller: ageController,
-                      decoration: InputDecoration(labelText: "Age"),
-                      keyboardType: TextInputType.number,
-                    ),
+                    SizedBox(height: 50),
+
+                   //custom text widget found in /widget
+                   TextInputStyle(controller: nameController, labelText: "Name"),
+                    SizedBox(height: 10,),
+                    TextInputStyle(controller: ageController, labelText: "Age")
                   ],
                 ),
-
               ),
             ),
-            SizedBox(height: 50,),
-            //profile section
+            SizedBox(height: 50),
             Container(
               child: _isLoading
                   ? Center(child: CircularProgressIndicator())
                   : _profiles.isEmpty
-                  ? Center(child: Text("Profile Not Found"))
-                  : Column(
-                children: _profiles.map((profile) {
-                  return _profileCard(profile['name'], 'Assets/FemaleFoxPic.png', () {});
-                }).toList(),
-              ),
+                      ? Center(child: Text("Profile Not Found"))
+                      : Column(
+                          children: _profiles.map((profile) {
+                            return _profileCard(profile['name'], 'Assets/FemaleFoxPic.png', () {Navigator.pushNamed(context,'/ManageProfileView');});
+                          }).toList(),
+                        ),
             ),
           ],
         ),
@@ -168,7 +165,7 @@ class _SelectProfileViewState extends State<SelectProfileView> {
           children: [
             _buildNavItem(Icons.home, "Home", 0),
             _buildNavItem(Icons.nightlight_round, "Sleep", 1),
-            const SizedBox(width: 48), // Space for floating button
+            const SizedBox(width: 48),
             _buildNavItem(Icons.settings, "Settings", 3),
             _buildNavItem(Icons.logout, "Sign Out", 4),
           ],
