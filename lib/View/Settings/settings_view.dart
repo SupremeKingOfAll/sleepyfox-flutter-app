@@ -88,7 +88,7 @@ class _SettingsViewState extends State<SettingsView> {
                     const SizedBox(height: 12), // Reduced spacing
                     const Divider(color: Colors.black54),
 
-                    // 🔹 Move ListTiles up & Expand their area
+                    // Move ListTiles up & Expand their area
                     ListTile(
                       leading: Icon(Icons.person, color: Colors.amber, size: 34), // Bigger Icon
                       title: Text("Account", style: TextStyle(color: Colors.black, fontSize: 20)),
@@ -106,7 +106,7 @@ class _SettingsViewState extends State<SettingsView> {
                     ),
                     ListTile(
                       leading: Icon(Icons.help, color: Colors.amber, size: 34),
-                      title: Text("Help & Support", style: TextStyle(color: Colors.black, fontSize: 20)),
+                      title: Text("About Us", style: TextStyle(color: Colors.black, fontSize: 20)),
                       onTap: () {},
                     ),
                   ],

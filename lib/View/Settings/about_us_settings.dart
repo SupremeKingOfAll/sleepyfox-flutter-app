@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class HelpSupportView extends StatefulWidget {
-  const HelpSupportView({super.key});
+class AboutUs extends StatefulWidget {
+  const AboutUs({super.key});
 
   @override
-  State<HelpSupportView> createState() => _HelpSupportViewState();
+  State<AboutUs> createState() => _AboutUs();
 }
 
-class _HelpSupportViewState extends State<HelpSupportView> {
+class _AboutUs extends State<AboutUs> {
   int _selectedIndex = 3; // Default to Help & Support page
 
   void _onItemTapped(int index) {
@@ -29,7 +29,7 @@ class _HelpSupportViewState extends State<HelpSupportView> {
           color: const Color.fromARGB(255, 202, 126, 33),
         ),
         backgroundColor: const Color.fromARGB(255, 234, 235, 235),
-        title: Text("Help & Support"),
+        title: Text("About Us"),
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 16),
@@ -134,7 +134,7 @@ class _HelpSupportViewState extends State<HelpSupportView> {
         ),
       ),
 
-      // 📌 Bottom Navigation Bar
+      //  Bottom Navigation Bar
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         notchMargin: 8.0,
