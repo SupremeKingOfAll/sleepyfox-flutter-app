@@ -28,7 +28,7 @@ class TextInputStyle extends StatelessWidget {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12.0),
           borderSide: BorderSide(
-            color: Colors.green,
+            color: Colors.amber,
             width: 1.0,
           ),
         ),
@@ -39,14 +39,7 @@ class TextInputStyle extends StatelessWidget {
             width: 1.0,
           ),
         ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12.0),
-          borderSide: BorderSide(
-            color: Colors.red,
-            width: 1.0,
-          ),
-        ),
-        contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
+        contentPadding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 12.0),
       ),
       style: TextStyle(
         color: Colors.black,
