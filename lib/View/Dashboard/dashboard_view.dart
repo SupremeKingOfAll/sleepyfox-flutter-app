@@ -99,6 +99,7 @@ class _DashboardViewState extends State<DashboardView> {
                       child: InfoContainer(
                         title: 'Sleep Hygiene',
                         subtitle: 'Sleeping Techniques',
+                        imagePath: 'Assets/GirlSleep.jpeg',
                       ),
                     ),
                     Padding(
@@ -106,6 +107,7 @@ class _DashboardViewState extends State<DashboardView> {
                       child: InfoContainer(
                         title: 'Sleep Cycle',
                         subtitle: 'Deep & REM Sleep',
+                        imagePath: '',
                       ),
                     ),
                     Padding(
@@ -113,6 +115,7 @@ class _DashboardViewState extends State<DashboardView> {
                       child: InfoContainer(
                         title: 'Healthy Habits',
                         subtitle: 'Better Rest Routine',
+                        imagePath: '',
                       ),
                     ),
                   ],
