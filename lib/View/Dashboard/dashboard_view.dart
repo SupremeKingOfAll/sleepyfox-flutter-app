@@ -2,7 +2,7 @@ import 'package:elaros_gp4/Controller/user_data_retrieve.dart';
 import 'package:elaros_gp4/View/Education/education_view.dart';
 import 'package:elaros_gp4/View/Profiles/select_profile_view.dart';
 import 'package:elaros_gp4/View/Sleep%20Tracker/sleep_tracker_view.dart';
-import 'package:elaros_gp4/Widgets/Buttons/button_guide_stule.dart';
+import 'package:elaros_gp4/Widgets/Buttons/button_guide_style.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_start_track_style.dart';
 import 'package:elaros_gp4/Widgets/Buttons/logout_function.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -135,7 +135,7 @@ class _DashboardViewState extends State<DashboardView> {
                   _featureItem('Sleep',null),
                   _featureItem('Education', EducationView()),
                   _featureItem('Analytics',null),
-                  _featureItem('Sleep Tracking', SleepTracking(profileId: 'Moo')),
+                  _featureItem('Sleep Tracking', SleepTracking(profileId: '')),
 
 
                 ],
