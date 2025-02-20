@@ -18,9 +18,11 @@ class QuestionnaireViewState extends State<QuestionnaireView> {
 
     Map<String, dynamic> answersToStore = {};
     _answers.forEach((questionIndex, answers) {
+      final question = _controller.questions[questionIndex];
       answers.forEach((subQuestionIndex, answer) {
+        final subQuestion = question.questionText[subQuestionIndex];
         answersToStore[
-                'Question ${questionIndex + 1} - SubQuestion ${subQuestionIndex + 1}'] =
+                'Q${questionIndex + 1}_S${subQuestionIndex + 1}_ ${subQuestion.substring(0, 22)}'] =
             answer;
       });
     });
@@ -29,7 +31,7 @@ class QuestionnaireViewState extends State<QuestionnaireView> {
         .collection('questionnaire_answers')
         .add(answersToStore);
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Answers submitted successfully!')),
+      SnackBar(content: Text('Answers Submitted Successfully!')),
     );
   }
 
