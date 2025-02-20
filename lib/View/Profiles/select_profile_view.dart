@@ -1,4 +1,5 @@
-import 'package:elaros_gp4/Widgets/Buttons/button_guide_stule.dart';
+import 'package:elaros_gp4/Widgets/Buttons/button_guide_style.dart';
+import 'package:elaros_gp4/Widgets/Text%20Styles/text_input_style.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../../Widgets/Buttons/logout_function.dart';
@@ -132,15 +133,11 @@ class _SelectProfileViewState extends State<SelectProfileView> {
                       },
                     ),
                     SizedBox(height: 50),
-                    TextField(
-                      controller: nameController,
-                      decoration: InputDecoration(labelText: "Name"),
-                    ),
-                    TextField(
-                      controller: ageController,
-                      decoration: InputDecoration(labelText: "Age"),
-                      keyboardType: TextInputType.number,
-                    ),
+
+                   //custom text widget found in /widget
+                   TextInputStyle(controller: nameController, labelText: "Name"),
+                    SizedBox(height: 10,),
+                    TextInputStyle(controller: ageController, labelText: "Age")
                   ],
                 ),
               ),
@@ -150,12 +147,14 @@ class _SelectProfileViewState extends State<SelectProfileView> {
               child: _isLoading
                   ? Center(child: CircularProgressIndicator())
                   : _profiles.isEmpty
-                      ? Center(child: Text("Profile Not Found"))
-                      : Column(
-                          children: _profiles.map((profile) {
-                            return _profileCard(profile['name'], 'Assets/FemaleFoxPic.png', () {});
-                          }).toList(),
-                        ),
+                  ? Center(child: Text("Profile Not Found"))
+                  : Column(
+                children: _profiles.map((profile) {
+                  return _profileCard(profile['name'], 'Assets/FemaleFoxPic.png', () {
+                    Navigator.pushNamed(context, '/ManageProfileView');
+                  });
+                }).toList(),
+              ),
             ),
           ],
         ),

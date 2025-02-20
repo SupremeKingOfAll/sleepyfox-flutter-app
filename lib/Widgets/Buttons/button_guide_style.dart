@@ -14,7 +14,7 @@ class GuideButton extends StatelessWidget {
     required this.onPressed,
     this.backgroundColor = Colors.amber,
     this.textColor = Colors.black,
-    this.fontSize = 14.0,
+    this.fontSize = 16.0,
     this.minimumSize = const Size(double.infinity, 50),
     this.borderRadius = 30.0,
   });
@@ -30,6 +30,7 @@ class GuideButton extends StatelessWidget {
         textStyle: TextStyle(fontSize: fontSize),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(borderRadius),
+          side: BorderSide(color: Colors.black), // Adding black border
         ),
       ),
       child: Text(text),
