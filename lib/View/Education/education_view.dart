@@ -1,3 +1,5 @@
+import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
+import 'package:elaros_gp4/Widgets/Buttons/logout_function.dart';
 import 'package:elaros_gp4/Widgets/custom_bottom_nav_bar.dart';
 import 'package:elaros_gp4/Widgets/education_container.dart';
 import 'package:flutter/material.dart';
@@ -28,13 +30,22 @@ class _EducationViewState extends State<EducationView> {
 
   int _selectedIndex = 0;
 
-  void _onItemTapped(int index) {
-    if (index != 2) {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
+void _onItemTapped(int index) {
+  if (index == 4) {
+    setState(() {
+      logout(context);
+    });
+  } else if (index == 0) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => DashboardView()),
+    );
+  } else if (index != 2) {
+    setState(() {
+      _selectedIndex = index;
+    });
   }
+}
 
   @override
   Widget build(BuildContext context) {
