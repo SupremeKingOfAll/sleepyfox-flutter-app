@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class ProfileServices {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   // Function to add a child profile
   Future<void> addChildProfile(String name, int age, String email) async {
     CollectionReference childProfiles =
@@ -29,6 +29,15 @@ class ProfileServices {
     return querySnapshot.docs
         .map((doc) => doc.data() as Map<String, dynamic>)
         .toList();
+  }
+  //DELETE PROFILE FUNC
+  Future<void> deleteProfile(String profileId) async {
+    try {
+      await _firestore.collection('childProfiles').doc(profileId).delete();
+      print('Profile Deleted');
+    } catch (e) {
+      print("Failed to delete profile: $e");
+    }
   }
 
   // Fetch profiles associated with the logged-in user's email
