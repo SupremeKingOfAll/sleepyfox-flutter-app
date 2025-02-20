@@ -147,14 +147,12 @@ class _SelectProfileViewState extends State<SelectProfileView> {
               child: _isLoading
                   ? Center(child: CircularProgressIndicator())
                   : _profiles.isEmpty
-                  ? Center(child: Text("Profile Not Found"))
-                  : Column(
-                children: _profiles.map((profile) {
-                  return _profileCard(profile['name'], 'Assets/FemaleFoxPic.png', () {
-                    Navigator.pushNamed(context, '/ManageProfileView');
-                  });
-                }).toList(),
-              ),
+                      ? Center(child: Text("Profile Not Found"))
+                      : Column(
+                          children: _profiles.map((profile) {
+                            return _profileCard(profile['name'], 'Assets/FemaleFoxPic.png', () {Navigator.pushNamed(context,'/ManageProfileView');});
+                          }).toList(),
+                        ),
             ),
           ],
         ),

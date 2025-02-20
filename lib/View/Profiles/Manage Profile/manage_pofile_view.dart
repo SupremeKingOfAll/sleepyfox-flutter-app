@@ -1,6 +1,4 @@
 import 'package:elaros_gp4/Widgets/Buttons/button_guide_style.dart';
-import 'package:elaros_gp4/Widgets/Text%20Styles/text_style_black.dart';
-import 'package:elaros_gp4/Widgets/Text%20Styles/text_style_light.dart';
 import 'package:elaros_gp4/Widgets/Text%20Styles/zaks_personal_text_style.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,8 +17,6 @@ class _ManageProfileViewState extends State<ManageProfileView> {
   final ProfileServices _profileServices = ProfileServices();
   List<Map<String, dynamic>> _profiles = [];
   bool _isLoading = true;
-
-  @override
 
   int _selectedIndex = 0;
 
@@ -52,7 +48,7 @@ class _ManageProfileViewState extends State<ManageProfileView> {
     super.initState();
     _fetchProfiles();
   }
-
+  //Profile fetch
   Future<void> _fetchProfiles() async {
     try {
       List<Map<String, dynamic>> profiles = await _profileServices.fetchChildProfilesForCurrentUser();
@@ -65,6 +61,22 @@ class _ManageProfileViewState extends State<ManageProfileView> {
       setState(() {
         _isLoading = false;
       });
+    }
+  }
+
+  //prof delete
+  Future<void> _deleteProfile(String profileId) async {
+    try {
+      await _profileServices.deleteProfile(profileId);
+      await _fetchProfiles(); // Refresh the profiles list after deletion
+    } catch (error) {
+      print("Failed to delete profile: $error");
+    }
+  }
+
+  void _handleDeleteProfile() async {
+    if (_profiles.isNotEmpty) {
+      await _deleteProfile(_profiles[0]['name']);
     }
   }
 
@@ -188,12 +200,14 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     SizedBox(height: 100,),
-                    GuideButton(text: 'Delete Profile', onPressed: (){}),
-                    SizedBox(height: 5,),
+                    GuideButton(
+                      text: 'Delete Profile',
+                      onPressed: _handleDeleteProfile,
+                    ),
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
