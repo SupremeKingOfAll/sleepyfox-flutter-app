@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:elaros_gp4/Services/profile_services.dart';
 import 'package:elaros_gp4/View/Sleep%20Tracker/time_input_fields.dart';
 import 'package:elaros_gp4/Widgets/custom_bottom_nav_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,15 +7,47 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class SleepTracking extends StatefulWidget {
-  final String profileId;
-
-  const SleepTracking({Key? key, required this.profileId}) : super(key: key);
+  const SleepTracking({super.key});
 
   @override
-  _SleepTrackingState createState() => _SleepTrackingState();
+  State<SleepTracking> createState() => _SleepTrackingState();
 }
 
 class _SleepTrackingState extends State<SleepTracking> {
+  final ProfileServices _profileServices = ProfileServices();
+  String? _selectedProfileId;
+  List<Map<String, dynamic>> _profiles = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchProfiles();
+  }
+
+ Future<void> _fetchProfiles() async {
+    try {
+      List<Map<String, dynamic>> profiles =
+          await _profileServices.fetchChildProfilesForCurrentUser();
+
+      setState(() {
+        _profiles = profiles;
+        _isLoading = false;
+
+        // Auto-select the first profile if none is selected
+        if (_profiles.isNotEmpty && _selectedProfileId == null) {
+          _selectedProfileId = _profiles.first['name'];
+        }
+      });
+    } catch (error) {
+      print("Failed to fetch profiles: $error");
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  
+
   final TextEditingController _bedtimeController = TextEditingController();
   final TextEditingController _wakeUpController = TextEditingController();
   final TextEditingController _notesController = TextEditingController();
@@ -22,6 +55,7 @@ class _SleepTrackingState extends State<SleepTracking> {
   String? _selectedSleepQuality;
   List<Map<String, dynamic>> awakenings = [];
   List<Map<String, dynamic>> naps = [];
+  bool _isLoading = true;
 
   Future<void> _selectDateTime(TextEditingController controller) async {
     DateTime? pickedDate = await showDatePicker(
@@ -69,7 +103,7 @@ class _SleepTrackingState extends State<SleepTracking> {
       // Save to Firestore
       await FirebaseFirestore.instance.collection('dailyTracking').add({
         'email': user.email,
-        'profileId': widget.profileId,
+        'profileId': _selectedProfileId,
         'sleepQuality': _selectedSleepQuality,
         'bedtime': _bedtimeController.text,
         'wakeUp': _wakeUpController.text,
@@ -114,7 +148,6 @@ class _SleepTrackingState extends State<SleepTracking> {
     });
   }
 
-
     int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
@@ -150,6 +183,46 @@ class _SleepTrackingState extends State<SleepTracking> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Profile Selection Dropdown
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: const Text(
+                "Profile Selection",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.amber),
+              ),
+            ),
+            if (_isLoading)
+              const CircularProgressIndicator()
+            else if (_profiles.isEmpty)
+              const Text('No profiles available')
+            else
+              DropdownButtonFormField<String>(
+                value: _profiles.any((profile) => profile['name'] == _selectedProfileId)
+                    ? _selectedProfileId
+                    : null,
+                decoration: InputDecoration(
+                  labelText: 'Select Child Profile',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.amberAccent, width: 2),
+                  ),
+                ),
+                icon: Icon(Icons.arrow_drop_down, color: Colors.amberAccent),
+                dropdownColor: Colors.amber[50],
+                onChanged: (String? newValue) {
+                  setState(() {
+                    _selectedProfileId = newValue;
+                  });
+                },
+                items: _profiles.map<DropdownMenuItem<String>>((profile) {
+                  return DropdownMenuItem<String>(
+                    value: profile['name'],
+                    child: Text(profile['name']),
+                  );
+                }).toList(),
+              ),
             const Text(
               "Sleep Quality",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.amber),
@@ -445,3 +518,4 @@ class NapEntry extends StatefulWidget {
       child: child,
     );
   }
+

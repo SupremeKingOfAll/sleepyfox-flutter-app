@@ -135,7 +135,7 @@ class _DashboardViewState extends State<DashboardView> {
                   _featureItem('Sleep',null),
                   _featureItem('Education', EducationView()),
                   _featureItem('Analytics',null),
-                  _featureItem('Sleep Tracking', SleepTracking(profileId: 'Moo')),
+                  _featureItem('Sleep Tracking', SleepTracking()),
 
 
                 ],
