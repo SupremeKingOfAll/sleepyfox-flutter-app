@@ -221,7 +221,7 @@ void _onItemTapped(int index) {
                   children: [
                     //Widget is inside ./widget/buttons
                     GuideButton(
-                      text: "LearnMore",
+                      text: "Learn More",
                       onPressed: () {},
                     ),
                     SizedBox(height: 10),

@@ -124,6 +124,11 @@ void _onItemTapped(int index) {
                         Navigator.pushNamed(context, '/AboutUs');
                       },
                     ),
+                    ListTile(
+                      leading: Icon(Icons.swap_horizontal_circle_rounded, color: Colors.amber, size: 34),
+                      title: Text("Dark Mode", style: TextStyle(color: Colors.black, fontSize: 20)),
+                      onTap: () {},
+                    ),
                   ],
                 ),
               ),
