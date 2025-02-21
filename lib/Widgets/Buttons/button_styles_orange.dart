@@ -12,11 +12,11 @@ class OrangeButton extends StatelessWidget {
   OrangeButton({
     required this.text,
     required this.onPressed,
-    this.backgroundColor = Colors.orangeAccent,
+    this.backgroundColor = Colors.amberAccent,
     this.textColor = Colors.black,
     this.fontSize = 16.0,
-    this.padding = const EdgeInsets.symmetric(horizontal: 50, vertical: 12),
-    this.borderRadius = 11.0,
+    this.padding = const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+    this.borderRadius = 19.0,
   });
 
   @override

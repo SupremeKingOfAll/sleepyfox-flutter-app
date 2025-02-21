@@ -1,5 +1,6 @@
 import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
 import 'package:elaros_gp4/View/Settings/settings_view.dart';
+import 'package:elaros_gp4/Widgets/Buttons/button_styles_orange.dart';
 import 'package:elaros_gp4/Widgets/Buttons/logout_function.dart';
 import 'package:elaros_gp4/Widgets/custom_bottom_nav_bar.dart';
 import 'package:elaros_gp4/Widgets/education_container.dart';
@@ -80,18 +81,11 @@ void _onItemTapped(int index) {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ElevatedButton(
-                    onPressed: () => _scrollToSection(_hygieneKey),
-                    child: Text('Good Sleep Hygiene'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => _scrollToSection(_cycleKey),
-                    child: Text('Sleep Cycle'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () => _scrollToSection(_habitsKey),
-                    child: Text('Healthy Sleep Habits'),
-                  ),
+                  OrangeButton(text: 'Sleep Hygiene', onPressed: () => _scrollToSection(_hygieneKey),),
+                  SizedBox(width: 5,),
+                  OrangeButton(text: 'Sleep Cycle', onPressed: () => _scrollToSection(_cycleKey),),
+                  SizedBox(width: 5,),
+                  OrangeButton(text: 'Healthy Sleep Habits',onPressed: () => _scrollToSection(_cycleKey),),
                 ],
               ),
             ),

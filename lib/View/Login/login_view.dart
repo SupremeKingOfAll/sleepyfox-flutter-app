@@ -89,7 +89,7 @@ class LoginPageState extends State<LoginPage> {
               onPressed: _handleLogin,
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(200, 50),
-                side: const BorderSide(color: Colors.black, width: 0.5),
+                side: const BorderSide(color: Colors.black, width: 1),
               ),
               child: const Text(
                 'Login',
