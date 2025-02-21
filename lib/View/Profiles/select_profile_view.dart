@@ -49,6 +49,7 @@ class _SelectProfileViewState extends State<SelectProfileView> {
   List<Map<String, dynamic>> _profiles = [];
   bool _isLoading = true;
 
+  // Fetch profiles with error handling
   Future<void> _fetchProfiles() async {
     try {
       List<Map<String, dynamic>> profiles = await _profileServices.fetchChildProfilesForCurrentUser();
@@ -67,12 +68,8 @@ class _SelectProfileViewState extends State<SelectProfileView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white70,
+      backgroundColor: Colors.amber[50],
       appBar: AppBar(
-        leading: Icon(
-          Icons.menu,
-          color: const Color.fromARGB(255, 202, 126, 33),
-        ),
         backgroundColor: const Color.fromARGB(255, 234, 235, 235),
         title: Text("Profiles"),
         actions: [
@@ -147,13 +144,35 @@ class _SelectProfileViewState extends State<SelectProfileView> {
               child: _isLoading
                   ? Center(child: CircularProgressIndicator())
                   : _profiles.isEmpty
-                      ? Center(child: Text("Profile Not Found"))
-                      : Column(
-                          children: _profiles.map((profile) {
-                            return _profileCard(profile['name'], 'Assets/FemaleFoxPic.png', () {Navigator.pushNamed(context,'/ManageProfileView');});
-                          }).toList(),
-                        ),
-            ),
+                  ? Center(child: Text("Profile Not Found"))
+                  : Column(
+                children: _profiles.asMap().entries.map((entry) {
+                  int index = entry.key;
+                  var profile = entry.value;
+
+                  print("Profile index: $index, Profile name: ${profile['name']}");
+
+                  // Ensure that the profile exists before navigating
+                  return _profileCard(
+                    index,
+                    profile['name'],
+                    'Assets/FemaleFoxPic.png',
+                        () {
+                      if (_profiles.length > index) {
+                        Navigator.pushNamed(
+                          context,
+                          '/ManageProfileView',
+                          arguments: index,
+                        );
+                      } else {
+                        print("Invalid profile index: $index");
+                      }
+                    },
+                  );
+                }).toList(),
+              ),
+            )
+
           ],
         ),
       ),
@@ -186,7 +205,7 @@ class _SelectProfileViewState extends State<SelectProfileView> {
   }
 
 
-  Widget _profileCard(String title, String imagePath, VoidCallback? onTap) {
+  Widget _profileCard(int index, String title, String imagePath, VoidCallback? onTap) {
     return Card(
       child: ListTile(
         leading: CircleAvatar(
@@ -198,6 +217,7 @@ class _SelectProfileViewState extends State<SelectProfileView> {
       ),
     );
   }
+
 
 
   Widget _buildNavItem(IconData icon, String label, int index) {

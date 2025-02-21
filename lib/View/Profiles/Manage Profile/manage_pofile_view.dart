@@ -3,7 +3,6 @@ import 'package:elaros_gp4/Widgets/Text%20Styles/zaks_personal_text_style.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:elaros_gp4/Services/profile_services.dart';
-
 import '../../../Widgets/Buttons/logout_function.dart';
 
 class ManageProfileView extends StatefulWidget {
@@ -64,6 +63,8 @@ class _ManageProfileViewState extends State<ManageProfileView> {
     }
   }
 
+
+
   //prof delete
   Future<void> _deleteProfile(String profileId) async {
     try {
@@ -74,34 +75,57 @@ class _ManageProfileViewState extends State<ManageProfileView> {
     }
   }
 
+  //Not Functional delete profile
   void _handleDeleteProfile() async {
     if (_profiles.isNotEmpty) {
       await _deleteProfile(_profiles[0]['name']);
     }
   }
-
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
 
-      appBar: AppBar(
-        leading: Icon(
-          Icons.menu,
-          color: const Color.fromARGB(255, 202, 126, 33),
-        ),
-        backgroundColor: const Color.fromARGB(255, 234, 235, 235),
-        title: Text("Profiles"),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Text("Sleepy fox"),
+  Widget build(BuildContext context) {
+    final int index = ModalRoute.of(context)!.settings.arguments as int;
+
+    // Range error before profile fully loads up
+    //Needs to be fixed after this sprint week. Sorry guys :(
+    if (_profiles.isEmpty || index >= _profiles.length) {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color.fromARGB(255, 234, 235, 235),
+          title: Text("Profiles"),
+          actions: [
+            Padding(
+              padding: EdgeInsets.only(right: 16),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Text("Sleepy fox"),
+              ),
             ),
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
+          ],
+        ),
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
+    final profile = _profiles[index]; // Index of selected profile
+
+    return Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color.fromARGB(255, 234, 235, 235),
+          title: Text("Profiles"),
+          actions: [
+            Padding(
+              padding: EdgeInsets.only(right: 16),
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: Text("Sleepy fox"),
+              ),
+            ),
+          ],
+        ),
+        body: SingleChildScrollView(
         child: Column(
           children: [
             // TOP PROFILE SECTION
@@ -124,17 +148,17 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                         _isLoading
                             ? CircularProgressIndicator()
                             : Column(
-                          children: [
-                            ZaksPersonalTextStyle(
-                              text: _profiles.isNotEmpty ? _profiles[0]['name'] : 'No Profile',
-                              textStyle: TextStyle(fontSize: 40),
-                            ),
-                            Container(height: 0,),
-                            ZaksPersonalTextStyle(
-                              text: "Age: ${_profiles.isNotEmpty ? _profiles[0]['age'].toString() : 'No Age'}",
-                              textStyle: TextStyle(fontSize: 30),
-                            ),
-                          ],
+                        children: [
+                        ZaksPersonalTextStyle(
+                        text: profile['name'],
+                          textStyle: TextStyle(fontSize: 40), // Here (.)(.) ProfileIndex
+                        ),
+                        Container(height: 0),
+                        ZaksPersonalTextStyle(
+                          text: "Age: ${profile['age'].toString()}", //and here as well (.)(.)ProfileIndex
+                          textStyle: TextStyle(fontSize: 30),
+                        ),
+                      ],
                         ),
                       ],
                     ),
