@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elaros_gp4/Services/profile_services.dart';
 import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
+import 'package:elaros_gp4/View/Settings/settings_view.dart';
 import 'package:elaros_gp4/View/Sleep%20Tracker/time_input_fields.dart';
 import 'package:elaros_gp4/Widgets/Buttons/logout_function.dart';
 import 'package:elaros_gp4/Widgets/custom_bottom_nav_bar.dart';
@@ -162,6 +163,11 @@ void _onItemTapped(int index) {
       context,
       MaterialPageRoute(builder: (context) => DashboardView()),
     );
+  } else if (index == 3) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => SettingsView()),
+    );
   } else if (index != 2) {
     setState(() {
       _selectedIndex = index;
@@ -173,12 +179,8 @@ void _onItemTapped(int index) {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Icon(
-          Icons.menu,
-          color: const Color.fromARGB(255, 202, 126, 33),
-        ),
         backgroundColor: const Color.fromARGB(255, 234, 235, 235),
-        title: Text("Dashboard"),
+        title: Text("Daily tracking"),
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 16),
