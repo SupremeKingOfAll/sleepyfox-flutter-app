@@ -1,4 +1,7 @@
+import 'package:elaros_gp4/View/Settings/settings_view.dart';
+import 'package:elaros_gp4/Widgets/Buttons/logout_function.dart';
 import 'package:flutter/material.dart';
+import '../Dashboard/dashboard_view.dart';
 
 class AboutUs extends StatefulWidget {
   const AboutUs({super.key});
@@ -8,13 +11,28 @@ class AboutUs extends StatefulWidget {
 }
 
 class _AboutUs extends State<AboutUs> {
-  int _selectedIndex = 3; // Default to Help & Support page
+  int _selectedIndex = 2; // Default to Settings page
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-      //  Add navigation logic here (e.g., Navigator.pushNamed)
-    });
+    if (index == 4) {
+      setState(() {
+        logout(context);
+      });
+    } else if (index == 0) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => DashboardView()),
+      );
+    } else if (index == 3) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SettingsView()),
+      );
+    } else if (index != 2) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   @override
@@ -24,10 +42,6 @@ class _AboutUs extends State<AboutUs> {
 
       //  Top Navigation Bar
       appBar: AppBar(
-        leading: Icon(
-          Icons.menu,
-          color: const Color.fromARGB(255, 202, 126, 33),
-        ),
         backgroundColor: const Color.fromARGB(255, 234, 235, 235),
         title: Text("About Us"),
         actions: [
@@ -151,30 +165,67 @@ class _AboutUs extends State<AboutUs> {
       ),
 
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.orange,
         onPressed: () {},
-        child: const Icon(Icons.help, color: Colors.white), // Help icon
+        backgroundColor: const Color.fromARGB(255, 233, 166, 90),
+        shape: const CircleBorder(),
+        child: Image.asset(
+          "Assets/SleepyFoxLogo512.png",
+          width: 40,
+          height: 40,
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
-
-  // 🔹 Navigation Item Builder
+//nav
   Widget _buildNavItem(IconData icon, String label, int index) {
+    bool isSelected = _selectedIndex == index;
+
     return GestureDetector(
       onTap: () => _onItemTapped(index),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: _selectedIndex == index ? Colors.orange : Colors.black),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              color: _selectedIndex == index ? Colors.orange : Colors.black,
-            ),
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color:
+          isSelected ? Colors.amber.withOpacity(0.2) : Colors.transparent,
+        ),
+        child: SizedBox(
+          height: 56, // OVERFLOW FIX
+          width: 60, // same width on all devices
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Positioned(
+                top: isSelected ? 0 : 4, // Moves up when selected
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.easeOut,
+                  height: isSelected ? 28 : 24, // Adjusts size without scaling
+                  child: Icon(icon,
+                      color: isSelected ? Colors.amber.shade700 : Colors.black,
+                      size: isSelected ? 28 : 24),
+                ),
+              ),
+              Positioned(
+                bottom: 0, // Fixes text position
+                child: AnimatedDefaultTextStyle(
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight:
+                    isSelected ? FontWeight.bold : FontWeight.normal,
+                    color: isSelected ? Colors.amber.shade700 : Colors.black,
+                  ),
+                  child: Text(label),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

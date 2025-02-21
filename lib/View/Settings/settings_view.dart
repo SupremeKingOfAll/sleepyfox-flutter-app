@@ -120,7 +120,9 @@ void _onItemTapped(int index) {
                     ListTile(
                       leading: Icon(Icons.help, color: Colors.amber, size: 34),
                       title: Text("About Us", style: TextStyle(color: Colors.black, fontSize: 20)),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(context, '/AboutUs');
+                      },
                     ),
                   ],
                 ),
@@ -147,9 +149,14 @@ void _onItemTapped(int index) {
       ),
 
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.orange,
         onPressed: () {},
-        child: const Icon(Icons.settings, color: Colors.white), // Cog icon
+        backgroundColor: const Color.fromARGB(255, 233, 166, 90),
+        shape: const CircleBorder(),
+        child: Image.asset(
+          "Assets/SleepyFoxLogo512.png",
+          width: 40,
+          height: 40,
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
@@ -157,20 +164,53 @@ void _onItemTapped(int index) {
 
   // Navigation Item Builder
   Widget _buildNavItem(IconData icon, String label, int index) {
+    bool isSelected = _selectedIndex == index;
+
     return GestureDetector(
       onTap: () => _onItemTapped(index),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: _selectedIndex == index ? Colors.orange : Colors.black),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              color: _selectedIndex == index ? Colors.orange : Colors.black,
-            ),
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color:
+          isSelected ? Colors.amber.withOpacity(0.2) : Colors.transparent,
+        ),
+        child: SizedBox(
+          height: 56, // OVERFLOW FIX
+          width: 60, // same width on all devices
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              Positioned(
+                top: isSelected ? 0 : 4, // Moves up when selected
+                child: AnimatedContainer(
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.easeOut,
+                  height: isSelected ? 28 : 24, // Adjusts size without scaling
+                  child: Icon(icon,
+                      color: isSelected ? Colors.amber.shade700 : Colors.black,
+                      size: isSelected ? 28 : 24),
+                ),
+              ),
+              Positioned(
+                bottom: 0, // Fixes text position
+                child: AnimatedDefaultTextStyle(
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight:
+                    isSelected ? FontWeight.bold : FontWeight.normal,
+                    color: isSelected ? Colors.amber.shade700 : Colors.black,
+                  ),
+                  child: Text(label),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

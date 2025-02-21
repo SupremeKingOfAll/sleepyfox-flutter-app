@@ -80,7 +80,6 @@ void _onItemTapped(int index) {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.amber[50],
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 234, 235, 235),
         title: Text("Profiles"),

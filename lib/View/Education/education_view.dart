@@ -75,22 +75,25 @@ void _onItemTapped(int index) {
           // Navigation Buttons
           Padding(
             padding: EdgeInsets.all(8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                  onPressed: () => _scrollToSection(_hygieneKey),
-                  child: Text('Good Sleep Hygiene'),
-                ),
-                ElevatedButton(
-                  onPressed: () => _scrollToSection(_cycleKey),
-                  child: Text('Sleep Cycle'),
-                ),
-                ElevatedButton(
-                  onPressed: () => _scrollToSection(_habitsKey),
-                  child: Text('Healthy Sleep Habits'),
-                ),
-              ],
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => _scrollToSection(_hygieneKey),
+                    child: Text('Good Sleep Hygiene'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => _scrollToSection(_cycleKey),
+                    child: Text('Sleep Cycle'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => _scrollToSection(_habitsKey),
+                    child: Text('Healthy Sleep Habits'),
+                  ),
+                ],
+              ),
             ),
           ),
           Expanded(
