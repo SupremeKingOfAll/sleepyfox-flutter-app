@@ -2,6 +2,7 @@ import 'package:elaros_gp4/Controller/user_data_retrieve.dart';
 import 'package:elaros_gp4/View/Education/education_view.dart';
 import 'package:elaros_gp4/View/Profiles/select_profile_view.dart';
 import 'package:elaros_gp4/View/Questionaire/questionaire_view.dart';
+import 'package:elaros_gp4/View/Settings/settings_view.dart';
 import 'package:elaros_gp4/View/Sleep%20Tracker/sleep_tracker_view.dart';
 import 'package:elaros_gp4/View/Sleep%20Review/sleep_review_view.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_guide_style.dart';
@@ -30,6 +31,12 @@ void _onItemTapped(int index) {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => DashboardView()),
+    );
+  }
+    else if (index == 3) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => SettingsView()),
     );
   } else if (index != 2) {
     setState(() {
@@ -147,7 +154,7 @@ void _onItemTapped(int index) {
                   _featureItem('Manage Profiles',SelectProfileView()), // CHANGE NULL INTO NAVIGATOR PUSH TO THE FILE, education example
                   _featureItem('Sleep History',SleepTrackingOverview()),
                   _featureItem('Education', EducationView()),
-                  _featureItem('Analytics', null),
+                  // _featureItem('Analytics', null),
                   _featureItem('Sleep Tracking', SleepTracking()),
                   _featureItem('Questionnaire', QuestionnaireView()),
                 ],

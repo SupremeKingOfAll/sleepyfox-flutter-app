@@ -1,3 +1,5 @@
+import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
+import 'package:elaros_gp4/Widgets/Buttons/logout_function.dart';
 import 'package:flutter/material.dart';
 
 class SettingsView extends StatefulWidget {
@@ -10,22 +12,33 @@ class SettingsView extends StatefulWidget {
 class _SettingsViewState extends State<SettingsView> {
   int _selectedIndex = 2; // Default to Settings page
 
-  void _onItemTapped(int index) {
+void _onItemTapped(int index) {
+  if (index == 4) {
+    setState(() {
+      logout(context);
+    });
+  } else if (index == 0) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => DashboardView()),
+    );
+  } else if (index == 3) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => SettingsView()),
+    );
+  } else if (index != 2) {
     setState(() {
       _selectedIndex = index;
-      //  Add navigation logic here (e.g., Navigator.pushNamed)
     });
   }
+}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white, // Theme color
       appBar: AppBar(
-        leading: Icon(
-          Icons.menu,
-          color: const Color.fromARGB(255, 202, 126, 33),
-        ),
         backgroundColor: const Color.fromARGB(255, 234, 235, 235),
         title: Text("Settings"),
         actions: [

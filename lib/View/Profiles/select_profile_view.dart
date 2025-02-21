@@ -1,4 +1,5 @@
 import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
+import 'package:elaros_gp4/View/Settings/settings_view.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_guide_style.dart';
 import 'package:elaros_gp4/Widgets/Text%20Styles/text_input_style.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,6 +26,11 @@ void _onItemTapped(int index) {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => DashboardView()),
+    );
+  } else if (index == 3) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => SettingsView()),
     );
   } else if (index != 2) {
     setState(() {
