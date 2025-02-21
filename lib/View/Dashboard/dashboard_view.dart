@@ -119,7 +119,7 @@ void _onItemTapped(int index) {
                       child: InfoContainer(
                         title: 'Sleep Cycle',
                         subtitle: 'Deep & REM Sleep',
-                        imagePath: '',
+                        imagePath: 'Assets/FoxMascProfPic.png',
                       ),
                     ),
                     Padding(
@@ -127,7 +127,7 @@ void _onItemTapped(int index) {
                       child: InfoContainer(
                         title: 'Healthy Habits',
                         subtitle: 'Better Rest Routine',
-                        imagePath: '',
+                        imagePath: 'Assets/ProfPicKid.png',
                       ),
                     ),
                   ],

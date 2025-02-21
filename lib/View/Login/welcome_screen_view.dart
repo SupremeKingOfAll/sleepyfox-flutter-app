@@ -70,14 +70,6 @@ class _WelcomeScreenViewState extends State<WelcomeScreenView> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 OrangeButton(
-                  onPressed: () {
-                    setState(() {
-                      _currentIndex = (_currentIndex - 1 + _cards.length) % _cards.length;
-                    });
-                  },
-                  text: 'Back',
-                ),
-                OrangeButton(
                   text: "Next",
                   onPressed: () {
                     setState(() {
@@ -336,46 +328,55 @@ class _WelcomeScreenViewState extends State<WelcomeScreenView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Container(
-          color: Colors.yellow[100],
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              
-              SizedBox(height: 150),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 300,
-                    height: 200,
-                    child: Center(
-                      child: Column(
-                        children: [
-                          StrokeTextDark(
-                            text: "Sleepy",
-                            textStyle: TextStyle(fontSize: 70),
-                          ),
-                          StrokeTextLight(
-                            text: "Fox",
-                            textStyle: TextStyle(fontSize: 70),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
-              Container(
+      backgroundColor: Colors.yellow[100],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Center(
+              child: Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
 
-                height: 300,
-                child: _cards[_currentIndex], // Display the current card based on the index
-              ),
-            ],
+                    SizedBox(height: 100),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 300,
+                          height: 200,
+                          child: Center(
+                            child: Column(
+                              children: [
+                                StrokeTextDark(
+                                  text: "Sleepy",
+                                  textStyle: TextStyle(fontSize: 70),
+                                ),
+                                StrokeTextLight(
+                                  text: "Fox",
+                                  textStyle: TextStyle(fontSize: 70),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+        Container(
+          constraints: BoxConstraints(
+            minHeight: 0,
+            maxHeight: double.infinity,
           ),
+          child: _cards[_currentIndex], // Display the current card based on the index
+        )
+
+        ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

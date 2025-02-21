@@ -19,7 +19,7 @@ class WelcomeTextStyle extends StatelessWidget {
     return Text(
       text,
       style: TextStyle(
-        fontSize: 14,
+        fontSize: 19,
         fontWeight: FontWeight.normal,
         color: Colors.black,
       ),
