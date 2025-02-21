@@ -39,7 +39,7 @@ class TextInputStyle extends StatelessWidget {
             width: 1.0,
           ),
         ),
-        contentPadding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 12.0),
+        contentPadding: EdgeInsets.symmetric(vertical: 14.0, horizontal: 10.0),
       ),
       style: TextStyle(
         color: Colors.black,

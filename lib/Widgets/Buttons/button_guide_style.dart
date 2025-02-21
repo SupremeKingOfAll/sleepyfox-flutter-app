@@ -12,7 +12,7 @@ class GuideButton extends StatelessWidget {
   GuideButton({
     required this.text,
     required this.onPressed,
-    this.backgroundColor = Colors.amber,
+    this.backgroundColor = Colors.amberAccent,
     this.textColor = Colors.black,
     this.fontSize = 16.0,
     this.minimumSize = const Size(double.infinity, 50),

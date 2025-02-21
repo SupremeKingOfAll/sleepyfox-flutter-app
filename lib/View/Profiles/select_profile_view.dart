@@ -98,55 +98,58 @@ void _onItemTapped(int index) {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    SizedBox(height: 50),
-                    GuideButton(
-                      text: "Create a New Profile",
-                      onPressed: () async {
-                        final String name = nameController.text;
-                        final String ageText = ageController.text;
-                        if (name.isEmpty || ageText.isEmpty) {
+              child: Card(
+                color: Colors.grey[50],
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 20),
+                      //custom text widget found in /widget
+                      TextInputStyle(controller: nameController, labelText: "Name"),
+                      SizedBox(height: 10,),
+                      TextInputStyle(controller: ageController, labelText: "Age"),
+                      SizedBox(height: 20,),
+                      GuideButton(
+                        text: "Create a New Profile",
+                        onPressed: () async {
+                          final String name = nameController.text;
+                          final String ageText = ageController.text;
+                          if (name.isEmpty || ageText.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Name and Age are required"),
+                              ),
+                            );
+                            return;
+                          }
+                          final int? age = int.tryParse(ageText);
+                          if (age == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Age has to be a number!')),
+                            );
+                            return;
+                          }
+
+                          final String? email = FirebaseAuth.instance.currentUser?.email;
+                          if (email == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('User not logged in.')),
+                            );
+                            return;
+                          }
+
+                          await _profileServices.addChildProfile(name, age, email);
+                          await _fetchProfiles();
+
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text("Name and Age are required"),
-                            ),
+                            SnackBar(content: Text('Profile created successfully!')),
                           );
-                          return;
-                        }
-                        final int? age = int.tryParse(ageText);
-                        if (age == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Age has to be a number!')),
-                          );
-                          return;
-                        }
-
-                        final String? email = FirebaseAuth.instance.currentUser?.email;
-                        if (email == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('User not logged in.')),
-                          );
-                          return;
-                        }
-
-                        await _profileServices.addChildProfile(name, age, email);
-                        await _fetchProfiles();
-
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Profile created successfully!')),
-                        );
-                      },
-                    ),
-                    SizedBox(height: 50),
-
-                   //custom text widget found in /widget
-                   TextInputStyle(controller: nameController, labelText: "Name"),
-                    SizedBox(height: 10,),
-                    TextInputStyle(controller: ageController, labelText: "Age")
-                  ],
+                        },
+                      ),
+                      SizedBox(height: 20),
+                    ],
+                  ),
                 ),
               ),
             ),
