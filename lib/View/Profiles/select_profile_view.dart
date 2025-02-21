@@ -1,3 +1,4 @@
+import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_guide_style.dart';
 import 'package:elaros_gp4/Widgets/Text%20Styles/text_input_style.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,18 +15,23 @@ class SelectProfileView extends StatefulWidget {
 
 class _SelectProfileViewState extends State<SelectProfileView> {
   int _selectedIndex = 0;
-  void _onItemTapped(int index) {
-    if (index == 4) {
-      setState(() {
-        logout(context);
-      });
-    }
-    if (index != 2) {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
+
+void _onItemTapped(int index) {
+  if (index == 4) {
+    setState(() {
+      logout(context);
+    });
+  } else if (index == 0) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => DashboardView()),
+    );
+  } else if (index != 2) {
+    setState(() {
+      _selectedIndex = index;
+    });
   }
+}
 
   void _logout(BuildContext context) async {
     try {
