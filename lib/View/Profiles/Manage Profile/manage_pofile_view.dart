@@ -152,19 +152,22 @@ void _onItemTapped(int index) {
                         ),
                         _isLoading
                             ? CircularProgressIndicator()
-                            : Column(
-                        children: [
-                        ZaksPersonalTextStyle(
-                        text: profile['name'],
-                          textStyle: TextStyle(fontSize: 40), // Here (.)(.) ProfileIndex
-                        ),
-                        Container(height: 0),
-                        ZaksPersonalTextStyle(
-                          text: "Age: ${profile['age'].toString()}", //and here as well (.)(.)ProfileIndex
-                          textStyle: TextStyle(fontSize: 30),
-                        ),
-                      ],
-                        ),
+                            : Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Column(
+                                                      children: [
+                                                      ZaksPersonalTextStyle(
+                                                      text: profile['name'],
+                                                        textStyle: TextStyle(fontSize: 40), // Here (.)(.) ProfileIndex
+                                                      ),
+                                                      Container(height: 0),
+                                                      ZaksPersonalTextStyle(
+                                                        text: "Age: ${profile['age'].toString()}", //and here as well (.)(.)ProfileIndex
+                                                        textStyle: TextStyle(fontSize: 30),
+                                                      ),
+                                                    ],
+                                                      ),
+                            ),
                       ],
                     ),
                   ),
@@ -174,7 +177,7 @@ void _onItemTapped(int index) {
 
 
             // Decorative Bar
-           SizedBox(height: 50,),
+           SizedBox(height: 20,),
 
             Padding(
               padding: const EdgeInsets.all(8.2),
@@ -210,7 +213,8 @@ void _onItemTapped(int index) {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 ZaksPersonalTextStyle(text: 'Current Mood:', textStyle: TextStyle(fontSize: 20)),
-                                Text('Missing Khalid :(')
+                                ZaksPersonalTextStyle(text: 'Happy', textStyle: TextStyle(fontSize: 18))
+
                               ],
                             ),
                           ],
