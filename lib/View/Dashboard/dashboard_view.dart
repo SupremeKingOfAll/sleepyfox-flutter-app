@@ -105,29 +105,33 @@ void _onItemTapped(int index) {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: const [
+                  children: [
                     Padding(
-                      padding: EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8.0),
                       child: InfoContainer(
+                        onPressed: (){Navigator.pushNamed(context, '/EducationView');},
                         title: 'Sleep Hygiene',
                         subtitle: 'Sleeping Techniques',
                         imagePath: 'Assets/GirlSleep.jpeg',
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8.0),
                       child: InfoContainer(
+                        onPressed: (){Navigator.pushNamed(context, '/EducationView');},
                         title: 'Sleep Cycle',
                         subtitle: 'Deep & REM Sleep',
                         imagePath: 'Assets/FoxMascProfPic.png',
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(8.0),
                       child: InfoContainer(
+                        onPressed: (){Navigator.pushNamed(context, '/EducationView');},
                         title: 'Healthy Habits',
                         subtitle: 'Better Rest Routine',
                         imagePath: 'Assets/ProfPicKid.png',
+
                       ),
                     ),
                   ],

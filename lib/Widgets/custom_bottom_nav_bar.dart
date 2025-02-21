@@ -32,7 +32,7 @@ class CustomBottomNavBar extends StatelessWidget {
       child: AnimatedContainer(
         duration: Duration(milliseconds: 300),
         curve: Curves.easeInOut,
-        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: isSelected ? Colors.amber.withOpacity(0.2) : Colors.transparent,

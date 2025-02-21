@@ -8,6 +8,7 @@ import 'package:elaros_gp4/View/Settings/account_settings.dart';
 import 'package:elaros_gp4/View/Settings/settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'View/Education/education_view.dart';
 import 'View/Profiles/Manage Profile/manage_pofile_view.dart';
 import 'firebase_options.dart';
 import 'View/Login/login_view.dart';
@@ -35,6 +36,8 @@ class MyApp extends StatelessWidget {
 
       home: const WelcomeScreenView(),
       routes: {
+        '/EducationView': (context) => const EducationView(),
+        '/AboutUs':(context) => const AboutUs(),
         '/ManageProfileView': (context) => const ManageProfileView(),
         '/WelcomeView': (context) => const WelcomeScreenView(),
         '/Dashboard': (context) => const DashboardView(),
