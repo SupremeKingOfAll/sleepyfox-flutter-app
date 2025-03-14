@@ -1,5 +1,6 @@
 import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_guide_style.dart';
+import 'package:elaros_gp4/Widgets/PopUp/profile_sharecode_popup.dart';
 import 'package:elaros_gp4/Widgets/Text%20Styles/zaks_personal_text_style.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -460,9 +461,13 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                     SizedBox(
                       height: 100,
                     ),
-                    GuideButton(
+                    GuideButton(                                   //Share Profile Button
                       text: 'Share Profile',
-                      onPressed: (){},
+                      onPressed: (){
+                        showDialog(context: context, builder: (context){
+                          return ProfilePopUp(content: 'FF785HS', title: 'Share Code');//PopUp Dialog can be found in widgets/PopUp
+                        });
+                      },
                     ),
                     SizedBox(height: 10,),
                     GuideButton(
