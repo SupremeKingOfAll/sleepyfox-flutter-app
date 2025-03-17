@@ -474,6 +474,7 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                       text: 'Delete Profile',
                       onPressed: _handleDeleteProfile,
                     ),
+                    SizedBox(height: 20,)
                   ],
                 ),
               ),
