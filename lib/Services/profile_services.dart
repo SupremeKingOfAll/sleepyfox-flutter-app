@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -7,20 +9,27 @@ class ProfileServices {
   // Function to add a child profile
   Future<void> addChildProfile(String name, int age, String email) async {
     CollectionReference childProfiles =
-        FirebaseFirestore.instance.collection('childProfiles');
-    try {
-      await childProfiles.add({
-        'name': name,
-        'age': age,
-        'emails': [email], // multiple emails can be bound to a profile
-      });
-      print("Child Profile Added");
-    } catch (error) {
-      print("Failed to add child profile: $error");
-    }
+    FirebaseFirestore.instance.collection('childProfiles');
+
+     String shareCode = generateShareCode();    // sharecode function is called and is added to profile   
+      try {
+        await childProfiles.add({
+          'name': name,
+          'age': age,
+          'emails': [email], // multiple emails can be bound to a profile
+          'sharecode' : shareCode,
+        });
+        print("Child Profile Added");
+      } catch (error) {
+        print("Failed to add child profile: $error");
+      }
   }
 
-  
+  String generateShareCode({int length = 5}) {
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    final rand = Random.secure();
+    return List.generate(length, (index) => chars[rand.nextInt(chars.length)]).join();
+  }
 
   // Fetch all profiles (not filtered)
   Future<List<Map<String, dynamic>>> fetchChildProfiles() async {
