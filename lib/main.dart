@@ -33,11 +33,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-
       home: const LoginPage(),
       routes: {
         '/EducationView': (context) => const EducationView(),
-        '/AboutUs':(context) => const AboutUs(),
+        '/AboutUs': (context) => const AboutUs(),
         '/ManageProfileView': (context) => const ManageProfileView(),
         '/WelcomeView': (context) => const WelcomeScreenView(),
         '/Dashboard': (context) => const DashboardView(),
