@@ -24,7 +24,12 @@ class _DashboardViewState extends State<DashboardView> {
   int _selectedIndex = 1;
 
   void _onItemTapped(int index) {
-    if (index == 1) {
+    if (index == 0) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SleepTracking()),
+      );
+    } else if (index == 1) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => DashboardView()),
@@ -174,8 +179,8 @@ class _DashboardViewState extends State<DashboardView> {
                         'Assets/ProfPicKid.png'),
                     _featureItem(
                         'Education', EducationView(), 'Assets/ProfPicKid.png'),
-                    _featureItem(
-                        'Sleep', SleepTracking(), 'Assets/ProfPicKid.png'),
+                    _featureItem('Questionnaire', QuestionnaireView(),
+                        'Assets/ProfPicKid.png'),
                   ],
                 ),
               ),
