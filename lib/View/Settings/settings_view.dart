@@ -1,5 +1,5 @@
 import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
-import 'package:elaros_gp4/Widgets/Buttons/logout_function.dart';
+import 'package:elaros_gp4/Services/logout_function.dart';
 import 'package:flutter/material.dart';
 
 class SettingsView extends StatefulWidget {
