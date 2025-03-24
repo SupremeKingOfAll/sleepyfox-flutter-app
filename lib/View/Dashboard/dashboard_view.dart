@@ -177,10 +177,13 @@ class _DashboardViewState extends State<DashboardView> {
                     ),
                     _featureItem('Profiles', SelectProfileView(),
                         'Assets/ProfPicKid.png'),
-                    _featureItem(
-                        'Education', EducationView(), 'Assets/ProfPicKid.png'),
-                    _featureItem('Questionnaire', QuestionnaireView(),
+                    _featureItem('Education', EducationView(), 
                         'Assets/ProfPicKid.png'),
+                    _featureItem('Questionnaire', QuestionnaireView(),
+                        'Assets/ProfPicKid.png'),                       
+                    _featureItem('Did You Know?', EducationView(),
+                        'Assets/ProfPicKid.png'),
+
                   ],
                 ),
               ),
