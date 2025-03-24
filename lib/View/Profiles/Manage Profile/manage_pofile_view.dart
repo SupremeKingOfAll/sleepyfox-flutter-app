@@ -375,8 +375,11 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                 ],
               ),
             ),
-
-            SizedBox(height: 50,),
+            SizedBox(height: 15),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: GuideButton(text: 'Sleep History', onPressed: (){Navigator.pushNamed(context, '/SleepHistory');},),),
+            SizedBox(height: 15),
 
             //Card for the top reasons
             Card(
