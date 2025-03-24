@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:elaros_gp4/Services/profile_services.dart';
 
 class ProfileInputPopUp extends StatelessWidget {
   final String title;
@@ -10,6 +12,7 @@ class ProfileInputPopUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TextEditingController _sharecodecontroller = TextEditingController();
+    final ProfileServices _profileServices = ProfileServices();
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
@@ -72,9 +75,18 @@ class ProfileInputPopUp extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.amber,
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     String inputCode = _sharecodecontroller.text;
                     Navigator.of(context).pop(inputCode);
+                    final String? email = FirebaseAuth.instance.currentUser?.email;
+                    if (email == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('User not logged in.')),
+                      );
+                      return;
+                    }
+                    await _profileServices.addProfileByShareCode(email,inputCode);
+                    await _profileServices.fetchChildProfilesForCurrentUser();
                   },
                   child: Text(
                     'Submit',
