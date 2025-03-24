@@ -465,7 +465,7 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                       text: 'Share Profile',
                       onPressed: (){
                         showDialog(context: context, builder: (context){
-                          return ProfilePopUp(content: 'FF785HS', title: 'Share Code');//PopUp Dialog can be found in widgets/PopUp
+                          return ProfilePopUp(content: profile['sharecode'], title: 'Share Code');//PopUp Dialog can be found in widgets/PopUp
                         });
                       },
                     ),

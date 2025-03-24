@@ -98,4 +98,19 @@ class ProfileServices {
       return [];
     }
   }
+
+  Future<String?> getShareCode(String profileId) async {
+    try {
+      DocumentSnapshot profileDoc = await _firestore.collection('childProfiles').doc(profileId).get();
+      if (profileDoc.exists) { // checks if retrieved profile is not empty
+        return profileDoc['sharecode'] as String?; // returns sharecode if succesfull
+      } else {
+        print("Profile not found");
+        return null;
+      }
+    } catch (e) {
+      print("Failed to retrieve sharecode: $e");
+      return null;
+    }
+  }
 }
