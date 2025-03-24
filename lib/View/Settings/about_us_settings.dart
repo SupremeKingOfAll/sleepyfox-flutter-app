@@ -1,5 +1,7 @@
 import 'package:elaros_gp4/View/Settings/settings_view.dart';
+import 'package:elaros_gp4/View/Sleep%20Tracker/sleep_tracker_view.dart';
 import 'package:elaros_gp4/Widgets/Buttons/logout_function.dart';
+import 'package:elaros_gp4/Widgets/custom_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import '../Dashboard/dashboard_view.dart';
 
@@ -11,19 +13,20 @@ class AboutUs extends StatefulWidget {
 }
 
 class _AboutUs extends State<AboutUs> {
-  int _selectedIndex = 2; // Default to Settings page
+  int _selectedIndex = 1;
 
   void _onItemTapped(int index) {
-    if (index == 4) {
-      setState(() {
-        logout(context);
-      });
-    } else if (index == 0) {
+    if (index == 0) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SleepTracking()),
+      );
+    } else if (index == 1) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => DashboardView()),
       );
-    } else if (index == 3) {
+    } else if (index == 2) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => SettingsView()),
@@ -101,7 +104,7 @@ class _AboutUs extends State<AboutUs> {
               //  Description
               const Text(
                 "Sleep is essential for human survival. Lack of adequate sleep leads to many detrimental health effects. Common behavioural sleep problems include difficulties falling asleep, an inability to maintain sleep and early morning awakenings.\n\n"
-                    "Using the Sleepy Fox™ app, carers are taught to understand the science behind sleep and to create a personalised bedtime plan along with strategies to help the child get a good night’s sleep.",
+                "Using the Sleepy Fox™ app, carers are taught to understand the science behind sleep and to create a personalised bedtime plan along with strategies to help the child get a good night’s sleep.",
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 15, color: Colors.black87),
               ),
@@ -127,7 +130,8 @@ class _AboutUs extends State<AboutUs> {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.orange,
-                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
@@ -148,35 +152,13 @@ class _AboutUs extends State<AboutUs> {
         ),
       ),
 
-      //  Bottom Navigation Bar
-      bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 8.0,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildNavItem(Icons.home, "Home", 0),
-            _buildNavItem(Icons.nightlight_round, "Sleep", 1),
-            const SizedBox(width: 48), // Space for floating button
-            _buildNavItem(Icons.settings, "Settings", 2), // Highlighted by default
-            _buildNavItem(Icons.logout, "Sign Out", 3),
-          ],
-        ),
+      bottomNavigationBar: CustomBottomNavBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
       ),
-
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: const Color.fromARGB(255, 233, 166, 90),
-        shape: const CircleBorder(),
-        child: Image.asset(
-          "Assets/SleepyFoxLogo512.png",
-          width: 40,
-          height: 40,
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
+
 //nav
   Widget _buildNavItem(IconData icon, String label, int index) {
     bool isSelected = _selectedIndex == index;
@@ -190,7 +172,7 @@ class _AboutUs extends State<AboutUs> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color:
-          isSelected ? Colors.amber.withOpacity(0.2) : Colors.transparent,
+              isSelected ? Colors.amber.withOpacity(0.2) : Colors.transparent,
         ),
         child: SizedBox(
           height: 56, // OVERFLOW FIX
@@ -217,7 +199,7 @@ class _AboutUs extends State<AboutUs> {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight:
-                    isSelected ? FontWeight.bold : FontWeight.normal,
+                        isSelected ? FontWeight.bold : FontWeight.normal,
                     color: isSelected ? Colors.amber.shade700 : Colors.black,
                   ),
                   child: Text(label),
