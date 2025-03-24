@@ -61,7 +61,7 @@ class ProfileServices {
 
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('childProfiles')
-          .where('email', isEqualTo: userEmail)
+          .where('emails', arrayContains: userEmail) // changed to arrayContains, this checks if any email equals the userEmail
           .get();
 
       return querySnapshot.docs
