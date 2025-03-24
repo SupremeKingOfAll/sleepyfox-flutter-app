@@ -121,6 +121,7 @@ class _SelectProfileViewState extends State<SelectProfileView> {
                       SizedBox(
                         height: 20,
                       ),
+                      SizedBox(height: 20),
                       GuideButton(
                         text: "Create a New Profile",
                         onPressed: () async {
@@ -168,6 +169,8 @@ class _SelectProfileViewState extends State<SelectProfileView> {
                           return ProfileInputPopUp(hint: 'Share Code', title: 'Add Profile'); //File Found in widgets/PopUp/profile_sharecode_input_popup.dart
                         });
                       }),
+                      SizedBox(height: 10,),
+                      GuideButton(text: 'Sleep History', onPressed: (){Navigator.pushNamed(context, '/SleepHistory');},),
                       SizedBox(height: 20),
                     ],
                   ),
