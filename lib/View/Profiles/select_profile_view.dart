@@ -1,10 +1,11 @@
 import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
 import 'package:elaros_gp4/View/Settings/settings_view.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_guide_style.dart';
+import 'package:elaros_gp4/Widgets/PopUp/profile_sharecode_input_popup.dart';
 import 'package:elaros_gp4/Widgets/Text%20Styles/text_input_style.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../Widgets/Buttons/logout_function.dart';
+import '../../Services/logout_function.dart';
 import 'package:elaros_gp4/Services/profile_services.dart';
 
 class SelectProfileView extends StatefulWidget {
@@ -147,6 +148,12 @@ void _onItemTapped(int index) {
                           );
                         },
                       ),
+                      SizedBox(height: 10,),
+                      GuideButton(text: 'Add With Share Code', onPressed: (){
+                        showDialog(context: context, builder: (context){
+                          return ProfileInputPopUp(hint: 'Share Code', title: 'Add Profile'); //File Found in widgets/PopUp/profile_sharecode_input_popup.dart
+                        });
+                      }),
                       SizedBox(height: 20),
                     ],
                   ),

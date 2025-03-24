@@ -7,7 +7,7 @@ import 'package:elaros_gp4/View/Sleep%20Tracker/sleep_tracker_view.dart';
 import 'package:elaros_gp4/View/Sleep%20Review/sleep_review_view.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_guide_style.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_start_track_style.dart';
-import 'package:elaros_gp4/Widgets/Buttons/logout_function.dart';
+import 'package:elaros_gp4/Services/logout_function.dart';
 import 'package:elaros_gp4/Widgets/custom_bottom_nav_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
