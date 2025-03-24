@@ -12,13 +12,15 @@ class ProfileServices {
       await childProfiles.add({
         'name': name,
         'age': age,
-        'email': email,
+        'emails': [email], // multiple emails can be bound to a profile
       });
       print("Child Profile Added");
     } catch (error) {
       print("Failed to add child profile: $error");
     }
   }
+
+  
 
   // Fetch all profiles (not filtered)
   Future<List<Map<String, dynamic>>> fetchChildProfiles() async {
