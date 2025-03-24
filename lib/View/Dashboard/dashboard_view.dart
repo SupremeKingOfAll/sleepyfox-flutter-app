@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elaros_gp4/Controller/user_data_retrieve.dart';
 import 'package:elaros_gp4/View/Education/education_view.dart';
 import 'package:elaros_gp4/View/Profiles/select_profile_dashboard_view.dart';
@@ -180,10 +183,9 @@ class _DashboardViewState extends State<DashboardView> {
                     _featureItem('Education', EducationView(), 
                         'Assets/ProfPicKid.png'),
                     _featureItem('Questionnaire', QuestionnaireView(),
-                        'Assets/ProfPicKid.png'),                       
+                        'Assets/ProfPicKid.png'),                     
                     _featureItem('Did You Know?', EducationView(),
                         'Assets/ProfPicKid.png'),
-
                   ],
                 ),
               ),
@@ -198,7 +200,7 @@ class _DashboardViewState extends State<DashboardView> {
     );
   }
 
-  Widget _featureItem(String title, Widget page, String imagePath) {
+  Widget _featureItem(String title, Widget page, String imagePath, [String? subText]) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -326,5 +328,34 @@ class _DashboardViewState extends State<DashboardView> {
         ),
       ),
     );
+  }
+
+  Future<String?> getRandomFunFact() async {
+    try {
+      // all documents from the FunFacts collection
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('FunFacts')
+          .get();
+
+      // checks if collection is empty
+      if (snapshot.docs.isEmpty) {
+        print('No fun facts found.');
+        return null;
+      }
+
+      // random document gets picked
+      int randomIndex = Random().nextInt(snapshot.docs.length);
+      DocumentSnapshot randomDoc = snapshot.docs[randomIndex];
+
+      // returns the fact thats stored in the document
+      return randomDoc['fact'] as String?;
+    } catch (e) {
+      print('Error fetching fun fact: $e');
+      return null;
+    }
+  }
+
+  void showFunFact() async{
+    String? fact = await getRandomFunFact();
   }
 }

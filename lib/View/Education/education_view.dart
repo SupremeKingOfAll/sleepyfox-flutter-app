@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
 import 'package:elaros_gp4/View/Settings/settings_view.dart';
 import 'package:elaros_gp4/View/Sleep%20Tracker/sleep_tracker_view.dart';
@@ -279,5 +282,30 @@ class _EducationViewState extends State<EducationView> {
         onItemTapped: _onItemTapped,
       ),
     );
+  }
+
+  Future<String?> getRandomFunFact() async {
+    try {
+      // all documents from the FunFacts collection
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('FunFacts')
+          .get();
+
+      // checks if collection is empty
+      if (snapshot.docs.isEmpty) {
+        print('No fun facts found.');
+        return null;
+      }
+
+      // random document gets picked
+      int randomIndex = Random().nextInt(snapshot.docs.length);
+      DocumentSnapshot randomDoc = snapshot.docs[randomIndex];
+
+      // returns the fact thats stored in the document
+      return randomDoc['fact'] as String?;
+    } catch (e) {
+      print('Error fetching fun fact: $e');
+      return null;
+    }
   }
 }
