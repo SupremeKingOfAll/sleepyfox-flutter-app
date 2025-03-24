@@ -1,5 +1,6 @@
 import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
 import 'package:elaros_gp4/Widgets/Buttons/logout_function.dart';
+import 'package:elaros_gp4/Widgets/custom_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 
 class SettingsView extends StatefulWidget {
@@ -13,16 +14,12 @@ class _SettingsViewState extends State<SettingsView> {
   int _selectedIndex = 2; // Default to Settings page
 
   void _onItemTapped(int index) {
-    if (index == 4) {
-      setState(() {
-        logout(context);
-      });
-    } else if (index == 0) {
+    if (index == 1) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => DashboardView()),
       );
-    } else if (index == 3) {
+    } else if (index == 2) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => SettingsView()),
@@ -126,8 +123,10 @@ class _SettingsViewState extends State<SettingsView> {
                       onTap: () {},
                     ),
                     ListTile(
-                      leading: Icon(Icons.question_mark, color: Colors.amber, size: 34),
-                      title: Text("Guide", style: TextStyle(color: Colors.black, fontSize: 20)),
+                      leading: Icon(Icons.question_mark,
+                          color: Colors.amber, size: 34),
+                      title: Text("Guide",
+                          style: TextStyle(color: Colors.black, fontSize: 20)),
                       onTap: () {
                         Navigator.pushNamed(context, '/GuideView');
                       },
@@ -155,87 +154,12 @@ class _SettingsViewState extends State<SettingsView> {
         ),
       ),
 
-      // Bottom Navigation Bar
-      bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 8.0,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildNavItem(Icons.home, "Home", 0),
-            _buildNavItem(Icons.nightlight_round, "Sleep", 1),
-            const SizedBox(width: 48), // Space for floating button
-            _buildNavItem(
-                Icons.settings, "Settings", 2), // Highlighted by default
-            _buildNavItem(Icons.logout, "Sign Out", 3),
-          ],
-        ),
+      bottomNavigationBar: CustomBottomNavBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
       ),
-
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: const Color.fromARGB(255, 233, 166, 90),
-        shape: const CircleBorder(),
-        child: Image.asset(
-          "Assets/SleepyFoxLogo512.png",
-          width: 40,
-          height: 40,
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
   // Navigation Item Builder
-  Widget _buildNavItem(IconData icon, String label, int index) {
-    bool isSelected = _selectedIndex == index;
-
-    return GestureDetector(
-      onTap: () => _onItemTapped(index),
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color:
-              isSelected ? Colors.amber.withOpacity(0.2) : Colors.transparent,
-        ),
-        child: SizedBox(
-          height: 56, // OVERFLOW FIX
-          width: 60, // same width on all devices
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Positioned(
-                top: isSelected ? 0 : 4, // Moves up when selected
-                child: AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  curve: Curves.easeOut,
-                  height: isSelected ? 28 : 24, // Adjusts size without scaling
-                  child: Icon(icon,
-                      color: isSelected ? Colors.amber.shade700 : Colors.black,
-                      size: isSelected ? 28 : 24),
-                ),
-              ),
-              Positioned(
-                bottom: 0, // Fixes text position
-                child: AnimatedDefaultTextStyle(
-                  duration: Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight:
-                        isSelected ? FontWeight.bold : FontWeight.normal,
-                    color: isSelected ? Colors.amber.shade700 : Colors.black,
-                  ),
-                  child: Text(label),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }
