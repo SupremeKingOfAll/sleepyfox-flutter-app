@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ProfilePopUp extends StatelessWidget {
   final String title;
@@ -19,15 +20,16 @@ class ProfilePopUp extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
           boxShadow: [
             BoxShadow(
-              color: Colors.amberAccent.withOpacity(0.7), // Color of outline glow/light
-              blurRadius: 10, //  spread
+              color: Colors.amberAccent.withOpacity(0.7), // shadow on box
+              blurRadius: 10,
               spreadRadius: 1,
             ),
           ],
         ),
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         child: Column(
-          mainAxisSize: MainAxisSize.min, // Ensures the dialog doesn’t take up the whole screen, as it took it up for last attempt
+          mainAxisSize:
+          MainAxisSize.min,
           children: [
             Text(
               title,
@@ -43,11 +45,28 @@ class ProfilePopUp extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 20,
-                color: Colors.grey[700],
+                color: Colors.grey[700], // grey text , sharecode colour
                 letterSpacing: 5,
               ),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 10),
+            TextButton.icon(
+              onPressed: () {
+                Clipboard.setData(ClipboardData(text: content));
+                ScaffoldMessenger.of(context).showSnackBar( // snackbar popup for confirmation
+                  SnackBar(
+                    content: Text('Copied to clipboard'),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+              },
+              icon: Icon(Icons.copy, color: Colors.black87),
+              label: Text(
+                'Copy Share Code',
+                style: TextStyle(color: Colors.black87),
+              ),
+            ),
+            SizedBox(height: 10),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
