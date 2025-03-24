@@ -1,5 +1,6 @@
 import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
 import 'package:elaros_gp4/View/Settings/settings_view.dart';
+import 'package:elaros_gp4/View/Sleep%20Tracker/sleep_tracker_view.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_styles_orange.dart';
 import 'package:elaros_gp4/Services/logout_function.dart';
 import 'package:elaros_gp4/Widgets/custom_bottom_nav_bar.dart';
@@ -32,33 +33,33 @@ class _EducationViewState extends State<EducationView> {
 
   int _selectedIndex = 0;
 
-void _onItemTapped(int index) {
-  if (index == 4) {
-    setState(() {
-      logout(context);
-    });
-  } else if (index == 0) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => DashboardView()),
-    );
-  } else if (index == 3) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => SettingsView()),
-    );
-  }else if (index != 2) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  void _onItemTapped(int index) {
+    if (index == 0) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SleepTracking()),
+      );
+    } else if (index == 1) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => DashboardView()),
+      );
+    } else if (index == 2) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SettingsView()),
+      );
+    } else if (index != 2) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-
         backgroundColor: Color.fromARGB(255, 234, 235, 235),
         title: Text("Education"),
         actions: [
@@ -81,11 +82,24 @@ void _onItemTapped(int index) {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  OrangeButton(text: 'Sleep Hygiene', onPressed: () => _scrollToSection(_hygieneKey),),
-                  SizedBox(width: 5,),
-                  OrangeButton(text: 'Sleep Cycle', onPressed: () => _scrollToSection(_cycleKey),),
-                  SizedBox(width: 5,),
-                  OrangeButton(text: 'Healthy Sleep Habits',onPressed: () => _scrollToSection(_cycleKey),),
+                  OrangeButton(
+                    text: 'Sleep Hygiene',
+                    onPressed: () => _scrollToSection(_hygieneKey),
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  OrangeButton(
+                    text: 'Sleep Cycle',
+                    onPressed: () => _scrollToSection(_cycleKey),
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  OrangeButton(
+                    text: 'Healthy Sleep Habits',
+                    onPressed: () => _scrollToSection(_cycleKey),
+                  ),
                 ],
               ),
             ),
@@ -102,7 +116,10 @@ void _onItemTapped(int index) {
                     padding: EdgeInsets.only(left: 16, top: 8, bottom: 4),
                     child: Text(
                       'Sleep Hygiene',
-                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.amber),
+                      style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.amber),
                     ),
                   ),
                   Padding(
@@ -112,22 +129,26 @@ void _onItemTapped(int index) {
                   SizedBox(height: 8),
                   InfoCard(
                     title: 'Good Sleep Hygiene',
-                    content: 'Good sleep hygiene includes a consistent routine, a comfortable sleep environment, '
+                    content:
+                        'Good sleep hygiene includes a consistent routine, a comfortable sleep environment, '
                         'and healthy habits that promote restful sleep.',
                   ),
                   InfoCard(
                     title: 'Consistent Bedtime Routine',
-                    content: 'A predictable bedtime routine helps children feel secure and ready for sleep. '
+                    content:
+                        'A predictable bedtime routine helps children feel secure and ready for sleep. '
                         'This can include brushing teeth, reading a book, and dimming the lights 30 minutes before bed.',
                   ),
                   InfoCard(
                     title: 'Create a Comfortable Sleep Environment',
-                    content: 'A cool, dark, and quiet bedroom promotes better sleep. Use blackout curtains, '
+                    content:
+                        'A cool, dark, and quiet bedroom promotes better sleep. Use blackout curtains, '
                         'a white noise machine if needed, and a comfortable mattress and pillow suitable for their age.',
                   ),
                   InfoCard(
                     title: 'Limit Screen Time Before Bed',
-                    content: 'Blue light from screens can disrupt melatonin production, making it harder to fall asleep. '
+                    content:
+                        'Blue light from screens can disrupt melatonin production, making it harder to fall asleep. '
                         'Turn off devices at least one hour before bedtime and encourage quiet activities instead.',
                   ),
 
@@ -137,7 +158,10 @@ void _onItemTapped(int index) {
                     padding: EdgeInsets.only(left: 16, top: 8, bottom: 4),
                     child: Text(
                       'Understanding the Sleep Cycle',
-                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.amber),
+                      style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.amber),
                     ),
                   ),
                   Padding(
@@ -146,13 +170,15 @@ void _onItemTapped(int index) {
                   ),
                   SizedBox(height: 8),
                   InfoCard(
-                  title: 'Understanding the Sleep Cycle',
-                  content: 'Children’s sleep cycles include deep sleep and REM sleep, both essential for growth and brain development. '
-                    'Maintaining a consistent sleep schedule helps regulate these cycles.',
+                    title: 'Understanding the Sleep Cycle',
+                    content:
+                        'Children’s sleep cycles include deep sleep and REM sleep, both essential for growth and brain development. '
+                        'Maintaining a consistent sleep schedule helps regulate these cycles.',
                   ),
                   InfoCard(
                     title: 'Age-Appropriate Sleep Duration',
-                    content: 'Children need different amounts of sleep based on age:\n'
+                    content:
+                        'Children need different amounts of sleep based on age:\n'
                         '- 2-3 years: 11-14 hours (including naps)\n'
                         '- 4-5 years: 10-13 hours\n'
                         '- 6-13 years: 9-11 hours.\n'
@@ -160,12 +186,14 @@ void _onItemTapped(int index) {
                   ),
                   InfoCard(
                     title: 'Wake Up at the Same Time Daily',
-                    content: 'Even on weekends, keeping a consistent wake-up time strengthens the body’s sleep-wake cycle, '
+                    content:
+                        'Even on weekends, keeping a consistent wake-up time strengthens the body’s sleep-wake cycle, '
                         'leading to better sleep quality.',
                   ),
                   InfoCard(
                     title: 'No Late Naps for Older Kids',
-                    content: 'While naps are essential for toddlers, children over 5 should avoid napping too late in the afternoon, '
+                    content:
+                        'While naps are essential for toddlers, children over 5 should avoid napping too late in the afternoon, '
                         'as it can interfere with nighttime sleep.',
                   ),
 
@@ -175,7 +203,10 @@ void _onItemTapped(int index) {
                     padding: EdgeInsets.only(left: 16, top: 8, bottom: 4),
                     child: Text(
                       'Healthy Sleep Habits',
-                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.amber),
+                      style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.amber),
                     ),
                   ),
                   Padding(
@@ -185,27 +216,32 @@ void _onItemTapped(int index) {
                   SizedBox(height: 8),
                   InfoCard(
                     title: 'Healthy Sleep Habits',
-                    content: 'Healthy lifestyle choices, including physical activity, a balanced diet, and stress management, '
+                    content:
+                        'Healthy lifestyle choices, including physical activity, a balanced diet, and stress management, '
                         'can significantly improve sleep quality for children.',
                   ),
                   InfoCard(
                     title: 'Encourage Physical Activity',
-                    content: 'Regular exercise during the day helps children fall asleep faster and enjoy deeper sleep. '
+                    content:
+                        'Regular exercise during the day helps children fall asleep faster and enjoy deeper sleep. '
                         'However, avoid high-energy activities right before bed.',
                   ),
                   InfoCard(
                     title: 'Healthy Eating Habits',
-                    content: 'Avoid sugary snacks, caffeine (found in soda, tea, and chocolate), and heavy meals close to bedtime. '
+                    content:
+                        'Avoid sugary snacks, caffeine (found in soda, tea, and chocolate), and heavy meals close to bedtime. '
                         'A light snack, like a banana or warm milk, can be calming before bed.',
                   ),
                   InfoCard(
                     title: 'Reduce Nighttime Anxiety',
-                    content: 'Some children experience bedtime anxiety. A comfort object, a calming bedtime story, or talking '
+                    content:
+                        'Some children experience bedtime anxiety. A comfort object, a calming bedtime story, or talking '
                         'about their day can ease their minds before sleep.',
                   ),
                   InfoCard(
                     title: 'Teach Self-Soothing Techniques',
-                    content: 'If children wake up at night, encourage them to self-soothe rather than relying on a parent. '
+                    content:
+                        'If children wake up at night, encourage them to self-soothe rather than relying on a parent. '
                         'A favorite stuffed animal or a soft nightlight can help.',
                   ),
 
@@ -214,7 +250,10 @@ void _onItemTapped(int index) {
                     padding: EdgeInsets.only(left: 16, top: 8, bottom: 4),
                     child: Text(
                       'References',
-                      style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.amber),
+                      style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.amber),
                     ),
                   ),
                   Padding(
@@ -224,7 +263,8 @@ void _onItemTapped(int index) {
                   SizedBox(height: 8),
                   InfoCard(
                     title: 'References',
-                    content: '1. American Academy of Sleep Medicine (AASM). "Recommended Sleep Duration by Age."\n'
+                    content:
+                        '1. American Academy of Sleep Medicine (AASM). "Recommended Sleep Duration by Age."\n'
                         '2. National Sleep Foundation. "Healthy Sleep Tips for Children."\n'
                         '3. Centers for Disease Control and Prevention (CDC). "Children’s Sleep Guidelines."',
                   ),
@@ -235,20 +275,9 @@ void _onItemTapped(int index) {
         ],
       ),
       bottomNavigationBar: CustomBottomNavBar(
-              selectedIndex: _selectedIndex,
-              onItemTapped: _onItemTapped,
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {},
-              backgroundColor: const Color.fromARGB(255, 233, 166, 90),
-              shape: const CircleBorder(),
-              child: Image.asset(
-                "Assets/SleepyFoxLogo512.png",
-                width: 40,
-                height: 40,
-              ),
-            ),
-            floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-          );
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
+      ),
+    );
   }
 }

@@ -12,7 +12,8 @@ class QuestionnaireView extends StatefulWidget {
 class QuestionnaireViewState extends State<QuestionnaireView> {
   final QuestionnaireController _controller = QuestionnaireController();
   final Map<int, Map<int, String>> _answers = {};
-  int _currentStep = 0;
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
 
   void _handleSubmit() async {
     print('User answers: $_answers');
@@ -37,53 +38,63 @@ class QuestionnaireViewState extends State<QuestionnaireView> {
   }
 
   double _calculateProgress() {
-    return _currentStep / _controller.questions.length;
+    return (_currentPage + 1) / _controller.questions.length;
   }
 
-  List<Step> _buildSteps() {
+  List<Widget> _buildQuestionCards() {
     return _controller.questions.asMap().entries.map((entry) {
       int index = entry.key;
       var question = entry.value;
 
-      return Step(
-        title: Text(question.questionTitle),
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ...List.generate(question.questionText.length, (qIndex) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    question.questionText[qIndex],
-                    style: TextStyle(fontSize: 15),
-                  ),
-                  SizedBox(height: 20),
-                  ...question.answers[qIndex].map((answer) {
-                    return RadioListTile<String>(
-                      title: Text(answer, style: TextStyle(fontSize: 14)),
-                      value: answer,
-                      groupValue: _answers[index]?[qIndex],
-                      onChanged: (value) {
-                        setState(() {
-                          _answers[index] ??= {};
-                          _answers[index]![qIndex] = value!;
-                        });
-                      },
-                    );
-                  }),
-                  SizedBox(height: 20),
-                  if (qIndex < question.questionText.length - 1)
-                    Divider(color: Colors.grey, indent: 25, endIndent: 25),
-                  if (qIndex < question.questionText.length - 1)
-                    SizedBox(height: 20),
-                ],
-              );
-            }),
-          ],
+      return SizedBox(
+        height: 200,
+        child: Card(
+          margin: EdgeInsets.all(16.0),
+          elevation: 4,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  question.questionTitle,
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 5),
+                ...List.generate(question.questionText.length, (qIndex) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        question.questionText[qIndex],
+                        style: TextStyle(fontSize: 15),
+                      ),
+                      SizedBox(height: 10),
+                      ...question.answers[qIndex].map((answer) {
+                        return RadioListTile<String>(
+                          title: Text(answer, style: TextStyle(fontSize: 14)),
+                          value: answer,
+                          groupValue: _answers[index]?[qIndex],
+                          onChanged: (value) {
+                            setState(() {
+                              _answers[index] ??= {};
+                              _answers[index]![qIndex] = value!;
+                            });
+                          },
+                        );
+                      }),
+                      SizedBox(height: 10),
+                      if (qIndex < question.questionText.length - 1)
+                        Divider(color: Colors.grey, indent: 25, endIndent: 25),
+                      if (qIndex < question.questionText.length - 1)
+                        SizedBox(height: 10),
+                    ],
+                  );
+                }),
+              ],
+            ),
+          ),
         ),
-        isActive: _currentStep >= index,
-        state: _currentStep > index ? StepState.complete : StepState.indexed,
       );
     }).toList();
   }
@@ -120,32 +131,30 @@ class QuestionnaireViewState extends State<QuestionnaireView> {
             ),
           ),
           Expanded(
-            child: Stepper(
-              currentStep: _currentStep,
-              onStepContinue: () {
-                if (_currentStep < _controller.questions.length - 1) {
-                  setState(() {
-                    _currentStep += 1;
-                  });
-                } else {
-                  _handleSubmit();
-                }
+            child: PageView(
+              controller: _pageController,
+              onPageChanged: (index) {
+                setState(() {
+                  _currentPage = index;
+                });
               },
-              onStepCancel: () {
-                if (_currentStep > 0) {
-                  setState(() {
-                    _currentStep -= 1;
-                  });
-                }
-              },
-              steps: _buildSteps(),
+              children: _buildQuestionCards(),
             ),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _handleSubmit,
-        child: Icon(Icons.check),
+        onPressed: () {
+          if (_currentPage < _controller.questions.length - 1) {
+            _pageController.nextPage(
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+          } else {
+            _handleSubmit();
+          }
+        },
+        child: Icon(Icons.arrow_forward),
       ),
     );
   }

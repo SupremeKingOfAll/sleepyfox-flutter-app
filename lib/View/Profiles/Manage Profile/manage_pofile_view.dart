@@ -1,12 +1,13 @@
 import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
+import 'package:elaros_gp4/View/Settings/settings_view.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_guide_style.dart';
 import 'package:elaros_gp4/Widgets/PopUp/profile_sharecode_popup.dart';
 import 'package:elaros_gp4/Widgets/Text%20Styles/zaks_personal_text_style.dart';
+import 'package:elaros_gp4/Widgets/custom_bottom_nav_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:elaros_gp4/Services/profile_services.dart';
-import '../../../Services/logout_function.dart';
 
 class ManageProfileView extends StatefulWidget {
   const ManageProfileView({super.key});
@@ -23,14 +24,15 @@ class _ManageProfileViewState extends State<ManageProfileView> {
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {
-    if (index == 4) {
-      setState(() {
-        logout(context);
-      });
-    } else if (index == 0) {
+    if (index == 1) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => DashboardView()),
+      );
+    } else if (index == 2) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SettingsView()),
       );
     } else if (index != 2) {
       setState(() {
@@ -253,7 +255,12 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Center(child: ZaksPersonalTextStyle(text: 'Sleep Pie', textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
+                          Center(
+                              child: ZaksPersonalTextStyle(
+                                  text: 'Sleep Pie',
+                                  textStyle: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold))),
                           SizedBox(height: 10),
                           SizedBox(
                             height: 200,
@@ -272,18 +279,27 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                               ),
                             ),
                           ),
-
-                          SizedBox(height: 50,),
-
+                          SizedBox(
+                            height: 50,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              ZaksPersonalTextStyle(text: 'Asleep: 🟢', textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                              SizedBox(width: 10,),
-                              ZaksPersonalTextStyle(text: 'Awake: 🟠', textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                              ZaksPersonalTextStyle(
+                                  text: 'Asleep: 🟢',
+                                  textStyle: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold)),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              ZaksPersonalTextStyle(
+                                  text: 'Awake: 🟠',
+                                  textStyle: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold)),
                             ],
                           ),
-
                         ],
                       ),
                     ),
@@ -303,14 +319,20 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ZaksPersonalTextStyle(text: 'Sleep Calendar', textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                          ZaksPersonalTextStyle(
+                              text: 'Sleep Calendar',
+                              textStyle: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold)),
                           SizedBox(height: 10),
                           SizedBox(
                             height: 200,
                             child: GridView.builder(
-                              physics: NeverScrollableScrollPhysics(),// Wont let the user scroll the calendar
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 7, // 7 columns for days of the week as it was discussed
+                              physics:
+                                  NeverScrollableScrollPhysics(), // Wont let the user scroll the calendar
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount:
+                                    7, // 7 columns for days of the week as it was discussed
                                 mainAxisSpacing: 4,
                                 crossAxisSpacing: 4,
                               ),
@@ -318,7 +340,10 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                               itemBuilder: (context, index) {
                                 return Container(
                                   decoration: BoxDecoration(
-                                    color: index % 5 == 0 ? Colors.red : Colors.green,//temp decoration implementation here. index div 5 = 0 then red. else green
+                                    color: index % 5 == 0
+                                        ? Colors.red
+                                        : Colors
+                                            .green, //temp decoration implementation here. index div 5 = 0 then red. else green
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Center(
@@ -331,7 +356,9 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                               },
                             ),
                           ),
-                          SizedBox(height: 10,),
+                          SizedBox(
+                            height: 10,
+                          ),
                           // Color code explanation part below
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -342,12 +369,17 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                                 children: [
                                   ZaksPersonalTextStyle(
                                     text: 'Excellent: 🟢',
-                                    textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                    textStyle: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
                                   ),
-                                  SizedBox(width: 20), // Ensure consistent spacing
+                                  SizedBox(
+                                      width: 20), // Ensure consistent spacing
                                   ZaksPersonalTextStyle(
                                     text: 'Could be better: 🟠',
-                                    textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                    textStyle: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
@@ -357,12 +389,16 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                                 children: [
                                   ZaksPersonalTextStyle(
                                     text: 'Bad: 🟡',
-                                    textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                    textStyle: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   SizedBox(width: 20),
                                   ZaksPersonalTextStyle(
                                     text: 'Really Bad: 🔴',
-                                    textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                    textStyle: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
@@ -375,11 +411,10 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                 ],
               ),
             ),
-            SizedBox(height: 15),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: GuideButton(text: 'Sleep History', onPressed: (){Navigator.pushNamed(context, '/SleepHistory');},),),
-            SizedBox(height: 15),
+
+            SizedBox(
+              height: 50,
+            ),
 
             //Card for the top reasons
             Card(
@@ -401,9 +436,13 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 20,),
+                    SizedBox(
+                      height: 20,
+                    ),
                     SizedBox(height: 10),
-                    SizedBox(height: 20,),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -417,9 +456,13 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20,),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Divider(),
-                    SizedBox(height: 20,),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -433,9 +476,13 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20,),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Divider(),
-                    SizedBox(height: 20,),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -454,7 +501,6 @@ class _ManageProfileViewState extends State<ManageProfileView> {
               ),
             ),
 
-
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Container(
@@ -464,20 +510,30 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                     SizedBox(
                       height: 100,
                     ),
-                    GuideButton(                                   //Share Profile Button
+                    GuideButton(
+                      //Share Profile Button
                       text: 'Share Profile',
-                      onPressed: (){
-                        showDialog(context: context, builder: (context){
-                          return ProfilePopUp(content: profile['sharecode'], title: 'Share Code');//PopUp Dialog can be found in widgets/PopUp
-                        });
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return ProfilePopUp(
+                                  content: 'FF785HS',
+                                  title:
+                                      'Share Code'); //PopUp Dialog can be found in widgets/PopUp
+                            });
                       },
                     ),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     GuideButton(
                       text: 'Delete Profile',
                       onPressed: _handleDeleteProfile,
                     ),
-                    SizedBox(height: 20,)
+                    SizedBox(
+                      height: 20,
+                    )
                   ],
                 ),
               ),
@@ -485,82 +541,9 @@ class _ManageProfileViewState extends State<ManageProfileView> {
           ],
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 8.0,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildNavItem(Icons.home, "Home", 0),
-            _buildNavItem(Icons.nightlight_round, "Sleep", 1),
-            const SizedBox(width: 48), // Space for floating button
-            _buildNavItem(Icons.settings, "Settings", 3),
-            _buildNavItem(Icons.logout, "Sign Out", 4),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: const Color.fromARGB(255, 233, 166, 90),
-        shape: const CircleBorder(),
-        child: Image.asset(
-          "Assets/SleepyFoxLogo512.png",
-          width: 40,
-          height: 40,
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-    );
-  }
-
-  Widget _buildNavItem(IconData icon, String label, int index) {
-    bool isSelected = _selectedIndex == index;
-
-    return GestureDetector(
-      onTap: () => _onItemTapped(index),
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color:
-              isSelected ? Colors.amber.withOpacity(0.2) : Colors.transparent,
-        ),
-        child: SizedBox(
-          height: 56, // OVERFLOW FIX
-          width: 60, // same width on all devices
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Positioned(
-                top: isSelected ? 0 : 4, // Moves up when selected
-                child: AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  curve: Curves.easeOut,
-                  height: isSelected ? 28 : 24, // Adjusts size without scaling
-                  child: Icon(icon,
-                      color: isSelected ? Colors.amber.shade700 : Colors.black,
-                      size: isSelected ? 28 : 24),
-                ),
-              ),
-              Positioned(
-                bottom: 0, // Fixes text position
-                child: AnimatedDefaultTextStyle(
-                  duration: Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight:
-                        isSelected ? FontWeight.bold : FontWeight.normal,
-                    color: isSelected ? Colors.amber.shade700 : Colors.black,
-                  ),
-                  child: Text(label),
-                ),
-              ),
-            ],
-          ),
-        ),
+      bottomNavigationBar: CustomBottomNavBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
       ),
     );
   }

@@ -10,7 +10,8 @@ class UserDataRetrieveService {
     try {
       User? user = _auth.currentUser;
       if (user != null) {
-        DocumentSnapshot userDoc = await _firestore.collection('users').doc(user.uid).get();
+        DocumentSnapshot userDoc =
+            await _firestore.collection('users').doc(user.uid).get();
         if (userDoc.exists) {
           return userDoc['username'];
         } else {
@@ -42,7 +43,7 @@ class UserNameDisplay extends StatelessWidget {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Colors.black,
+              color: const Color.fromARGB(255, 252, 174, 41),
             ),
           );
         }
@@ -52,7 +53,7 @@ class UserNameDisplay extends StatelessWidget {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Colors.black,
+              color: const Color.fromARGB(255, 252, 174, 41),
             ),
           );
         }
@@ -71,7 +72,7 @@ class UserNameDisplay extends StatelessWidget {
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: const Color.fromARGB(255, 252, 174, 41),
           ),
         );
       },

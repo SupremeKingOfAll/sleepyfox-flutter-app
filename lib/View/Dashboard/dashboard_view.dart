@@ -21,30 +21,30 @@ class DashboardView extends StatefulWidget {
 }
 
 class _DashboardViewState extends State<DashboardView> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
 
-void _onItemTapped(int index) {
-  if (index == 4) {
-    setState(() {
-      logout(context);
-    });
-  } else if (index == 0) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => DashboardView()),
-    );
+  void _onItemTapped(int index) {
+    if (index == 0) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SleepTracking()),
+      );
+    } else if (index == 1) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => DashboardView()),
+      );
+    } else if (index == 2) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SettingsView()),
+      );
+    } else if (index != 2) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
-    else if (index == 3) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => SettingsView()),
-    );
-  } else if (index != 2) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-}
 
 //logout function
   void _logout(BuildContext context) async {
@@ -65,7 +65,8 @@ void _onItemTapped(int index) {
         title: Text(
           "Dashboard",
           style: TextStyle(
-            color: const Color.fromARGB(255, 252, 174, 41), // Amber color for title text
+            color: const Color.fromARGB(
+                255, 252, 174, 41), // Amber color for title text
           ),
         ),
         actions: [
@@ -76,7 +77,8 @@ void _onItemTapped(int index) {
               child: Text(
                 "Sleepy fox",
                 style: TextStyle(
-                  color: const Color.fromARGB(255, 252, 174, 41), // Light amber for the subtitle text
+                  color: const Color.fromARGB(
+                      255, 252, 174, 41), // Light amber for the subtitle text
                 ),
               ),
             ),
@@ -84,12 +86,13 @@ void _onItemTapped(int index) {
         ],
       ),
       body: Container(
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('Assets/blue-phone-0njfrpcuzj98bp30.jpg'), // Background image
-              fit: BoxFit.cover,
-            ),
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+                'Assets/blue-phone-0njfrpcuzj98bp30.jpg'), // Background image
+            fit: BoxFit.cover,
           ),
+        ),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -123,7 +126,9 @@ void _onItemTapped(int index) {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: InfoContainer(
-                          onPressed: (){Navigator.pushNamed(context, '/EducationView');},
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/EducationView');
+                          },
                           title: 'Sleep Hygiene',
                           subtitle: 'Sleeping Techniques',
                           imagePath: 'Assets/GirlSleep.jpeg',
@@ -132,7 +137,9 @@ void _onItemTapped(int index) {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: InfoContainer(
-                          onPressed: (){Navigator.pushNamed(context, '/EducationView');},
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/EducationView');
+                          },
                           title: 'Sleep Cycle',
                           subtitle: 'Deep & REM Sleep',
                           imagePath: 'Assets/FoxMascProfPic.png',
@@ -141,18 +148,19 @@ void _onItemTapped(int index) {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: InfoContainer(
-                          onPressed: (){Navigator.pushNamed(context, '/EducationView');},
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/EducationView');
+                          },
                           title: 'Healthy Habits',
                           subtitle: 'Better Rest Routine',
                           imagePath: 'Assets/ProfPicKid.png',
-        
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-        
+
               // SLEEPYFOX FEATURES PART
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -167,35 +175,24 @@ void _onItemTapped(int index) {
                         color: Colors.amber,
                       ),
                     ),
-                    _featureItem('Profiles', SelectProfileView(),'Assets/ProfPicKid.png'),
-                    _featureItem('Education', EducationView(),'Assets/ProfPicKid.png'),
-                    _featureItem('Sleep', SleepTracking(),'Assets/ProfPicKid.png'),
+                    _featureItem('Profiles', SelectProfileView(),
+                        'Assets/ProfPicKid.png'),
+                    _featureItem(
+                        'Education', EducationView(), 'Assets/ProfPicKid.png'),
+                    _featureItem('Questionnaire', QuestionnaireView(),
+                        'Assets/ProfPicKid.png'),
                   ],
-
                 ),
               ),
-        
-              
             ],
           ),
         ),
       ),
-        bottomNavigationBar: CustomBottomNavBar(
-          selectedIndex: _selectedIndex,
-          onItemTapped: _onItemTapped,
-        ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {},
-            backgroundColor: const Color.fromARGB(255, 233, 166, 90),
-            shape: const CircleBorder(),
-            child: Image.asset(
-            "Assets/SleepyFoxLogo512.png",
-            width: 40,
-            height: 40,
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      );
+      bottomNavigationBar: CustomBottomNavBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
+      ),
+    );
   }
 
   Widget _featureItem(String title, Widget page, String imagePath) {
@@ -216,7 +213,10 @@ void _onItemTapped(int index) {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
             gradient: LinearGradient(
-              colors: [Colors.blueGrey.shade900, Colors.blueGrey.shade700], 
+              colors: [
+                Color.fromARGB(255, 23, 28, 55),
+                Colors.blueGrey.shade700
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -234,7 +234,7 @@ void _onItemTapped(int index) {
                     style: TextStyle(
                       fontSize: 26,
                       fontWeight: FontWeight.bold,
-                      color: Colors.amber, 
+                      color: Colors.amber,
                     ),
                   ),
                 ),
@@ -243,8 +243,8 @@ void _onItemTapped(int index) {
                   borderRadius: BorderRadius.circular(80), // circular image
                   child: Image.asset(
                     imagePath,
-                    width: 100, 
-                    height: 100, 
+                    width: 100,
+                    height: 100,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -255,9 +255,6 @@ void _onItemTapped(int index) {
       ),
     );
   }
-
-
-
 
   Widget _infoBox(String label, String value, {bool isButton = false}) {
     return Column(
@@ -327,7 +324,4 @@ void _onItemTapped(int index) {
       ),
     );
   }
-
-
-
 }
