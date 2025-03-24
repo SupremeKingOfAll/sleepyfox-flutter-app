@@ -12,27 +12,27 @@ class SettingsView extends StatefulWidget {
 class _SettingsViewState extends State<SettingsView> {
   int _selectedIndex = 2; // Default to Settings page
 
-void _onItemTapped(int index) {
-  if (index == 4) {
-    setState(() {
-      logout(context);
-    });
-  } else if (index == 0) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => DashboardView()),
-    );
-  } else if (index == 3) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => SettingsView()),
-    );
-  } else if (index != 2) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  void _onItemTapped(int index) {
+    if (index == 4) {
+      setState(() {
+        logout(context);
+      });
+    } else if (index == 0) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => DashboardView()),
+      );
+    } else if (index == 3) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SettingsView()),
+      );
+    } else if (index != 2) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,8 @@ void _onItemTapped(int index) {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10), // Reduce side padding
+          padding:
+              const EdgeInsets.symmetric(horizontal: 10), // Reduce side padding
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -70,8 +71,9 @@ void _onItemTapped(int index) {
               // 🟡 Full-width Expanded Settings Box
               Container(
                 width: double.infinity, // Full width
-                height: 600, // Increased height
-                padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 25), // More padding inside
+                height: 450, // Increased height
+                padding: const EdgeInsets.symmetric(
+                    vertical: 40, horizontal: 25), // More padding inside
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(40),
@@ -85,7 +87,8 @@ void _onItemTapped(int index) {
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start, // Align items left
+                  crossAxisAlignment:
+                      CrossAxisAlignment.start, // Align items left
                   children: [
                     //  Move Settings title up
                     Center(
@@ -103,18 +106,23 @@ void _onItemTapped(int index) {
 
                     // Move ListTiles up & Expand their area
                     ListTile(
-                      leading: Icon(Icons.person, color: Colors.amber, size: 34), // Bigger Icon
-                      title: Text("Account", style: TextStyle(color: Colors.black, fontSize: 20)),
+                      leading: Icon(Icons.person,
+                          color: Colors.amber, size: 34), // Bigger Icon
+                      title: Text("Account",
+                          style: TextStyle(color: Colors.black, fontSize: 20)),
                       onTap: () {},
                     ),
                     ListTile(
-                      leading: Icon(Icons.notifications, color: Colors.amber, size: 34),
-                      title: Text("Notifications", style: TextStyle(color: Colors.black, fontSize: 20)),
+                      leading: Icon(Icons.notifications,
+                          color: Colors.amber, size: 34),
+                      title: Text("Notifications",
+                          style: TextStyle(color: Colors.black, fontSize: 20)),
                       onTap: () {},
                     ),
                     ListTile(
                       leading: Icon(Icons.lock, color: Colors.amber, size: 34),
-                      title: Text("Privacy", style: TextStyle(color: Colors.black, fontSize: 20)),
+                      title: Text("Privacy",
+                          style: TextStyle(color: Colors.black, fontSize: 20)),
                       onTap: () {},
                     ),
                     ListTile(
@@ -126,14 +134,17 @@ void _onItemTapped(int index) {
                     ),
                     ListTile(
                       leading: Icon(Icons.help, color: Colors.amber, size: 34),
-                      title: Text("About Us", style: TextStyle(color: Colors.black, fontSize: 20)),
+                      title: Text("About Us",
+                          style: TextStyle(color: Colors.black, fontSize: 20)),
                       onTap: () {
                         Navigator.pushNamed(context, '/AboutUs');
                       },
                     ),
                     ListTile(
-                      leading: Icon(Icons.swap_horizontal_circle_rounded, color: Colors.amber, size: 34),
-                      title: Text("Dark Mode", style: TextStyle(color: Colors.black, fontSize: 20)),
+                      leading: Icon(Icons.swap_horizontal_circle_rounded,
+                          color: Colors.amber, size: 34),
+                      title: Text("Dark Mode",
+                          style: TextStyle(color: Colors.black, fontSize: 20)),
                       onTap: () {},
                     ),
                   ],
@@ -154,7 +165,8 @@ void _onItemTapped(int index) {
             _buildNavItem(Icons.home, "Home", 0),
             _buildNavItem(Icons.nightlight_round, "Sleep", 1),
             const SizedBox(width: 48), // Space for floating button
-            _buildNavItem(Icons.settings, "Settings", 2), // Highlighted by default
+            _buildNavItem(
+                Icons.settings, "Settings", 2), // Highlighted by default
             _buildNavItem(Icons.logout, "Sign Out", 3),
           ],
         ),
@@ -187,7 +199,7 @@ void _onItemTapped(int index) {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color:
-          isSelected ? Colors.amber.withOpacity(0.2) : Colors.transparent,
+              isSelected ? Colors.amber.withOpacity(0.2) : Colors.transparent,
         ),
         child: SizedBox(
           height: 56, // OVERFLOW FIX
@@ -214,7 +226,7 @@ void _onItemTapped(int index) {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight:
-                    isSelected ? FontWeight.bold : FontWeight.normal,
+                        isSelected ? FontWeight.bold : FontWeight.normal,
                     color: isSelected ? Colors.amber.shade700 : Colors.black,
                   ),
                   child: Text(label),

@@ -29,8 +29,18 @@ class LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 249, 217, 130),
-      body: SingleChildScrollView(
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.bottomCenter,
+            end: Alignment.topCenter,
+            colors: [
+              Color.fromARGB(255, 255, 132, 0),
+              Color.fromARGB(255, 255, 171, 81),
+              Color.fromARGB(255, 255, 215, 134),
+            ],
+          ),
+        ),
         child: Column(
           children: [
             const SizedBox(height: 100),
