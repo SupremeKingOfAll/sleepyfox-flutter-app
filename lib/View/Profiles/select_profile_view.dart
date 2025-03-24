@@ -151,7 +151,7 @@ void _onItemTapped(int index) {
                       SizedBox(height: 10,),
                       GuideButton(text: 'Add With Share Code', onPressed: (){
                         showDialog(context: context, builder: (context){
-                          return ProfileInputPopUp(hint: 'Share Code', title: '');
+                          return ProfileInputPopUp(hint: 'Share Code', title: 'Add Profile'); //File Found in widgets/PopUp/profile_sharecode_input_popup.dart
                         });
                       }),
                       SizedBox(height: 20),
