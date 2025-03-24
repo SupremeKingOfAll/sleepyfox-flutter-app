@@ -208,7 +208,10 @@ class _DashboardViewState extends State<DashboardView> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
             gradient: LinearGradient(
-              colors: [Colors.blueGrey.shade900, Colors.blueGrey.shade700],
+              colors: [
+                Color.fromARGB(255, 23, 28, 55),
+                Colors.blueGrey.shade700
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
