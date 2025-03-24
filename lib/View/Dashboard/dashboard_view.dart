@@ -25,6 +25,19 @@ class DashboardView extends StatefulWidget {
 
 class _DashboardViewState extends State<DashboardView> {
   int _selectedIndex = 1;
+  String? factDashboard;
+
+  void initState(){
+    super.initState();
+    loadFunFact();
+  }
+
+  void loadFunFact() async{
+    String? factRetrieve = await getRandomFunFact();
+    setState(() {
+      factDashboard = factRetrieve;
+    });
+  }
 
   void _onItemTapped(int index) {
     if (index == 0) {
@@ -185,7 +198,7 @@ class _DashboardViewState extends State<DashboardView> {
                     _featureItem('Questionnaire', QuestionnaireView(),
                         'Assets/ProfPicKid.png'),                     
                     _featureItem('Did You Know?', EducationView(),
-                        'Assets/ProfPicKid.png'),
+                        'Assets/ProfPicKid.png', factDashboard),
                   ],
                 ),
               ),
@@ -230,19 +243,23 @@ class _DashboardViewState extends State<DashboardView> {
           height: 180,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 28),
-            child: Row(
+             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.amber,
-                    ),
-                  ),
-                  if (subText != null) ...[
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.amber,
+                        ),
+                      ),
+                      if (subText != null) ...[
                         SizedBox(height: 8),
                         Text(
                           subText,
@@ -365,9 +382,5 @@ class _DashboardViewState extends State<DashboardView> {
       print('Error fetching fun fact: $e');
       return null;
     }
-  }
-
-  void showFunFact() async{
-    String? fact = await getRandomFunFact();
   }
 }
