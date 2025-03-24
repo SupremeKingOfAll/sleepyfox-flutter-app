@@ -31,6 +31,32 @@ class ProfileServices {
     return List.generate(length, (index) => chars[rand.nextInt(chars.length)]).join();
   }
 
+  Future<void> addProfileByShareCode(String email, String shareCode) async {
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    try {
+      QuerySnapshot childQuery = await firestore
+          .collection('childProfiles')
+          .where('sharecode', isEqualTo: shareCode)
+          .limit(1) // error handling for any instances of multiple sharecodes present
+          .get();
+
+      if (childQuery.docs.isEmpty) {
+        print("No child profile found with that share code.");
+        return;
+      }
+
+      DocumentSnapshot childDoc = childQuery.docs.first;
+
+      await childDoc.reference.update({
+        'emails': FieldValue.arrayUnion([email]) // updates email list of the profile to include the users
+      });
+
+      print("Email $email added to child profile.");
+    } catch (error) {
+      print("Failed to add user email to child profile: $error");
+    }
+  }
   // Fetch all profiles (not filtered)
   Future<List<Map<String, dynamic>>> fetchChildProfiles() async {
     CollectionReference childProfiles =
