@@ -242,6 +242,18 @@ class _DashboardViewState extends State<DashboardView> {
                       color: Colors.amber,
                     ),
                   ),
+                  if (subText != null) ...[
+                        SizedBox(height: 8),
+                        Text(
+                          subText,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white70,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
                 ),
                 SizedBox(width: 20),
                 ClipRRect(
