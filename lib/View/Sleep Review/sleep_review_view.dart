@@ -5,6 +5,7 @@ import 'package:elaros_gp4/View/Settings/settings_view.dart';
 import 'package:elaros_gp4/Services/logout_function.dart';
 import 'package:elaros_gp4/Widgets/custom_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // for parsing custom date formats i had to use this package
 
 class SleepTrackingOverview extends StatefulWidget {
   const SleepTrackingOverview({super.key});
@@ -16,10 +17,10 @@ class SleepTrackingOverview extends StatefulWidget {
 class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
   final ProfileServices _profileServices = ProfileServices();
   List<Map<String, dynamic>> _profiles = [];
-  // store all records fetched from firestore
-  List<Map<String, dynamic>> _allRecords = [];
+  List<Map<String, dynamic>> _allRecords = []; // Holds sleep records based on filter
   bool _isLoading = true;
-  String? _selectedProfile;
+  String? _selectedProfile; // Currently selected child profile
+  String _selectedFilter = "This Week";
 
   @override
   void initState() {
@@ -27,11 +28,10 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
     _fetchProfiles();
   }
 
+  // Fetch profiles from our database and update the ui
   Future<void> _fetchProfiles() async {
     try {
-      List<Map<String, dynamic>> profiles =
-      await _profileServices.fetchChildProfilesForCurrentUser();
-
+      final profiles = await _profileServices.fetchChildProfilesForCurrentUser();
       setState(() {
         _profiles = profiles;
         _isLoading = false;
@@ -44,12 +44,28 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
     }
   }
 
+  // get sleep records for a selected profile with the active filter.
   Future<void> _fetchAllRecords(String profileId) async {
     setState(() {
       _isLoading = true;
     });
 
     try {
+      final now = DateTime.now();
+
+      // week filter logic
+      DateTime? startOfWeek;
+      DateTime? endOfWeek;
+      if (_selectedFilter == "This Week") {
+        startOfWeek = now.subtract(Duration(days: now.weekday - 1)); // Monday
+        endOfWeek = startOfWeek.add(const Duration(days: 7)); // End of week
+      } else if (_selectedFilter == "Last Week") {
+        startOfWeek = now.subtract(Duration(days: now.weekday + 6)); // Previous Monday
+        endOfWeek = startOfWeek.add(const Duration(days: 7)); // End of last week
+      }
+
+      final sleepDateFormat = DateFormat("dd/MM/yyyy HH:mm"); // Matches wakeUp format
+
       final snapshot = await FirebaseFirestore.instance
           .collection('dailyTracking')
           .where('profileId', isEqualTo: profileId)
@@ -57,12 +73,22 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
 
       final records = snapshot.docs.map((doc) {
         final data = doc.data();
-        data['timestamp'] = (data['timestamp'] as Timestamp).toDate();
-        return data;
-      }).toList();
+        data['timestamp'] = (data['timestamp'] as Timestamp).toDate(); // getting the timestamp from database, and parse it
+
+        try {
+          final wakeUpTime = sleepDateFormat.parse(data['wakeUp']); // Parse wake-up time
+          if (_selectedFilter == "All" ||
+              (wakeUpTime.isAfter(startOfWeek!) && wakeUpTime.isBefore(endOfWeek!))) {
+            return data;
+          }
+        } catch (e) {
+          print("Error parsing wakeUp for doc ${doc.id}: $e");
+        }
+        return null;
+      }).where((record) => record != null).toList();
 
       setState(() {
-        _allRecords = records;
+        _allRecords = records.cast<Map<String, dynamic>>();
         _isLoading = false;
       });
     } catch (error) {
@@ -75,21 +101,20 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
 
   int _selectedIndex = 0;
 
+
   void _onItemTapped(int index) {
     if (index == 4) {
-      setState(() {
-        logout(context);
-      });
+      logout(context); // Log out
     } else if (index == 0) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => DashboardView()),
-      );
+      ); // Go to Dashboard
     } else if (index == 3) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => SettingsView()),
-      );
+      ); // Go to Settings
     } else if (index != 2) {
       setState(() {
         _selectedIndex = index;
@@ -103,13 +128,35 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 234, 235, 235),
         title: const Text("Sleep History"),
-        actions: const [
+        actions: [
+          PopupMenuButton<String>(
+            onSelected: (String filter) {
+              setState(() {
+                _selectedFilter = filter;
+              });
+              if (_selectedProfile != null) {
+                _fetchAllRecords(_selectedProfile!); // get data with new filter
+              }
+            },
+            icon: const Icon(Icons.filter_alt),
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+              const PopupMenuItem<String>(
+                value: "All",
+                child: Text("All"), // all records
+              ),
+              const PopupMenuItem<String>(
+                value: "This Week",
+                child: Text("This Week"), // this week's records
+              ),
+              const PopupMenuItem<String>(
+                value: "Last Week",
+                child: Text("Last Week"), // last week's records
+              ),
+            ],
+          ),
           Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Text("Sleepy fox"),
-            ),
+            padding: const EdgeInsets.only(right: 16),
+            child: Center(child: Text(_selectedFilter)), // filter in use
           ),
         ],
       ),
@@ -119,7 +166,7 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
           ? const Center(child: Text('No profiles available'))
           : Column(
         children: [
-          // Dropdown for selecting a profile
+          // drop for profile selection
           DropdownButton<String>(
             value: _selectedProfile,
             hint: const Text("Select a Profile"),
@@ -136,10 +183,10 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
             }).toList(),
             onChanged: (String? newValue) {
               setState(() {
-                _selectedProfile = newValue;
+                _selectedProfile = newValue; // update profile
               });
               if (_selectedProfile != null) {
-                _fetchAllRecords(_selectedProfile!);
+                _fetchAllRecords(_selectedProfile!); // get records for new profile
               }
             },
           ),
@@ -184,7 +231,7 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
         onItemTapped: _onItemTapped,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {}, // Placeholder for future action
         backgroundColor: const Color.fromARGB(255, 233, 166, 90),
         shape: const CircleBorder(),
         child: Image.asset(

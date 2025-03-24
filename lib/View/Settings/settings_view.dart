@@ -119,7 +119,9 @@ class _SettingsViewState extends State<SettingsView> {
                           color: Colors.amber, size: 34),
                       title: Text("Notifications",
                           style: TextStyle(color: Colors.black, fontSize: 20)),
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(context, '/Notifications');
+                      },
                     ),
                     ListTile(
                       leading: Icon(Icons.lock, color: Colors.amber, size: 34),
