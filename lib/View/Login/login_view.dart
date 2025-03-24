@@ -22,7 +22,7 @@ class LoginPageState extends State<LoginPage> {
 
     if (success) {
       if (!mounted) return;
-      Navigator.pushReplacementNamed(context, '/WelcomeView');
+      Navigator.pushReplacementNamed(context, '/Dashboard');
     }
   }
 
