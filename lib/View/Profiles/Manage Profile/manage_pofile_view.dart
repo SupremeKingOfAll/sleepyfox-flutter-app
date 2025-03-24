@@ -8,7 +8,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:elaros_gp4/Services/profile_services.dart';
-import '../../../Widgets/Buttons/logout_function.dart';
 
 class ManageProfileView extends StatefulWidget {
   const ManageProfileView({super.key});

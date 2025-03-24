@@ -1,6 +1,5 @@
 import 'package:elaros_gp4/View/Settings/settings_view.dart';
 import 'package:elaros_gp4/View/Sleep%20Tracker/sleep_tracker_view.dart';
-import 'package:elaros_gp4/Widgets/Buttons/logout_function.dart';
 import 'package:elaros_gp4/Widgets/custom_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import '../Dashboard/dashboard_view.dart';
