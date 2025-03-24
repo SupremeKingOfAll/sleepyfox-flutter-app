@@ -32,14 +32,25 @@ class TimeInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        labelText: label,
-        border: const OutlineInputBorder(),
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      decoration: BoxDecoration(
+        color: Color(0xFF2C3E50), // Dark blue for background
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.amber[300]!, width: 1),
       ),
-      readOnly: true,
-      onTap: () => _selectDateTime(context),
+      child: TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          labelText: label,
+          labelStyle: TextStyle(color: Colors.white70), // Lighter label text
+          border: InputBorder.none, // Remove default border
+        ),
+        style: TextStyle(color: Colors.white), // White text for input
+        readOnly: true,
+        onTap: () => _selectDateTime(context),
+      ),
     );
   }
 }
