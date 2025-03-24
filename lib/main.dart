@@ -1,6 +1,6 @@
 import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
 import 'package:elaros_gp4/View/Login/reset_password_view.dart';
-import 'package:elaros_gp4/View/Login/welcome_screen_view.dart';
+import 'package:elaros_gp4/View/Settings/Guide/guide_screen_view.dart';
 import 'package:elaros_gp4/View/Profiles/select_profile_view.dart';
 import 'package:elaros_gp4/View/Questionaire/questionaire_view.dart';
 import 'package:elaros_gp4/View/Settings/about_us_settings.dart';
@@ -38,9 +38,9 @@ class MyApp extends StatelessWidget {
         '/EducationView': (context) => const EducationView(),
         '/AboutUs': (context) => const AboutUs(),
         '/ManageProfileView': (context) => const ManageProfileView(),
-        '/WelcomeView': (context) => const WelcomeScreenView(),
+        '/GuideView': (context) => const GuideScreenView(),
         '/Dashboard': (context) => const DashboardView(),
-        '/WelcomeScreen': (context) => const WelcomeScreenView(),
+        '/WelcomeScreen': (context) => const GuideScreenView(),
         '/Register': (context) => const SignUpPage(),
         '/Login': (context) => const LoginPage(),
         '/ResetPassword': (context) => const ResetPassword(),

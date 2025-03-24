@@ -126,6 +126,13 @@ class _SettingsViewState extends State<SettingsView> {
                       onTap: () {},
                     ),
                     ListTile(
+                      leading: Icon(Icons.question_mark, color: Colors.amber, size: 34),
+                      title: Text("Guide", style: TextStyle(color: Colors.black, fontSize: 20)),
+                      onTap: () {
+                        Navigator.pushNamed(context, '/GuideView');
+                      },
+                    ),
+                    ListTile(
                       leading: Icon(Icons.help, color: Colors.amber, size: 34),
                       title: Text("About Us",
                           style: TextStyle(color: Colors.black, fontSize: 20)),

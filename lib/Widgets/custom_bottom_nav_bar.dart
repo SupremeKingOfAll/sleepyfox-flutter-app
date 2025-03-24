@@ -9,6 +9,7 @@ class CustomBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
+      color: Color.fromARGB(255, 0, 0, 0), // Dark background
       shape: const CircularNotchedRectangle(),
       notchMargin: 8.0,
       child: Row(
@@ -49,8 +50,11 @@ class CustomBottomNavBar extends StatelessWidget {
                   duration: Duration(milliseconds: 300),
                   curve: Curves.easeOut,
                   height: isSelected ? 28 : 24, // Adjusts size without scaling
-                  child: Icon(icon, color: isSelected ? Colors.amber.shade700 :
-Colors.black, size: isSelected ? 28 : 24),
+                  child: Icon(
+                    icon,
+                    color: isSelected ? Colors.amber.shade700 : Colors.white70, // Amber when selected, white when not
+                    size: isSelected ? 28 : 24,
+                  ),
                 ),
               ),
               Positioned(
@@ -61,7 +65,7 @@ Colors.black, size: isSelected ? 28 : 24),
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                    color: isSelected ? Colors.amber.shade700 : Colors.black,
+                    color: isSelected ? Colors.amber.shade700 : Colors.white70, // Amber when selected, grayish-white when not
                   ),
                   child: Text(label),
                 ),
