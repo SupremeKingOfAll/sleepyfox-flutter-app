@@ -176,7 +176,8 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
         ],
       ),
       body: _isLoading
-          ? Container(        decoration: const BoxDecoration(
+          ? Container(
+          decoration: const BoxDecoration(
         image: DecorationImage(
           image:
           AssetImage('Assets/900w-xy8Cv39_lA0.png'), // Background image

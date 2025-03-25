@@ -7,7 +7,7 @@ import 'package:elaros_gp4/View/Profiles/select_profile_dashboard_view.dart';
 import 'package:elaros_gp4/View/Questionaire/questionaire_view.dart';
 import 'package:elaros_gp4/View/Settings/settings_view.dart';
 import 'package:elaros_gp4/View/Sleep%20Tracker/sleep_tracker_view.dart';
-import 'package:elaros_gp4/View/Sleep%20Review/sleep_review_view.dart';
+import 'package:elaros_gp4/View/Profiles/Profile%20History/profile_history_view.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_guide_style.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_start_track_style.dart';
 import 'package:elaros_gp4/Services/logout_function.dart';
