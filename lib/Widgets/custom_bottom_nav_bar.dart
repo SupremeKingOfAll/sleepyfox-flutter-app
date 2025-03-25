@@ -9,17 +9,15 @@ class CustomBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-      color: Color.fromARGB(255, 0, 0, 0), // Dark background
+      color: Color.fromARGB(255, 24, 30, 58), // Dark background
       shape: const CircularNotchedRectangle(),
       notchMargin: 8.0,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildNavItem(Icons.home, "Home", 0),
-          _buildNavItem(Icons.nightlight_round, "Sleep", 1),
-          const SizedBox(width: 48), // Space for floating button
-          _buildNavItem(Icons.settings, "Settings", 3),
-          _buildNavItem(Icons.logout, "Sign Out", 4),
+          _buildNavItem(Icons.nightlight_round, "Sleep", 0),
+          _buildNavItem(Icons.home, "Home", 1),
+          _buildNavItem(Icons.settings, "Settings", 2),
         ],
       ),
     );
@@ -36,7 +34,8 @@ class CustomBottomNavBar extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: isSelected ? Colors.amber.withOpacity(0.2) : Colors.transparent,
+          color:
+              isSelected ? Colors.amber.withOpacity(0.2) : Colors.transparent,
         ),
         child: SizedBox(
           height: 56, // OVERFLOW FIX
@@ -52,7 +51,9 @@ class CustomBottomNavBar extends StatelessWidget {
                   height: isSelected ? 28 : 24, // Adjusts size without scaling
                   child: Icon(
                     icon,
-                    color: isSelected ? Colors.amber.shade700 : Colors.white70, // Amber when selected, white when not
+                    color: isSelected
+                        ? Colors.amber.shade700
+                        : Colors.white70, // Amber when selected, white when not
                     size: isSelected ? 28 : 24,
                   ),
                 ),
@@ -64,8 +65,12 @@ class CustomBottomNavBar extends StatelessWidget {
                   curve: Curves.easeInOut,
                   style: TextStyle(
                     fontSize: 12,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                    color: isSelected ? Colors.amber.shade700 : Colors.white70, // Amber when selected, grayish-white when not
+                    fontWeight:
+                        isSelected ? FontWeight.bold : FontWeight.normal,
+                    color: isSelected
+                        ? Colors.amber.shade700
+                        : Colors
+                            .white70, // Amber when selected, grayish-white when not
                   ),
                   child: Text(label),
                 ),

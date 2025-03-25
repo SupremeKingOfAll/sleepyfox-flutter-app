@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elaros_gp4/Services/profile_services.dart';
 import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
+import 'package:elaros_gp4/View/Settings/settings_view.dart';
 import 'package:elaros_gp4/View/Sleep%20Tracker/time_input_fields.dart';
-import 'package:elaros_gp4/Widgets/Buttons/logout_function.dart';
+import 'package:elaros_gp4/Services/logout_function.dart';
 import 'package:elaros_gp4/Widgets/custom_bottom_nav_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class _SleepTrackingState extends State<SleepTracking> {
     _fetchProfiles();
   }
 
- Future<void> _fetchProfiles() async {
+  Future<void> _fetchProfiles() async {
     try {
       List<Map<String, dynamic>> profiles =
           await _profileServices.fetchChildProfilesForCurrentUser();
@@ -48,8 +49,6 @@ class _SleepTrackingState extends State<SleepTracking> {
     }
   }
 
-  
-
   final TextEditingController _bedtimeController = TextEditingController();
   final TextEditingController _wakeUpController = TextEditingController();
   final TextEditingController _notesController = TextEditingController();
@@ -68,15 +67,15 @@ class _SleepTrackingState extends State<SleepTracking> {
       builder: (context, child) {
         return Theme(
           data: ThemeData.dark().copyWith(
-            primaryColor: Colors.amber, 
-            hintColor: Colors.amberAccent, 
+            primaryColor: Colors.amber,
+            hintColor: Colors.amberAccent,
             colorScheme: ColorScheme.dark(
-              primary: Colors.amber, 
-              onPrimary: Colors.black, 
-              surface: Color(0xFF1A1A2E), 
-              onSurface: Colors.white70, 
+              primary: Colors.amber,
+              onPrimary: Colors.black,
+              surface: Color(0xFF1A1A2E),
+              onSurface: Colors.white70,
             ),
-            dialogBackgroundColor: Color(0xFF121212), 
+            dialogBackgroundColor: Color(0xFF121212),
           ),
           child: child!,
         );
@@ -105,8 +104,8 @@ class _SleepTrackingState extends State<SleepTracking> {
       );
 
       if (pickedTime != null) {
-        DateTime dateTime = DateTime(
-            pickedDate.year, pickedDate.month, pickedDate.day, pickedTime.hour, pickedTime.minute);
+        DateTime dateTime = DateTime(pickedDate.year, pickedDate.month,
+            pickedDate.day, pickedTime.hour, pickedTime.minute);
         controller.text = DateFormat('dd/MM/yyyy HH:mm').format(dateTime);
       }
     }
@@ -121,9 +120,8 @@ class _SleepTrackingState extends State<SleepTracking> {
       print("Before filtering: $naps");
 
       // Filter out empty naps (Ensure valid start and end times)
-      List<Map<String, dynamic>> formattedNaps = naps
-          .where((nap) => nap['start'] != '' && nap['end'] != '')
-          .toList();
+      List<Map<String, dynamic>> formattedNaps =
+          naps.where((nap) => nap['start'] != '' && nap['end'] != '').toList();
 
       // Debugging: Print the naps list after filtering
       print("After filtering: $formattedNaps");
@@ -141,18 +139,16 @@ class _SleepTrackingState extends State<SleepTracking> {
         'bedtime': _bedtimeController.text,
         'wakeUp': _wakeUpController.text,
         'awakenings': awakenings,
-        'naps': formattedNaps, 
+        'naps': formattedNaps,
         'notes': _notesController.text,
         'timestamp': FieldValue.serverTimestamp(),
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Sleep record saved successfully'))
-      );
+          const SnackBar(content: Text('Sleep record saved successfully')));
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to save: $e'))
-      );
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Failed to save: $e')));
     }
   }
 
@@ -181,24 +177,25 @@ class _SleepTrackingState extends State<SleepTracking> {
     });
   }
 
-    int _selectedIndex = 0;
+  int _selectedIndex = 0;
 
-void _onItemTapped(int index) {
-  if (index == 4) {
-    setState(() {
-      logout(context);
-    });
-  } else if (index == 0) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => DashboardView()),
-    );
-  } else if (index != 2) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  void _onItemTapped(int index) {
+    if (index == 1) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => DashboardView()),
+      );
+    } else if (index == 2) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SettingsView()),
+      );
+    } else if (index != 2) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -208,7 +205,8 @@ void _onItemTapped(int index) {
         title: Text(
           "Sleep Tracker",
           style: TextStyle(
-            color: const Color.fromARGB(255, 252, 174, 41), // Amber color for title text
+            color: const Color.fromARGB(
+                255, 252, 174, 41), // Amber color for title text
           ),
         ),
         actions: [
@@ -219,7 +217,8 @@ void _onItemTapped(int index) {
               child: Text(
                 "Sleepy fox",
                 style: TextStyle(
-                  color: const Color.fromARGB(255, 252, 174, 41), // Light amber for the subtitle text
+                  color: const Color.fromARGB(
+                      255, 252, 174, 41), // Light amber for the subtitle text
                 ),
               ),
             ),
@@ -229,18 +228,22 @@ void _onItemTapped(int index) {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('Assets/900w-xy8Cv39_lA0.png'), // Background image
+            image:
+                AssetImage('Assets/900w-xy8Cv39_lA0.png'), // Background image
             fit: BoxFit.cover,
           ),
         ),
         child: Column(
           children: [
-            Expanded( // Ensures content doesn't push against the bottom nav bar
+            Expanded(
+              // Ensures content doesn't push against the bottom nav bar
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0), 
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min, // Prevents unnecessary vertical expansion
+                  mainAxisSize: MainAxisSize
+                      .min, // Prevents unnecessary vertical expansion
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(top: 10, bottom: 5),
@@ -251,80 +254,100 @@ void _onItemTapped(int index) {
                       const Center(
                         child: Text(
                           'No profiles available',
-                          style: TextStyle(color: Colors.white), // White text for dark mode
+                          style: TextStyle(
+                              color: Colors.white), // White text for dark mode
                         ),
                       )
                     else
                       DropdownButtonFormField<String>(
-                        value: _profiles.any((profile) => profile['name'] == _selectedProfileId)
+                        value: _profiles.any((profile) =>
+                                profile['name'] == _selectedProfileId)
                             ? _selectedProfileId
                             : null,
                         decoration: InputDecoration(
                           labelText: 'Select Child Profile',
-                          labelStyle: const TextStyle(color: Colors.amberAccent), // Amber label
+                          labelStyle: const TextStyle(
+                              color: Colors.amberAccent), // Amber label
                           filled: true,
-                          fillColor: Color(0xFF2C3E50), // Dark grayish-blue background
+                          fillColor:
+                              Color(0xFF2C3E50), // Dark grayish-blue background
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(color: Colors.tealAccent),
+                            borderSide:
+                                const BorderSide(color: Colors.tealAccent),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(color: Colors.amberAccent, width: 2),
+                            borderSide: const BorderSide(
+                                color: Colors.amberAccent, width: 2),
                           ),
                         ),
-                        icon: const Icon(Icons.arrow_drop_down, color: Colors.amberAccent),
-                        dropdownColor: Color(0xFF2C3E50), // Darker dropdown background
-                        style: const TextStyle(color: Colors.white), // White dropdown text
+                        icon: const Icon(Icons.arrow_drop_down,
+                            color: Colors.amberAccent),
+                        dropdownColor:
+                            Color(0xFF2C3E50), // Darker dropdown background
+                        style: const TextStyle(
+                            color: Colors.white), // White dropdown text
                         onChanged: (String? newValue) {
                           setState(() {
                             _selectedProfileId = newValue;
                           });
                         },
-                        items: _profiles.map<DropdownMenuItem<String>>((profile) {
+                        items:
+                            _profiles.map<DropdownMenuItem<String>>((profile) {
                           return DropdownMenuItem<String>(
                             value: profile['name'],
                             child: Text(
                               profile['name'],
-                              style: const TextStyle(color: Colors.white), // White text for contrast
+                              style: const TextStyle(
+                                  color:
+                                      Colors.white), // White text for contrast
                             ),
                           );
                         }).toList(),
                       ),
-
                     const SizedBox(height: 10),
                     const Text(
                       "Sleep Quality",
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.amber),
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.amber),
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly, 
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         _qualityButton("Bad", "😫"),
                         _qualityButton("Okay", "😐"),
                         _qualityButton("Good", "😴"),
                       ],
                     ),
-
                     Column(
                       children: [
                         _timeInputField("Bedtime", _bedtimeController),
-                        SizedBox(height: 8), // Small spacing between input fields
+                        SizedBox(
+                            height: 8), // Small spacing between input fields
                         _timeInputField("Wake Up", _wakeUpController),
                       ],
                     ),
-
                     _buildSectionHeader("Night Awakenings", _addAwakening),
                     if (awakenings.isNotEmpty)
                       AnimatedContainer(
-                        duration: Duration(milliseconds: 300), // Smooth transition effect
+                        duration: Duration(
+                            milliseconds: 300), // Smooth transition effect
                         decoration: BoxDecoration(
-                          color: Color(0xFF1E2A38), // Dark navy blue for subtle contrast
+                          color: Color(
+                              0xFF1E2A38), // Dark navy blue for subtle contrast
                           borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: Colors.amber[300]!, width: 1), // Soft amber border
+                          border: Border.all(
+                              color: Colors.amber[300]!,
+                              width: 1), // Soft amber border
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.amber.withOpacity(awakenings.isNotEmpty ? 0.5 : 0.0), // Glow only if awakenings exist
+                              color: Colors.amber.withOpacity(
+                                  awakenings.isNotEmpty
+                                      ? 0.5
+                                      : 0.0), // Glow only if awakenings exist
                               blurRadius: awakenings.isNotEmpty ? 12 : 0,
                               spreadRadius: awakenings.isNotEmpty ? 3 : 0,
                             ),
@@ -335,12 +358,12 @@ void _onItemTapped(int index) {
                           children: List.generate(
                             awakenings.length,
                             (index) => AwakeningEntry(
-                              onChanged: (data) => _updateAwakening(index, data),
+                              onChanged: (data) =>
+                                  _updateAwakening(index, data),
                             ),
                           ),
                         ),
                       ),
-
                     _buildSectionHeader("Naps", _addNap),
                     if (naps.isNotEmpty)
                       _greyContainer(
@@ -353,7 +376,6 @@ void _onItemTapped(int index) {
                           ),
                         ),
                       ),
-
                     TextField(
                       controller: _notesController,
                       decoration: const InputDecoration(
@@ -362,8 +384,7 @@ void _onItemTapped(int index) {
                       ),
                       maxLines: 3,
                     ),
-
-                    const SizedBox(height: 10), 
+                    const SizedBox(height: 10),
                   ],
                 ),
               ),
@@ -375,11 +396,15 @@ void _onItemTapped(int index) {
                   onPressed: _saveSleepRecord,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.amber,
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 12),
                   ),
                   child: const Text(
                     "Save Sleep Record",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
                   ),
                 ),
               ),
@@ -387,24 +412,10 @@ void _onItemTapped(int index) {
           ],
         ),
       ),
-
-
       bottomNavigationBar: CustomBottomNavBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
       ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          backgroundColor: const Color.fromARGB(255, 233, 166, 90),
-          shape: const CircleBorder(),
-          child: Image.asset(
-          "Assets/SleepyFoxLogo512.png",
-          width: 40,
-          height: 40,
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-          
     );
   }
 
@@ -422,15 +433,25 @@ void _onItemTapped(int index) {
           // Emoji container
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 8),
-            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10), // Smaller padding for a smaller container
+            padding: const EdgeInsets.symmetric(
+                vertical: 6,
+                horizontal: 10), // Smaller padding for a smaller container
             decoration: BoxDecoration(
               color: Colors.transparent, // Keep the container transparent
               shape: BoxShape.circle, // Circle shape
               border: isSelected
-                  ? Border.all(color: Colors.amber[400]!, width: 2) // Amber border when selected
-                  : Border.all(color: Colors.transparent), // No border when not selected
+                  ? Border.all(
+                      color: Colors.amber[400]!,
+                      width: 2) // Amber border when selected
+                  : Border.all(
+                      color: Colors.transparent), // No border when not selected
               boxShadow: isSelected
-                  ? [BoxShadow(color: Colors.amber.withOpacity(0.5), blurRadius: 8, spreadRadius: 3)] // Soft amber glow when selected
+                  ? [
+                      BoxShadow(
+                          color: Colors.amber.withOpacity(0.5),
+                          blurRadius: 8,
+                          spreadRadius: 3)
+                    ] // Soft amber glow when selected
                   : [], // No glow when not selected
             ),
             child: Column(
@@ -440,7 +461,10 @@ void _onItemTapped(int index) {
                   emoji,
                   style: TextStyle(
                     fontSize: 40, // Smaller size for compact container
-                    color: isSelected ? Colors.amber[600] : Colors.orange[600], // Amber color when selected, orange when not
+                    color: isSelected
+                        ? Colors.amber[600]
+                        : Colors.orange[
+                            600], // Amber color when selected, orange when not
                   ),
                 ),
               ],
@@ -454,7 +478,10 @@ void _onItemTapped(int index) {
               label,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                color: isSelected ? Colors.white : Colors.white70, // White text when selected, grayish-white otherwise
+                color: isSelected
+                    ? Colors.white
+                    : Colors
+                        .white70, // White text when selected, grayish-white otherwise
                 fontSize: 12, // Smaller text size for the label
               ),
             ),
@@ -463,7 +490,6 @@ void _onItemTapped(int index) {
       ),
     );
   }
-
 
   Widget _timeInputField(String label, TextEditingController controller) {
     return TextField(
@@ -497,7 +523,8 @@ void _onItemTapped(int index) {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.amber, // White text for better contrast on dark background
+            color: Colors
+                .amber, // White text for better contrast on dark background
             shadows: [
               Shadow(
                 color: Colors.amber.withOpacity(0.5), // Subtle amber glow
@@ -552,9 +579,13 @@ class _AwakeningEntryState extends State<AwakeningEntry> {
         margin: const EdgeInsets.symmetric(horizontal: 8),
         padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.amber[400] : Colors.transparent, // Only amber when selected
+          color: isSelected
+              ? Colors.amber[400]
+              : Colors.transparent, // Only amber when selected
           borderRadius: BorderRadius.circular(12),
-          border: isSelected ? Border.all(color: Colors.amber) : null, // Optional: border around the selected button
+          border: isSelected
+              ? Border.all(color: Colors.amber)
+              : null, // Optional: border around the selected button
         ),
         child: Column(
           children: [
@@ -562,14 +593,18 @@ class _AwakeningEntryState extends State<AwakeningEntry> {
               emoji,
               style: TextStyle(
                 fontSize: 50,
-                color: isSelected ? Colors.white : Colors.black, // Amber color for selected
+                color: isSelected
+                    ? Colors.white
+                    : Colors.black, // Amber color for selected
               ),
             ),
             Text(
               reason,
               style: TextStyle(
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                color: isSelected ? Colors.white : Colors.black, // Change label color when selected
+                color: isSelected
+                    ? Colors.white
+                    : Colors.black, // Change label color when selected
               ),
             ),
           ],
@@ -602,7 +637,6 @@ class _AwakeningEntryState extends State<AwakeningEntry> {
   }
 }
 
-
 class NapEntry extends StatefulWidget {
   final Function(Map<String, dynamic>) onChanged;
 
@@ -612,53 +646,53 @@ class NapEntry extends StatefulWidget {
   _NapEntryState createState() => _NapEntryState();
 }
 
-  class _NapEntryState extends State<NapEntry> {
-    final TextEditingController startController = TextEditingController();
-    final TextEditingController endController = TextEditingController();
+class _NapEntryState extends State<NapEntry> {
+  final TextEditingController startController = TextEditingController();
+  final TextEditingController endController = TextEditingController();
 
-    @override
-    void initState() {
-      super.initState();
-      startController.addListener(_update);
-      endController.addListener(_update);
-    }
-
-    @override
-    void dispose() {
-      startController.removeListener(_update);
-      endController.removeListener(_update);
-      startController.dispose();
-      endController.dispose();
-      super.dispose();
-    }
-
-    void _update() {
-      widget.onChanged({
-        'start': startController.text.isNotEmpty ? startController.text : 'N/A',
-        'end': endController.text.isNotEmpty ? endController.text : 'N/A',
-      });
-    }
-
-    @override
-    Widget build(BuildContext context) {
-      return Column(
-        children: [
-          TimeInputField(label: "Start", controller: startController),
-          TimeInputField(label: "End", controller: endController),
-          const Divider(),
-        ],
-      );
-    }
+  @override
+  void initState() {
+    super.initState();
+    startController.addListener(_update);
+    endController.addListener(_update);
   }
 
-  Widget _greyContainer(Widget child) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      margin: const EdgeInsets.only(top: 8), // Adds some spacing
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 245, 211, 166),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: child,
+  @override
+  void dispose() {
+    startController.removeListener(_update);
+    endController.removeListener(_update);
+    startController.dispose();
+    endController.dispose();
+    super.dispose();
+  }
+
+  void _update() {
+    widget.onChanged({
+      'start': startController.text.isNotEmpty ? startController.text : 'N/A',
+      'end': endController.text.isNotEmpty ? endController.text : 'N/A',
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        TimeInputField(label: "Start", controller: startController),
+        TimeInputField(label: "End", controller: endController),
+        const Divider(),
+      ],
     );
   }
+}
+
+Widget _greyContainer(Widget child) {
+  return Container(
+    padding: const EdgeInsets.all(10),
+    margin: const EdgeInsets.only(top: 8), // Adds some spacing
+    decoration: BoxDecoration(
+      color: const Color.fromARGB(255, 245, 211, 166),
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: child,
+  );
+}

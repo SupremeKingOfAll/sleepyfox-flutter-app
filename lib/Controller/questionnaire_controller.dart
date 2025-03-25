@@ -20,15 +20,11 @@ class QuestionnaireController {
       questionTitle: 'Question 3. Sleep Drive Factors:',
       questionText: [
         'Does Your Child Engage in Regular Physical Activity?',
-        'Does Your Child Have a Set Wake-up Time Each Morning?',
-        'For Young Children: Are Nap Times Appropriately Times and Not Too Close to Bedtime?',
-        'For Older Children (5-6 Years and Above): Does Your Child Avoid Daytime Naps?'
+        'Does Your Child Have a Set Wake-up Time Each Morning?'
       ],
       answers: [
         ['Yes', 'Sometimes', 'No'],
-        ['Yes', 'Sometimes', 'No'],
-        ['Yes', 'No', 'N/A'],
-        ['Yes', 'No', 'N/A']
+        ['Yes', 'Sometimes', 'No']
       ],
     ),
     Question(
@@ -84,14 +80,12 @@ class QuestionnaireController {
       questionText: [
         "Is Your Child's Bedroom Used Exclusively for Sleeping?",
         'Is the Bedroom Free from Distractions (e.g. Toys, Devices, Excessive Noise)?',
-        'Does Your Child Prefer Total Darkness in the Room, a Nightlight, or Does it Vary?',
-        'Is the Room Temperature Good for Sleeping?',
+        'Does Your Child Prefer Total Darkness in the Room, a Nightlight, or Does it Vary?'
       ],
       answers: [
         ['Yes', 'Sometimes', 'No'],
         ['Yes', 'Sometimes', 'No'],
-        ['Total Darkness', 'Nightlight', 'Varies'],
-        ['Yes', 'Sometimes', 'No']
+        ['Total Darkness', 'Nightlight', 'Varies']
       ],
     ),
     Question(

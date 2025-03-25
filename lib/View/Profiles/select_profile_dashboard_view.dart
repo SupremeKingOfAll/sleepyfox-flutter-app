@@ -1,10 +1,13 @@
 import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
 import 'package:elaros_gp4/View/Settings/settings_view.dart';
+import 'package:elaros_gp4/View/Sleep%20Tracker/sleep_tracker_view.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_guide_style.dart';
+import 'package:elaros_gp4/Widgets/PopUp/profile_sharecode_input_popup.dart';
 import 'package:elaros_gp4/Widgets/Text%20Styles/text_input_style.dart';
+import 'package:elaros_gp4/Widgets/custom_bottom_nav_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../../Widgets/Buttons/logout_function.dart';
+import '../../Services/logout_function.dart';
 import 'package:elaros_gp4/Services/profile_services.dart';
 
 class SelectProfileView extends StatefulWidget {
@@ -15,29 +18,30 @@ class SelectProfileView extends StatefulWidget {
 }
 
 class _SelectProfileViewState extends State<SelectProfileView> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
 
-void _onItemTapped(int index) {
-  if (index == 4) {
-    setState(() {
-      logout(context);
-    });
-  } else if (index == 0) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => DashboardView()),
-    );
-  } else if (index == 3) {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => SettingsView()),
-    );
-  } else if (index != 2) {
-    setState(() {
-      _selectedIndex = index;
-    });
+  void _onItemTapped(int index) {
+    if (index == 0) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SleepTracking()),
+      );
+    } else if (index == 1) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => DashboardView()),
+      );
+    } else if (index == 2) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SettingsView()),
+      );
+    } else if (index != 2) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
-}
 
   void _logout(BuildContext context) async {
     try {
@@ -64,7 +68,8 @@ void _onItemTapped(int index) {
   // Fetch profiles with error handling
   Future<void> _fetchProfiles() async {
     try {
-      List<Map<String, dynamic>> profiles = await _profileServices.fetchChildProfilesForCurrentUser();
+      List<Map<String, dynamic>> profiles =
+          await _profileServices.fetchChildProfilesForCurrentUser();
       setState(() {
         _profiles = profiles;
         _isLoading = false;
@@ -106,10 +111,16 @@ void _onItemTapped(int index) {
                     children: [
                       SizedBox(height: 20),
                       //custom text widget found in /widget
-                      TextInputStyle(controller: nameController, labelText: "Name"),
-                      SizedBox(height: 10,),
-                      TextInputStyle(controller: ageController, labelText: "Age"),
-                      SizedBox(height: 20,),
+                      TextInputStyle(
+                          controller: nameController, labelText: "Name"),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      TextInputStyle(
+                          controller: ageController, labelText: "Age"),
+                      SizedBox(
+                        height: 20,
+                      ),
                       GuideButton(
                         text: "Create a New Profile",
                         onPressed: () async {
@@ -126,12 +137,14 @@ void _onItemTapped(int index) {
                           final int? age = int.tryParse(ageText);
                           if (age == null) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Age has to be a number!')),
+                              SnackBar(
+                                  content: Text('Age has to be a number!')),
                             );
                             return;
                           }
 
-                          final String? email = FirebaseAuth.instance.currentUser?.email;
+                          final String? email =
+                              FirebaseAuth.instance.currentUser?.email;
                           if (email == null) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text('User not logged in.')),
@@ -139,14 +152,22 @@ void _onItemTapped(int index) {
                             return;
                           }
 
-                          await _profileServices.addChildProfile(name, age, email);
+                          await _profileServices.addChildProfile(
+                              name, age, email);
                           await _fetchProfiles();
 
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Profile created successfully!')),
+                            SnackBar(
+                                content: Text('Profile created successfully!')),
                           );
                         },
                       ),
+                      SizedBox(height: 10,),
+                      GuideButton(text: 'Add With Share Code', onPressed: (){
+                        showDialog(context: context, builder: (context){
+                          return ProfileInputPopUp(hint: 'Share Code', title: 'Add Profile'); //File Found in widgets/PopUp/profile_sharecode_input_popup.dart
+                        });
+                      }),
                       SizedBox(height: 20),
                     ],
                   ),
@@ -158,68 +179,47 @@ void _onItemTapped(int index) {
               child: _isLoading
                   ? Center(child: CircularProgressIndicator())
                   : _profiles.isEmpty
-                  ? Center(child: Text("Profile Not Found"))
-                  : Column(
-                children: _profiles.asMap().entries.map((entry) {
-                  int index = entry.key;
-                  var profile = entry.value;
+                      ? Center(child: Text("Profile Not Found"))
+                      : Column(
+                          children: _profiles.asMap().entries.map((entry) {
+                            int index = entry.key;
+                            var profile = entry.value;
 
-                  print("Profile index: $index, Profile name: ${profile['name']}");
+                            print(
+                                "Profile index: $index, Profile name: ${profile['name']}");
 
-                  // Ensure that the profile exists before navigating
-                  return _profileCard(
-                    index,
-                    profile['name'],
-                    'Assets/FemaleFoxPic.png',
-                        () {
-                      if (_profiles.length > index) {
-                        Navigator.pushNamed(
-                          context,
-                          '/ManageProfileView',
-                          arguments: index,
-                        );
-                      } else {
-                        print("Invalid profile index: $index");
-                      }
-                    },
-                  );
-                }).toList(),
-              ),
+                            // Ensure that the profile exists before navigating
+                            return _profileCard(
+                              index,
+                              profile['name'],
+                              'Assets/FemaleFoxPic.png',
+                              () {
+                                if (_profiles.length > index) {
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/ManageProfileView',
+                                    arguments: index,
+                                  );
+                                } else {
+                                  print("Invalid profile index: $index");
+                                }
+                              },
+                            );
+                          }).toList(),
+                        ),
             )
-
           ],
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 8.0,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildNavItem(Icons.home, "Home", 0),
-            _buildNavItem(Icons.nightlight_round, "Sleep", 1),
-            const SizedBox(width: 48),
-            _buildNavItem(Icons.settings, "Settings", 3),
-            _buildNavItem(Icons.logout, "Sign Out", 4),
-          ],
-        ),
+      bottomNavigationBar: CustomBottomNavBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: const Color.fromARGB(255, 233, 166, 90),
-        shape: const CircleBorder(),
-        child: Image.asset(
-          "Assets/SleepyFoxLogo512.png",
-          width: 40,
-          height: 40,
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
-
-  Widget _profileCard(int index, String title, String imagePath, VoidCallback? onTap) {
+  Widget _profileCard(
+      int index, String title, String imagePath, VoidCallback? onTap) {
     return Card(
       child: ListTile(
         leading: CircleAvatar(
@@ -232,8 +232,6 @@ void _onItemTapped(int index) {
     );
   }
 
-
-
   Widget _buildNavItem(IconData icon, String label, int index) {
     bool isSelected = _selectedIndex == index;
 
@@ -245,7 +243,8 @@ void _onItemTapped(int index) {
         padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: isSelected ? Colors.amber.withOpacity(0.2) : Colors.transparent,
+          color:
+              isSelected ? Colors.amber.withOpacity(0.2) : Colors.transparent,
         ),
         child: SizedBox(
           height: 56, // OVERFLOW FIX
@@ -259,7 +258,9 @@ void _onItemTapped(int index) {
                   duration: Duration(milliseconds: 300),
                   curve: Curves.easeOut,
                   height: isSelected ? 28 : 24, // Adjusts size without scaling
-                  child: Icon(icon, color: isSelected ? Colors.amber.shade700 : Colors.black, size: isSelected ? 28 : 24),
+                  child: Icon(icon,
+                      color: isSelected ? Colors.amber.shade700 : Colors.black,
+                      size: isSelected ? 28 : 24),
                 ),
               ),
               Positioned(
@@ -269,7 +270,8 @@ void _onItemTapped(int index) {
                   curve: Curves.easeInOut,
                   style: TextStyle(
                     fontSize: 12,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                    fontWeight:
+                        isSelected ? FontWeight.bold : FontWeight.normal,
                     color: isSelected ? Colors.amber.shade700 : Colors.black,
                   ),
                   child: Text(label),
