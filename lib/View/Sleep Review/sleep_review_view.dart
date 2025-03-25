@@ -20,7 +20,6 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
   List<Map<String, dynamic>> _allRecords = []; // Holds sleep records based on filter
   bool _isLoading = true;
   String? _selectedProfile; // Currently selected child profile
-  String? _selectedProfileShareCode;
   String _selectedFilter = "This Week";
 
   @override
@@ -36,6 +35,12 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
       setState(() {
         _profiles = profiles;
         _isLoading = false;
+
+        // auto select the first profile
+        if (_profiles.isNotEmpty) {
+          _selectedProfile = _profiles.first['name']; // first profile
+          _fetchAllRecords(_selectedProfile!); //  records for the default profile
+        }
       });
     } catch (error) {
       print("Failed to fetch profiles: $error");
@@ -44,7 +49,6 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
       });
     }
   }
-
   // get sleep records for a selected profile with the active filter.
   Future<void> _fetchAllRecords(String profileId) async {
     setState(() {
@@ -69,7 +73,7 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
 
       final snapshot = await FirebaseFirestore.instance
           .collection('dailyTracking')
-          .where('sharecode', isEqualTo: profileId)
+          .where('profileId', isEqualTo: profileId)
           .get();
 
       final records = snapshot.docs.map((doc) {
@@ -127,8 +131,16 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 234, 235, 235),
-        title: const Text("Sleep History"),
+        iconTheme: IconThemeData(
+          color: Colors.amber.shade500,
+        ),
+        backgroundColor: Color.fromARGB(255, 0, 0, 0),
+        title: const Text("Sleep History",
+          style: TextStyle(
+            color: const Color.fromARGB(
+                255, 252, 174, 41), // Light amber for the subtitle text
+          ),
+        ),
         actions: [
           PopupMenuButton<String>(
             onSelected: (String filter) {
@@ -162,88 +174,192 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
         ],
       ),
       body: _isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Container(        decoration: const BoxDecoration(
+        image: DecorationImage(
+          image:
+          AssetImage('Assets/900w-xy8Cv39_lA0.png'), // Background image
+          fit: BoxFit.cover,
+        ),
+      ),
+          child: const Center(child: CircularProgressIndicator(backgroundColor: Colors.amberAccent,)))
           : _profiles.isEmpty
           ? const Center(child: Text('No profiles available'))
-          : Column(
-        children: [
-          // drop for profile selection
-          DropdownButton<String>(
-            value: _selectedProfile,
-            hint: const Text("Select a Profile"),
-            items: _profiles.map<DropdownMenuItem<String>>((profile) {
-              return DropdownMenuItem<String>(
-                value: profile['name'],
-                child: Text(
-                  profile['name'],
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.amber),
-                ),
-              );
-            }).toList(),
-            onChanged: (String? newValue) {
-              setState(() {
-                _selectedProfile = newValue; // update profile
-                _selectedProfileShareCode = _profiles.firstWhere(
-                              (profile) => profile['name'] == _selectedProfile,
-                              orElse: () => {}  // Return an empty map if no match is found
-                            )['sharecode'];
-              });
-              if (_selectedProfile != null) {
-                _fetchAllRecords(_selectedProfileShareCode!); // get records for new profile
-              }
-            },
+          : Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image:
+            AssetImage('Assets/900w-xy8Cv39_lA0.png'), // Background image
+            fit: BoxFit.cover,
           ),
-          Expanded(
-            child: _allRecords.isEmpty
-                ? const Center(child: Text('No records found'))
-                : ListView.builder(
-              itemCount: _allRecords.length,
-              itemBuilder: (context, index) {
-                final record = _allRecords[index];
-                return Card(
-                  margin: const EdgeInsets.symmetric(
-                      vertical: 8, horizontal: 16),
-                  child: ListTile(
-                    title: Text(
-                        'Sleep Quality: ${record['sleepQuality'] ?? 'N/A'}'),
-                    subtitle: Column(
-                      crossAxisAlignment:
-                      CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                            'Bedtime: ${record['bedtime'] ?? 'N/A'}'),
-                        Text(
-                            'Wake Up: ${record['wakeUp'] ?? 'N/A'}'),
-                        Text(
-                            'Notes: ${record['notes'] ?? 'N/A'}'),
-                        Text(
-                            'Awakenings: ${record['awakenings']?.length ?? 0}'),
-                        Text(
-                            'Naps: ${record['naps']?.length ?? 0}'),
-                      ],
+        ),
+        child: Column(
+                    children: [
+            // drop for profile selection
+            DropdownButton<String>(
+              value: _selectedProfile, // default to the first profile
+              borderRadius: BorderRadius.circular(24),
+              hint: const Text("Select a Profile"),
+              items: _profiles.map<DropdownMenuItem<String>>((profile) {
+                return DropdownMenuItem<String>(
+                  value: profile['name'],
+                  child: Text(
+                    profile['name'],
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.amber,
                     ),
                   ),
                 );
+              }).toList(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  _selectedProfile = newValue;
+                });
+                if (_selectedProfile != null) {
+                  _fetchAllRecords(_selectedProfile!);
+                };
               },
+              dropdownColor: Colors.blueAccent,
             ),
+            Expanded(
+              child: _allRecords.isEmpty
+                  ? const Center(child: Text('No records found'))
+                  : ListView.builder(
+                itemCount: _allRecords.length,
+                itemBuilder: (context, index) {
+                  final record = _allRecords[index];
+            
+               //date time formatting
+                  final dateFormat = DateFormat("dd/MM/yyyy HH:mm");
+                  final timeFormat = DateFormat("HH:mm");
+                  DateTime? bedtime;
+                  DateTime? wakeUp;
+                  String bedtimeTime = "N/A";
+                  String wakeUpTime = "N/A";
+                  String date = "N/A";
+            
+                  try {
+                    if (record['bedtime'] != null) {
+                      bedtime = dateFormat.parse(record['bedtime']);
+                      bedtimeTime = timeFormat.format(bedtime);
+                      date = DateFormat("dd/MM/yyyy").format(bedtime);
+                    }
+                    if (record['wakeUp'] != null) {
+                      wakeUp = dateFormat.parse(record['wakeUp']);
+                      wakeUpTime = timeFormat.format(wakeUp);
+                    }
+                  } catch (e) {
+                    print("Error parsing times: $e");
+                  }
+            
+                  //quality text and emoji
+                  String quality = "N/A";
+                  String emoji = "❓";
+                  if (record['sleepQuality'] != null) {
+                    final qualityValue = record['sleepQuality'];
+                    if (qualityValue == "Good") {
+                      quality = "Good";
+                      emoji = "😴";
+                    } else if (qualityValue == "Okay") {
+                      quality = "Okay";
+                      emoji = "😑";
+                    } else if (qualityValue == "Bad") {
+                      quality = "Bad";
+                      emoji = "😖";
+                    }
+                  }
+            
+                  return Card(
+                      elevation: 12,
+                      shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),),
+                    margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(24),
+                        gradient: LinearGradient(
+                          colors: [
+                            Color.fromARGB(255, 23, 28, 55),
+                            Colors.blueGrey.shade700
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Date displayed at the top
+                            Text(
+                              'Date: $date',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.amber,
+                              ),
+                            ),
+                            const SizedBox(height: 8), // Spacing between date and columns
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                // Left Column: Bedtime and Awakenings
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Bedtime: $bedtimeTime',
+                                      style: const TextStyle(fontSize: 14,color: Colors.amber,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Awakenings: ${record['awakenings']?.length ?? 0}',
+                                      style: const TextStyle(fontSize: 14,color: Colors.amber,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                // Right Column: Wake-Up, Naps, and Quality
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Wake Up: $wakeUpTime',
+                                      style: const TextStyle(fontSize: 14,color: Colors.amber,),
+                                    ),
+                                    Text(
+                                      'Naps: ${record['naps']?.length ?? 0}',
+                                      style: const TextStyle(fontSize: 14,color: Colors.amber,),
+                                    ),
+                                    Text(
+                                      'Quality: $quality $emoji',
+                                      style: const TextStyle(fontSize: 14,color: Colors.amber,),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8), // Spacing before notes
+                            // Notes displayed at the bottom
+                            Text(
+                              'Notes: ${record['notes'] ?? 'N/A'}',
+                              style: const TextStyle(fontSize: 14, fontStyle: FontStyle.italic,color: Colors.amber,),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            )
+                    ],
+                  ),
           ),
-        ],
-      ),
       bottomNavigationBar: CustomBottomNavBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {}, // Placeholder for future action
-        backgroundColor: const Color.fromARGB(255, 233, 166, 90),
-        shape: const CircleBorder(),
-        child: Image.asset(
-          "Assets/SleepyFoxLogo512.png",
-          width: 40,
-          height: 40,
-        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
