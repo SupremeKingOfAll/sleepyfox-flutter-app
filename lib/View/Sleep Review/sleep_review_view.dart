@@ -35,6 +35,12 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
       setState(() {
         _profiles = profiles;
         _isLoading = false;
+
+        // auto select the first profile
+        if (_profiles.isNotEmpty) {
+          _selectedProfile = _profiles.first['name']; // first profile
+          _fetchAllRecords(_selectedProfile!); //  records for the default profile
+        }
       });
     } catch (error) {
       print("Failed to fetch profiles: $error");
@@ -43,7 +49,6 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
       });
     }
   }
-
   // get sleep records for a selected profile with the active filter.
   Future<void> _fetchAllRecords(String profileId) async {
     setState(() {
@@ -168,7 +173,7 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
         children: [
           // drop for profile selection
           DropdownButton<String>(
-            value: _selectedProfile,
+            value: _selectedProfile, // default to the first profile
             hint: const Text("Select a Profile"),
             items: _profiles.map<DropdownMenuItem<String>>((profile) {
               return DropdownMenuItem<String>(
@@ -176,17 +181,18 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
                 child: Text(
                   profile['name'],
                   style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.amber),
+                    fontWeight: FontWeight.bold,
+                    color: Colors.amber,
+                  ),
                 ),
               );
             }).toList(),
             onChanged: (String? newValue) {
               setState(() {
-                _selectedProfile = newValue; // update profile
+                _selectedProfile = newValue;
               });
               if (_selectedProfile != null) {
-                _fetchAllRecords(_selectedProfile!); // get records for new profile
+                _fetchAllRecords(_selectedProfile!);
               }
             },
           ),
