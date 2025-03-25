@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
 import 'package:elaros_gp4/View/Settings/settings_view.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_guide_style.dart';
@@ -74,6 +75,26 @@ class _ManageProfileViewState extends State<ManageProfileView> {
     }
   }
 
+  Future<List<Map<String, dynamic>>> fetchTrackingForProfile(String shareCode) async {
+    try {
+      final now = DateTime.now();
+      final firstDayOfMonth = DateTime(now.year, now.month, 1);
+      final lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
+
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('dailyTracking')
+          .where('sharecode', isEqualTo: shareCode) // ✅ No more email filtering
+          .where('timestamp', isGreaterThanOrEqualTo: Timestamp.fromDate(firstDayOfMonth))
+          .where('timestamp', isLessThanOrEqualTo: Timestamp.fromDate(lastDayOfMonth))
+          .get();
+      print(snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList());
+      return snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+    } catch (e) {
+      print("Error fetching tracking data: $e");
+      return [];
+    }
+  }
+
   //prof delete
   Future<void> _deleteProfile(String profileId) async {
     try {
@@ -119,6 +140,8 @@ class _ManageProfileViewState extends State<ManageProfileView> {
     }
 
     final profile = _profiles[index]; // Index of selected profile
+    print(profile["sharecode"]);
+    fetchTrackingForProfile(profile["sharecode"]);
 
     return Scaffold(
       appBar: AppBar(
@@ -518,7 +541,7 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                             context: context,
                             builder: (context) {
                               return ProfilePopUp(
-                                  content: 'FF785HS',
+                                  content: profile['sharecode'],
                                   title:
                                       'Share Code'); //PopUp Dialog can be found in widgets/PopUp
                             });
