@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const LoginPage(),
+      home: const DashboardView(),
       routes: {
         '/EducationView': (context) => const EducationView(),
         '/AboutUs': (context) => const AboutUs(),
@@ -45,6 +45,7 @@ class MyApp extends StatelessWidget {
         '/Register': (context) => const SignUpPage(),
         '/Login': (context) => const LoginPage(),
         '/ResetPassword': (context) => const ResetPassword(),
+        '/AccountSettings': (context) => const AccountSettings(),
         '/SleepHistory' : (context) => const SleepTrackingOverview(),
       },
     );
