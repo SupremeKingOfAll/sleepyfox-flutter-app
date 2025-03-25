@@ -11,7 +11,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'View/Education/education_view.dart';
 import 'View/Profiles/Manage Profile/manage_pofile_view.dart';
 import 'View/Settings/notifications_view.dart';
-import 'View/Sleep Review/sleep_review_view.dart';
+import 'View/Profiles/Profile History/profile_history_view.dart';
 import 'firebase_options.dart';
 import 'View/Login/login_view.dart';
 import 'View/Register/register_view.dart';
