@@ -293,6 +293,10 @@ class _SleepTrackingState extends State<SleepTracking> {
                         onChanged: (String? newValue) {
                           setState(() {
                             _selectedProfileId = newValue;
+                            _selectedProfileShareCode = _profiles.firstWhere(
+                              (profile) => profile['name'] == _selectedProfileId,
+                              orElse: () => {}  // Return an empty map if no match is found
+                            )['sharecode'];
                           });
                         },
                         items:
