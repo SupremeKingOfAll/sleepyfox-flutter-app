@@ -81,14 +81,23 @@ class _ManageProfileViewState extends State<ManageProfileView> {
       final firstDayOfMonth = DateTime(now.year, now.month, 1);
       final lastDayOfMonth = DateTime(now.year, now.month + 1, 0);
 
+      // Fetch all documents with the given sharecode
       QuerySnapshot snapshot = await FirebaseFirestore.instance
           .collection('dailyTracking')
-          .where('sharecode', isEqualTo: shareCode) // ✅ No more email filtering
-          .where('timestamp', isGreaterThanOrEqualTo: Timestamp.fromDate(firstDayOfMonth))
-          .where('timestamp', isLessThanOrEqualTo: Timestamp.fromDate(lastDayOfMonth))
+          .where('sharecode', isEqualTo: shareCode)
           .get();
-      print(snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList());
-      return snapshot.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+
+      // Filter the documents locally by the timestamp range
+      List<Map<String, dynamic>> filteredData = snapshot.docs
+          .where((doc) {
+            final timestamp = (doc['timestamp'] as Timestamp).toDate();
+            return timestamp.isAfter(firstDayOfMonth) && timestamp.isBefore(lastDayOfMonth);
+          })
+          .map((doc) => doc.data() as Map<String, dynamic>)
+          .toList();
+
+      print(filteredData);
+      return filteredData;
     } catch (e) {
       print("Error fetching tracking data: $e");
       return [];
