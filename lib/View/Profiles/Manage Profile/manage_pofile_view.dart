@@ -104,6 +104,44 @@ class _ManageProfileViewState extends State<ManageProfileView> {
     }
   }
 
+  Future<List<Color>> getCalendarColors(String shareCode) async {
+    try {
+      final trackingData = await fetchTrackingForProfile(shareCode);
+      final List<Color> calendarColors = List.generate(28, (index) => Colors.grey); // default color (grey for no data)
+
+      // create a color mapping for each day (0-27, for 28 days)
+      for (var doc in trackingData) {
+        final timestamp = (doc['timestamp'] as Timestamp).toDate();
+        final day = timestamp.day - 1; // zero-based index (0-27)
+
+        // retrieve the sleep and wake time from the document
+        final sleepTime = (doc['sleepTime'] as Timestamp).toDate();
+        final wakeTime = (doc['wakeTime'] as Timestamp).toDate();
+
+        // calculates the duration of sleep
+        final sleepDuration = wakeTime.difference(sleepTime).inHours;
+
+        // the color based on the duration
+        if (day >= 0 && day < 28) {
+          if (sleepDuration >= 8) {
+            calendarColors[day] = Colors.green; // 8+ hours: Excellent
+          } else if (sleepDuration >= 6) {
+            calendarColors[day] = Colors.orange; // 6-8 hours: Could be better
+          } else if (sleepDuration >= 4) {
+            calendarColors[day] = Colors.yellow; // 4-6 hours: Bad
+          } else {
+            calendarColors[day] = Colors.red; // 0-4 hours: Really bad
+          }
+        }
+      }
+
+      return calendarColors;
+    } catch (e) {
+      print("Error fetching tracking data: $e");
+      return List.generate(28, (index) => Colors.grey); // return grey for all days if error occurs
+    }
+  }
+
   //prof delete
   Future<void> _deleteProfile(String profileId) async {
     try {
