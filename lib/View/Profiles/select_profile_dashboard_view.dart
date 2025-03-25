@@ -110,63 +110,90 @@ class _SelectProfileViewState extends State<SelectProfileView> {
                   child: Column(
                     children: [
                       SizedBox(height: 20),
-                      //custom text widget found in /widget
-                      TextInputStyle(
-                          controller: nameController, labelText: "Name"),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      TextInputStyle(
-                          controller: ageController, labelText: "Age"),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      SizedBox(height: 20),
                       GuideButton(
-                        text: "Create a New Profile",
-                        onPressed: () async {
-                          final String name = nameController.text;
-                          final String ageText = ageController.text;
-                          if (name.isEmpty || ageText.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text("Name and Age are required"),
+                        text: "Create a New Profile", onPressed: (){
+                          showDialog(context: context, builder: (context) {
+                            return AlertDialog(
+                              backgroundColor: Colors.grey[100],
+                              elevation: 20,
+                              shadowColor: Colors.amber.withOpacity(0.5),
+                              insetPadding: EdgeInsets.all(20),
+                              contentPadding: EdgeInsets.all(20),
+                              clipBehavior: Clip.antiAlias,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                side: BorderSide(color: Colors.amber),
                               ),
-                            );
-                            return;
-                          }
-                          final int? age = int.tryParse(ageText);
-                          if (age == null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                  content: Text('Age has to be a number!')),
-                            );
-                            return;
-                          }
+                              title: Text('Create Profile'),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  TextInputStyle(controller: nameController, labelText: 'Name'),
+                                  SizedBox(height: 10,),
+                                  TextInputStyle(controller: ageController, labelText: 'Age'),
+                                ],
+                              ),
+                              actions: [
+                                TextButton(onPressed: () {
+                                  Navigator.of(context).pop();
+                                }, child: Text('Cancel')),
+                                TextButton(
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: Colors.amber,
+                                    foregroundColor: Colors.black,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15.0),
+                                    ),
+                                  ),
+                                  onPressed: () async {
+                                  final String name = nameController.text;
+                                  final String ageText = ageController.text;
+                                  if (name.isEmpty || ageText.isEmpty) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text("Name and Age are required"),
+                                      ),
+                                    );
+                                    return;
+                                  }
+                                  final int? age = int.tryParse(ageText);
+                                  if (age == null) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text('Age has to be a number!')),
+                                    );
+                                    return;
+                                  }
+                                  final String? email =
+                                      FirebaseAuth.instance.currentUser?.email;
+                                  if (email == null) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(content: Text('User not logged in.')),
+                                    );
+                                    return;
+                                  }
 
-                          final String? email =
-                              FirebaseAuth.instance.currentUser?.email;
-                          if (email == null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('User not logged in.')),
+                                  await _profileServices.addChildProfile(name, age, email);
+                                  await _fetchProfiles();
+                                  Navigator.of(context).pop();
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text('Profile created successfully!')),
+                                  );
+                                }, child: Text('Create'))
+                              ],
                             );
-                            return;
-                          }
-
-                          await _profileServices.addChildProfile(
-                              name, age, email);
-                          await _fetchProfiles();
-
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                                content: Text('Profile created successfully!')),
-                          );
+                          });
                         },
                       ),
                       SizedBox(height: 10,),
                       GuideButton(text: 'Add With Share Code', onPressed: (){
                         showDialog(context: context, builder: (context){
-                          return ProfileInputPopUp(hint: 'Share Code', title: 'Add Profile'); //File Found in widgets/PopUp/profile_sharecode_input_popup.dart
+                          return ProfileInputPopUp(
+                            hint: 'Share Code',
+                            title: 'Add Profile',
+                            //File Found in widgets/PopUp/profile_sharecode_input_popup.dart
+                          );
+
                         });
                       }),
                       SizedBox(height: 10,),
