@@ -1,8 +1,11 @@
+import 'package:elaros_gp4/Widgets/Buttons/button_guide_style.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:elaros_gp4/Widgets/custom_bottom_nav_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elaros_gp4/View/Settings/settings_view.dart';
+
+import '../../Widgets/Buttons/delete_button.dart';
 
 class AccountSettings extends StatefulWidget {
   const AccountSettings({super.key});
@@ -53,6 +56,9 @@ class _AccountSettingsState extends State<AccountSettings> {
         content: const Text("Are you sure you want to delete your account? This cannot be undone."),
         actions: [
           TextButton(
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.amber,
+            ),
             onPressed: () => Navigator.pop(context, false),
             child: const Text("Cancel"),
           ),
@@ -229,25 +235,27 @@ class _AccountSettingsState extends State<AccountSettings> {
                             ),
                           ),
                           const SizedBox(height: 35),
-                          ElevatedButton(
-                            onPressed: _confirmChangePassword,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.orange,
-                              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                            ),
-                            child: const Text("Change Password"),
-                          ),
+                          GuideButton(text: 'Change Password', onPressed: _confirmChangePassword),
+                          // ElevatedButton(
+                          //   onPressed: _confirmChangePassword,
+                          //   style: ElevatedButton.styleFrom(
+                          //     backgroundColor: Colors.orange,
+                          //     padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                          //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                          //   ),
+                          //   child: const Text("Change Password"),
+                          // ),
                           const SizedBox(height: 20),
-                          ElevatedButton(
-                            onPressed: _deleteAccount,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
-                              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                            ),
-                            child: const Text("Delete Account"),
-                          ),
+                          DeleteButton(text: 'Delete Account', onPressed: _deleteAccount),
+                          // ElevatedButton(
+                          //   onPressed: _deleteAccount,
+                          //   style: ElevatedButton.styleFrom(
+                          //     backgroundColor: Colors.red,
+                          //     padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                          //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                          //   ),
+                          //   child: const Text("Delete Account"),
+                          // ),
                         ],
                       ),
                     ),
