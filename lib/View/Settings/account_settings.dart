@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:elaros_gp4/Widgets/custom_bottom_nav_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:elaros_gp4/View/Settings/settings_view.dart';
 
 class AccountSettings extends StatefulWidget {
   const AccountSettings({super.key});
@@ -22,14 +24,16 @@ class _AccountSettingsState extends State<AccountSettings> {
   }
 
   Future<void> _loadUserData() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+    final currentUser = FirebaseAuth.instance.currentUser;
+
+    if (currentUser != null) {
+      final doc = await FirebaseFirestore.instance.collection('users').doc(currentUser.uid).get();
       final data = doc.data();
+
       if (data != null && mounted) {
         setState(() {
           _username = data['username'] ?? 'No username';
-          _maskedEmail = _maskEmail(user.email ?? '');
+          _maskedEmail = _maskEmail(currentUser.email ?? '');
         });
       }
     }
@@ -63,230 +67,201 @@ class _AccountSettingsState extends State<AccountSettings> {
     if (confirmed != true) return;
 
     try {
-      final user = FirebaseAuth.instance.currentUser;
+      final currentUser = FirebaseAuth.instance.currentUser;
 
-      if (user != null) {
-        // 1. Delete from Firestore
-        await FirebaseFirestore.instance.collection('users').doc(user.uid).delete();
+      if (currentUser != null) {
+        final userId = currentUser.uid;
+        await FirebaseFirestore.instance.collection('users').doc(userId).delete();
 
-        // 2. Sign out first
-        await FirebaseAuth.instance.signOut();
+        final providerData = currentUser.providerData;
+        if (providerData.isNotEmpty) {
+          final email = currentUser.email;
+          final auth = FirebaseAuth.instance;
 
-        // 3. Delete the user (will throw if not recently re-authenticated)
-        await user.delete();
-
-        // 4. Navigate to login screen
-        if (!mounted) return;
-        Navigator.pushNamedAndRemoveUntil(context, '/Login', (route) => false);
+          if (email != null) {
+            final methods = await auth.fetchSignInMethodsForEmail(email);
+            if (methods.contains('password')) {
+              await currentUser.delete();
+            }
+          }
+        }
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error deleting account: $e')),
+        SnackBar(content: Text('Account deletion failed. Please try again.')),
       );
+    } finally {
+      await FirebaseAuth.instance.signOut();
+      if (!mounted) return;
+      Navigator.pushNamedAndRemoveUntil(context, '/Login', (route) => false);
     }
   }
 
+  void _confirmChangePassword() async {
+    bool confirmed = await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Change Password"),
+        content: const Text("Are you sure you want to change your password?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text("Continue", style: TextStyle(color: Colors.orange)),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      Navigator.pushReplacementNamed(context, '/ResetPassword');
+    }
+  }
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
+
+    if (index == 0) {
+      Navigator.pushReplacementNamed(context, '/SleepTracking');
+    } else if (index == 1) {
+      Navigator.pushReplacementNamed(context, '/Dashboard');
+    } else if (index == 2) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SettingsView()),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: Colors.black,
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Color.fromARGB(255, 252, 174, 41)),
-            onPressed: () => Navigator.pop(context),
+    return Scaffold(
+      extendBody: true,
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.amber),
+          onPressed: () => Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => SettingsView()),
           ),
-          backgroundColor: const Color.fromARGB(255, 0, 0, 0),
-          title: const Text("Account Settings", style: TextStyle(color: Color.fromARGB(255, 252, 174, 41))),
-          actions: const [
-            Padding(
-              padding: EdgeInsets.only(right: 16),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Text("Sleepy fox", style: TextStyle(color: Color.fromARGB(255, 252, 174, 41))),
-              ),
-            ),
-          ],
         ),
-        body: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
-              colors: [Colors.black, Colors.lightBlueAccent],
+        backgroundColor: Colors.black,
+        title: const Text("Account Settings", style: TextStyle(color: Colors.amber)),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Text("Sleepy fox", style: TextStyle(color: Colors.amber)),
             ),
           ),
-          child: SafeArea(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const SizedBox(height: 30),
-                    Image.asset(
-                      'Assets/SleepyFoxLogo512.png',
-                      width: 100,
-                      height: 100,
+        ],
+      ),
+      body: Container(
+        constraints: const BoxConstraints.expand(),
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color.fromARGB(220, 10, 18, 43),
+              Color.fromARGB(255, 28, 29, 53),
+              Color.fromARGB(255, 25, 27, 53),
+            ],
+          ),
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 30),
+                  const SizedBox(height: 20),
+                  Card(
+                    elevation: 12,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
                     ),
-                    const SizedBox(height: 20),
-                    Card(
-                      elevation: 12,
-                      shape: RoundedRectangleBorder(
+                    shadowColor: Colors.black.withOpacity(0.4),
+                    child: Container(
+                      decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(24),
-                      ),
-                      shadowColor: Colors.black.withOpacity(0.4),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(24),
-                          gradient: LinearGradient(
-                            colors: [Colors.blueGrey.shade900, Colors.blueGrey.shade700],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                        ),
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 25),
-                        child: Column(
-                          children: [
-                            Container(
-                              width: double.infinity,
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                color: Colors.blueGrey.shade800,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("Username:", style: TextStyle(fontSize: 16, color: Colors.white70)),
-                                  const SizedBox(height: 4),
-                                  Text(_username, style: const TextStyle(fontSize: 18, color: Colors.amber, fontWeight: FontWeight.bold)),
-                                  const SizedBox(height: 16),
-                                  Text("Email:", style: TextStyle(fontSize: 16, color: Colors.white70)),
-                                  const SizedBox(height: 4),
-                                  Text(_maskedEmail, style: const TextStyle(fontSize: 18, color: Colors.white)),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(height: 35),
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.pushReplacementNamed(context, '/ResetPassword');
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.orange,
-                                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                              ),
-                              child: const Text("Change Password"),
-                            ),
-                            const SizedBox(height: 20),
-                            ElevatedButton(
-                              onPressed: _deleteAccount,
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.red,
-                                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-                              ),
-                              child: const Text("Delete Account"),
-                            ),
-
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Color.fromARGB(220, 10, 18, 43),
+                            Color.fromARGB(255, 28, 29, 53),
+                            Color.fromARGB(255, 25, 27, 53),
                           ],
                         ),
                       ),
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 25),
+                      child: Column(
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.blueGrey.shade800,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Username:", style: TextStyle(fontSize: 16, color: Colors.white70)),
+                                const SizedBox(height: 4),
+                                Text(_username, style: const TextStyle(fontSize: 18, color: Colors.amber, fontWeight: FontWeight.bold)),
+                                const SizedBox(height: 16),
+                                Text("Email:", style: TextStyle(fontSize: 16, color: Colors.white70)),
+                                const SizedBox(height: 4),
+                                Text(_maskedEmail, style: const TextStyle(fontSize: 18, color: Colors.white)),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 35),
+                          ElevatedButton(
+                            onPressed: _confirmChangePassword,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.orange,
+                              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                            ),
+                            child: const Text("Change Password"),
+                          ),
+                          const SizedBox(height: 20),
+                          ElevatedButton(
+                            onPressed: _deleteAccount,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                            ),
+                            child: const Text("Delete Account"),
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: 20),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 20),
+                ],
               ),
             ),
           ),
         ),
-        bottomNavigationBar: BottomAppBar(
-          color: Colors.black,
-          shape: const CircularNotchedRectangle(),
-          notchMargin: 8.0,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildNavItem(Icons.home, "Home", 0),
-              _buildNavItem(Icons.nightlight_round, "Sleep", 1),
-              const SizedBox(width: 48),
-              _buildNavItem(Icons.settings, "Settings", 2),
-              _buildNavItem(Icons.logout, "Sign Out", 3),
-            ],
-          ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: const Color.fromARGB(255, 233, 166, 90),
-          onPressed: () {},
-          shape: const CircleBorder(),
-          child: Image.asset(
-            "Assets/SleepyFoxLogo512.png",
-            width: 40,
-            height: 40,
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
-    );
-  }
-
-  Widget _buildNavItem(IconData icon, String label, int index) {
-    bool isSelected = _selectedIndex == index;
-    return GestureDetector(
-      onTap: () => _onItemTapped(index),
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: isSelected ? Colors.amber.withOpacity(0.2) : Colors.transparent,
-        ),
-        child: SizedBox(
-          height: 56,
-          width: 60,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              Positioned(
-                top: isSelected ? 0 : 4,
-                child: AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  curve: Curves.easeOut,
-                  height: isSelected ? 28 : 24,
-                  child: Icon(
-                    icon,
-                    color: isSelected ? Colors.amber.shade700 : Colors.white,
-                    size: isSelected ? 28 : 24,
-                  ),
-                ),
-              ),
-              Positioned(
-                bottom: 0,
-                child: AnimatedDefaultTextStyle(
-                  duration: Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                    color: isSelected ? Colors.amber.shade700 : Colors.white,
-                  ),
-                  child: Text(label),
-                ),
-              ),
-            ],
-          ),
-        ),
+      bottomNavigationBar: CustomBottomNavBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
       ),
     );
   }
