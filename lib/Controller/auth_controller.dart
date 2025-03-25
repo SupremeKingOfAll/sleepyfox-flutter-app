@@ -92,7 +92,7 @@ class AuthController {
       case "invalid-credential":
         return "Looks like either your email address or password were incorrect. Wanna try again?";
       default:
-        return "An unexpected error occurred. Please try again.";
+        return "An unexpected er  ror occurred. Please try again.";
     }
   }
 
