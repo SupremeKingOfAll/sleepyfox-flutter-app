@@ -40,6 +40,7 @@ class _SleepTrackingState extends State<SleepTracking> {
         // Auto-select the first profile if none is selected
         if (_profiles.isNotEmpty && _selectedProfileId == null) {
           _selectedProfileId = _profiles.first['name'];
+          _selectedProfileShareCode = _profiles[0]['sharecode']; // set sharecode for first profile
         }
       });
     } catch (error) {
@@ -132,6 +133,7 @@ class _SleepTrackingState extends State<SleepTracking> {
         formattedNaps.add({'start': 'N/A', 'end': 'N/A'}); // Placeholder data
       }
 
+      print(_selectedProfileShareCode);
       // Save to Firestore
       await FirebaseFirestore.instance.collection('dailyTracking').add({
         'email': user.email,
@@ -143,7 +145,7 @@ class _SleepTrackingState extends State<SleepTracking> {
         'naps': formattedNaps,
         'notes': _notesController.text,
         'timestamp': FieldValue.serverTimestamp(),
-        'sharecode' : _selectedProfileShareCode,
+        'sharecode': _selectedProfileShareCode,
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -238,14 +240,14 @@ class _SleepTrackingState extends State<SleepTracking> {
         child: Column(
           children: [
             Expanded(
-              // Ensures content doesn't push against the bottom nav bar
+              // ensures content doesn't push against the bottom nav bar
               child: SingleChildScrollView(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize
-                      .min, // Prevents unnecessary vertical expansion
+                      .min, // prevents unnecessary vertical expansion
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(top: 10, bottom: 5),
