@@ -38,10 +38,11 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
         _profiles = profiles;
         _isLoading = false;
 
-        // auto select the first profile
+        // Auto-select the first profile and fetch its records
         if (_profiles.isNotEmpty) {
-          _selectedProfile = _profiles.first['name']; // first profile
-          _fetchAllRecords(_selectedProfile!); //  records for the default profile
+          _selectedProfile = _profiles.first['name'];
+          _selectedProfileShareCode = _profiles.first['sharecode'];
+          _fetchAllRecords(_selectedProfileShareCode!); // Fetch data for the first profile
         }
       });
     } catch (error) {
@@ -50,8 +51,7 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
         _isLoading = false;
       });
     }
-  }
-  // get sleep records for a selected profile with the active filter.
+  }  // get sleep records for a selected profile with the active filter.
   Future<void> _fetchAllRecords(String profileId) async {
     setState(() {
       _isLoading = true;
@@ -147,29 +147,31 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
           PopupMenuButton<String>(
             onSelected: (String filter) {
               setState(() {
-                _selectedFilter = filter;
+                _selectedFilter = filter; // Update the filter
               });
-              if (_selectedProfile != null) {
-                _fetchAllRecords(_selectedProfile!); // get data with new filter
+              // Fetch data immediately with the current profile share code
+              if (_selectedProfileShareCode != null) {
+                _fetchAllRecords(_selectedProfileShareCode!);
+              } else {
+                print("No profile selected to fetch records.");
               }
             },
             icon: const Icon(Icons.filter_alt),
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
               const PopupMenuItem<String>(
                 value: "All",
-                child: Text("All"), // all records
+                child: Text("All"), // Show all records
               ),
               const PopupMenuItem<String>(
                 value: "This Week",
-                child: Text("This Week"), // this week's records
+                child: Text("This Week"), // Filter for this week's records
               ),
               const PopupMenuItem<String>(
                 value: "Last Week",
-                child: Text("Last Week"), // last week's records
+                child: Text("Last Week"), // Filter for last week's records
               ),
             ],
-          ),
-          Padding(
+          ),          Padding(
             padding: const EdgeInsets.only(right: 16),
             child: Center(child: Text(_selectedFilter)), // filter in use
           ),
@@ -199,8 +201,7 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
           children: [
             // drop for profile selection
             DropdownButton<String>(
-              value: _selectedProfile, // default to the first profile
-              borderRadius: BorderRadius.circular(24),
+              value: _selectedProfile,
               hint: const Text("Select a Profile"),
               items: _profiles.map<DropdownMenuItem<String>>((profile) {
                 return DropdownMenuItem<String>(
@@ -215,20 +216,22 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
                 );
               }).toList(),
               onChanged: (String? newValue) {
-                setState(() {
-                  _selectedProfile = newValue;
-                  _selectedProfileShareCode = _profiles.firstWhere(
+                if (newValue != null) {
+                  setState(() {
+                    _selectedProfile = newValue;
+                    _selectedProfileShareCode = _profiles
+                        .firstWhere(
                           (profile) => profile['name'] == _selectedProfile,
-                      orElse: () => {}  // Return an empty map if no match is found
-                  )['sharecode'];
-                });
-                if (_selectedProfile != null) {
-                  _fetchAllRecords(_selectedProfileShareCode!);
-                };
+                      orElse: () => {"sharecode": null},
+                    )['sharecode'];
+                  });
+
+                  if (_selectedProfileShareCode != null) {
+                    _fetchAllRecords(_selectedProfileShareCode!);
+                  }
+                }
               },
-              dropdownColor: Colors.blueAccent,
-            ),
-            Expanded(
+            ),            Expanded(
               child: _allRecords.isEmpty
                   ? const Center(child: Text('No records found'))
                   : ListView.builder(
