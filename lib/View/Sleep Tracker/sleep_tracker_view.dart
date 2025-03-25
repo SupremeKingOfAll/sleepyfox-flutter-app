@@ -19,6 +19,7 @@ class SleepTracking extends StatefulWidget {
 class _SleepTrackingState extends State<SleepTracking> {
   final ProfileServices _profileServices = ProfileServices();
   String? _selectedProfileId;
+  String? _selectedProfileShareCode;
   List<Map<String, dynamic>> _profiles = [];
 
   @override
@@ -142,6 +143,7 @@ class _SleepTrackingState extends State<SleepTracking> {
         'naps': formattedNaps,
         'notes': _notesController.text,
         'timestamp': FieldValue.serverTimestamp(),
+        'sharecode' : _selectedProfileShareCode,
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
