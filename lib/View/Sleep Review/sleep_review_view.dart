@@ -197,6 +197,7 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
             // drop for profile selection
             DropdownButton<String>(
               value: _selectedProfile, // default to the first profile
+              borderRadius: BorderRadius.circular(24),
               hint: const Text("Select a Profile"),
               items: _profiles.map<DropdownMenuItem<String>>((profile) {
                 return DropdownMenuItem<String>(
@@ -216,8 +217,9 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
                 });
                 if (_selectedProfile != null) {
                   _fetchAllRecords(_selectedProfile!);
-                }
+                };
               },
+              dropdownColor: Colors.blueAccent,
             ),
             Expanded(
               child: _allRecords.isEmpty
