@@ -20,8 +20,9 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
   List<Map<String, dynamic>> _allRecords = []; // Holds sleep records based on filter
   bool _isLoading = true;
   String? _selectedProfile; // Currently selected child profile
-  String _selectedFilter = "This Week";
   String? _selectedProfileShareCode;
+  String _selectedFilter = "This Week";
+
 
   @override
   void initState() {
@@ -221,7 +222,7 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
                   )['sharecode'];
                 });
                 if (_selectedProfile != null) {
-                  _fetchAllRecords(_selectedProfile!);
+                  _fetchAllRecords(_selectedProfileShareCode!);
                 };
               },
               dropdownColor: Colors.blueAccent,
