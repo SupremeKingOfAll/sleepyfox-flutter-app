@@ -21,6 +21,7 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
   bool _isLoading = true;
   String? _selectedProfile; // Currently selected child profile
   String _selectedFilter = "This Week";
+  String? _selectedProfileShareCode;
 
   @override
   void initState() {
@@ -73,7 +74,7 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
 
       final snapshot = await FirebaseFirestore.instance
           .collection('dailyTracking')
-          .where('profileId', isEqualTo: profileId)
+          .where('sharecode', isEqualTo: profileId)
           .get();
 
       final records = snapshot.docs.map((doc) {
@@ -193,7 +194,7 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
           ),
         ),
         child: Column(
-                    children: [
+          children: [
             // drop for profile selection
             DropdownButton<String>(
               value: _selectedProfile, // default to the first profile
@@ -214,6 +215,10 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
               onChanged: (String? newValue) {
                 setState(() {
                   _selectedProfile = newValue;
+                  _selectedProfileShareCode = _profiles.firstWhere(
+                          (profile) => profile['name'] == _selectedProfile,
+                      orElse: () => {}  // Return an empty map if no match is found
+                  )['sharecode'];
                 });
                 if (_selectedProfile != null) {
                   _fetchAllRecords(_selectedProfile!);
@@ -228,8 +233,8 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
                 itemCount: _allRecords.length,
                 itemBuilder: (context, index) {
                   final record = _allRecords[index];
-            
-               //date time formatting
+
+                  //date time formatting
                   final dateFormat = DateFormat("dd/MM/yyyy HH:mm");
                   final timeFormat = DateFormat("HH:mm");
                   DateTime? bedtime;
@@ -237,7 +242,7 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
                   String bedtimeTime = "N/A";
                   String wakeUpTime = "N/A";
                   String date = "N/A";
-            
+
                   try {
                     if (record['bedtime'] != null) {
                       bedtime = dateFormat.parse(record['bedtime']);
@@ -251,7 +256,7 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
                   } catch (e) {
                     print("Error parsing times: $e");
                   }
-            
+
                   //quality text and emoji
                   String quality = "N/A";
                   String emoji = "❓";
@@ -268,10 +273,10 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
                       emoji = "😖";
                     }
                   }
-            
+
                   return Card(
-                      elevation: 12,
-                      shape: RoundedRectangleBorder(
+                    elevation: 12,
+                    shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),),
                     margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                     child: Container(
@@ -354,9 +359,9 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
                 },
               ),
             )
-                    ],
-                  ),
-          ),
+          ],
+        ),
+      ),
       bottomNavigationBar: CustomBottomNavBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
