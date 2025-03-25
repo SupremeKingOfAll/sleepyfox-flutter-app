@@ -20,6 +20,7 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
   List<Map<String, dynamic>> _allRecords = []; // Holds sleep records based on filter
   bool _isLoading = true;
   String? _selectedProfile; // Currently selected child profile
+  String? _selectedProfileShareCode;
   String _selectedFilter = "This Week";
 
   @override
@@ -68,7 +69,7 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
 
       final snapshot = await FirebaseFirestore.instance
           .collection('dailyTracking')
-          .where('profileId', isEqualTo: profileId)
+          .where('sharecode', isEqualTo: profileId)
           .get();
 
       final records = snapshot.docs.map((doc) {
@@ -184,9 +185,13 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
             onChanged: (String? newValue) {
               setState(() {
                 _selectedProfile = newValue; // update profile
+                _selectedProfileShareCode = _profiles.firstWhere(
+                              (profile) => profile['name'] == _selectedProfile,
+                              orElse: () => {}  // Return an empty map if no match is found
+                            )['sharecode'];
               });
               if (_selectedProfile != null) {
-                _fetchAllRecords(_selectedProfile!); // get records for new profile
+                _fetchAllRecords(_selectedProfileShareCode!); // get records for new profile
               }
             },
           ),
