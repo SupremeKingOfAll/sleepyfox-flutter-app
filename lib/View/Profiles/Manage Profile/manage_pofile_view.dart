@@ -10,6 +10,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:elaros_gp4/Services/profile_services.dart';
 import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class ManageProfileView extends StatefulWidget {
   const ManageProfileView({super.key});
@@ -351,48 +352,53 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Center(
-                              child: ZaksPersonalTextStyle(
-                                  text: 'Sleep Pie',
-                                  textStyle: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold))),
+                            child: ZaksPersonalTextStyle(
+                              text: 'Sleep Pie',
+                              textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                          ),
                           SizedBox(height: 10),
                           SizedBox(
                             height: 200,
-                            child: PieChart(
-                              PieChartData(
-                                sections: [
-                                  PieChartSectionData(
-                                    color: Colors.green,
-                                    value: 70,
+                            child: SfCircularChart(
+                              annotations: <CircularChartAnnotation>[
+                                CircularChartAnnotation(
+                                  widget: Text(
+                                    'Sleep\nData',
+                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                    textAlign: TextAlign.center,
                                   ),
-                                  PieChartSectionData(
-                                    color: Colors.orangeAccent,
-                                    value: 30,
-                                  ),
-                                ],
-                              ),
+                                )
+                              ],
+                              series:
+                  <DoughnutSeries<Map<String, dynamic>, String>>[
+                                DoughnutSeries<Map<String, dynamic>, String>(
+                                  dataSource: [
+                                    {'label': 'Asleep', 'value': 70, 'color': Colors.green},
+                                    {'label': 'Awake', 'value': 30, 'color': Colors.orangeAccent},
+                                  ],
+                                  xValueMapper: (data, ) => data['label'],
+                                  yValueMapper: (data, ) => data['value'],
+                                  pointColorMapper: (data, _) => data['color'],
+                                  dataLabelSettings: DataLabelSettings(isVisible: true),
+                                  animationDuration: 1500,
+                                ),
+                              ],
                             ),
                           ),
-                          SizedBox(
-                            height: 50,
-                          ),
+                          SizedBox(height: 50),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               ZaksPersonalTextStyle(
-                                  text: 'Asleep: 🟢',
-                                  textStyle: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold)),
-                              SizedBox(
-                                width: 10,
+                                text: 'Asleep: 🟢',
+                                textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                               ),
+                              SizedBox(width: 10),
                               ZaksPersonalTextStyle(
-                                  text: 'Awake: 🟠',
-                                  textStyle: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold)),
+                                text: 'Awake: 🟠',
+                                textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
                             ],
                           ),
                         ],
