@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:elaros_gp4/Services/profile_services.dart';
+import 'package:intl/intl.dart';
 
 class ManageProfileView extends StatefulWidget {
   const ManageProfileView({super.key});
@@ -103,6 +104,68 @@ class _ManageProfileViewState extends State<ManageProfileView> {
       return [];
     }
   }
+
+  Future<List<Color>> getCalendarColors(String shareCode) async {
+    try {
+      final trackingData = await fetchTrackingForProfile(shareCode);
+      final List<Color> calendarColors = List.generate(28, (index) => Colors.grey); // default color (grey for no data)
+
+      // dateFormat to parse 
+      final dateFormat = DateFormat("dd/MM/yyyy HH:mm");
+
+      // goes over every day to colour it
+      for (var doc in trackingData) {
+        final timestamp = doc['timestamp']; // firebase Timestamp
+        final timestampDate = timestamp.toDate(); // convert to DateTime for flutter to read
+
+        final day = timestampDate.day - 1; // zero-based index (0-27)
+
+        // get bedtime and wakeup time from entries
+        final bedtime = dateFormat.parse(doc['bedtime']); // parse string to DateTime using DateFormat
+        final wakeUp = dateFormat.parse(doc['wakeUp']); // parse string to DateTime using DateFormat
+
+        // Calculate the duration between bedtime and wakeUp
+        final sleepDuration = wakeUp.difference(bedtime).inHours;
+
+        // handle case where wakeUp is on the next day
+        if (wakeUp.isBefore(bedtime)) {
+          wakeUp.add(Duration(days: 1)); // add a day to wakeUp if it's on the next day
+        }
+
+        
+        Color sleepColor = Colors.grey; // default color for the sleep duration, grey it out
+  if (sleepDuration >= 8) {
+          sleepColor = Colors.green; // 8+ hours: Excellent
+        } else if (sleepDuration >= 6) {
+          sleepColor = Colors.orange; // 6-8 hours: Could be better
+        } else if (sleepDuration >= 4) {
+          sleepColor = Colors.yellow; // 4-6 hours: Bad
+        } else {
+          sleepColor = Colors.red; // 0-4 hours: Really bad
+        }
+
+        // mark the calendar square for both days (bedtime and wakeup days)
+        final bedtimeDayIndex = bedtime.day - 1; 
+        final wakeUpDayIndex = wakeUp.day - 1; 
+
+        // assign color to the correct calendar squares
+        if (bedtimeDayIndex >= 0 && bedtimeDayIndex < 28) {
+          calendarColors[bedtimeDayIndex] = sleepColor;
+        }
+
+        if (wakeUpDayIndex >= 0 && wakeUpDayIndex < 28 && wakeUpDayIndex != bedtimeDayIndex) {
+          // no overwriting if person sleeps and wakes up same day
+          calendarColors[wakeUpDayIndex] = sleepColor;
+        }
+      }
+
+      return calendarColors;
+    } catch (e) {
+      print("Error fetching tracking data: $e");
+      return List.generate(28, (index) => Colors.grey); // grey calender if entries cant be received
+    }
+  }
+
 
   //prof delete
   Future<void> _deleteProfile(String profileId) async {
@@ -352,46 +415,56 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           ZaksPersonalTextStyle(
-                              text: 'Sleep Calendar',
-                              textStyle: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold)),
+                            text: 'Sleep Calendar',
+                            textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
                           SizedBox(height: 10),
-                          SizedBox(
-                            height: 200,
-                            child: GridView.builder(
-                              physics:
-                                  NeverScrollableScrollPhysics(), // Wont let the user scroll the calendar
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount:
-                                    7, // 7 columns for days of the week as it was discussed
-                                mainAxisSpacing: 4,
-                                crossAxisSpacing: 4,
-                              ),
-                              itemCount: 28, // 28 days for 4 weeks of period
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  decoration: BoxDecoration(
-                                    color: index % 5 == 0
-                                        ? Colors.red
-                                        : Colors
-                                            .green, //temp decoration implementation here. index div 5 = 0 then red. else green
-                                    borderRadius: BorderRadius.circular(8),
+                          FutureBuilder<List<Color>>(
+                            future: getCalendarColors(profile["sharecode"]), // Call the function here
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return CircularProgressIndicator(); // Show loading spinner while data is being fetched
+                              }
+
+                              if (snapshot.hasError) {
+                                return Center(child: Text('Error fetching data'));
+                              }
+
+                              if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                                return Center(child: Text('No data available for this month'));
+                              }
+
+                              List<Color> calendarColors = snapshot.data!;
+
+                              return SizedBox(
+                                height: 200,
+                                child: GridView.builder(
+                                  physics: NeverScrollableScrollPhysics(),
+                                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 7,
+                                    mainAxisSpacing: 4,
+                                    crossAxisSpacing: 4,
                                   ),
-                                  child: Center(
-                                    child: Text(
-                                      '${index + 1}',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
+                                  itemCount: 28,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        color: calendarColors[index], // Use color from the data
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          '${index + 1}',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              );
+                            },
                           ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          // Color code explanation part below
+                          SizedBox(height: 10),
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -401,17 +474,12 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                                 children: [
                                   ZaksPersonalTextStyle(
                                     text: 'Excellent: 🟢',
-                                    textStyle: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
+                                    textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                   ),
-                                  SizedBox(
-                                      width: 20), // Ensure consistent spacing
+                                  SizedBox(width: 20),
                                   ZaksPersonalTextStyle(
                                     text: 'Could be better: 🟠',
-                                    textStyle: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
+                                    textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
@@ -421,21 +489,17 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                                 children: [
                                   ZaksPersonalTextStyle(
                                     text: 'Bad: 🟡',
-                                    textStyle: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
+                                    textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                   ),
                                   SizedBox(width: 20),
                                   ZaksPersonalTextStyle(
                                     text: 'Really Bad: 🔴',
-                                    textStyle: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
+                                    textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
                             ],
-                          )
+                          ),
                         ],
                       ),
                     ),
