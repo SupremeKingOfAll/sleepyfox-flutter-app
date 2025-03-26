@@ -22,6 +22,7 @@ class ManageProfileView extends StatefulWidget {
 class _ManageProfileViewState extends State<ManageProfileView> {
   final ProfileServices _profileServices = ProfileServices();
   List<Map<String, dynamic>> _profiles = [];
+  late Future<Map<String, int>> _sleepDataFuture;
   bool _isLoading = true;
 
   int _selectedIndex = 0;
@@ -106,6 +107,44 @@ class _ManageProfileViewState extends State<ManageProfileView> {
     }
   }
 
+  Future<Map<String, int>> fetchWeeklySleepData(String shareCode) async {
+    try {
+      List<Map<String, dynamic>> allData = await fetchTrackingForProfile(shareCode);
+
+      final now = DateTime.now();
+      final oneWeekAgo = now.subtract(Duration(days: 7));
+
+      Map<String, int> sleepCategories = {
+        'Random': 0,
+        'Nightmare': 0,
+        'Bathroom': 0,
+        'Energised': 0,
+      };
+
+      for (var doc in allData) {
+        DateTime entryDate = (doc['timestamp'] as Timestamp).toDate();
+
+        if (entryDate.isAfter(oneWeekAgo) && entryDate.isBefore(now)) {
+          if (doc['awakenings'] != null && doc['awakenings'] is List) {
+            for (var awakening in doc['awakenings']) {
+              String reason = (awakening['reason'] ?? 'Random').trim();
+              if (sleepCategories.containsKey(reason)) {
+                sleepCategories[reason] = sleepCategories[reason]! + 1;
+              } else {
+                sleepCategories['Random'] = sleepCategories['Random']! + 1;
+              }
+            }
+          }
+        }
+      }
+
+      return sleepCategories;
+    } catch (e) {
+      print("Error fetching weekly sleep data: $e");
+      return {};
+    }
+  }
+
   Future<List<Color>> getCalendarColors(String shareCode) async {
     try {
       final trackingData = await fetchTrackingForProfile(shareCode);
@@ -167,7 +206,7 @@ class _ManageProfileViewState extends State<ManageProfileView> {
     }
   }
 
-
+  
   //prof delete
   Future<void> _deleteProfile(String profileId) async {
     try {
@@ -215,6 +254,7 @@ class _ManageProfileViewState extends State<ManageProfileView> {
     final profile = _profiles[index]; // Index of selected profile
     print(profile["sharecode"]);
     fetchTrackingForProfile(profile["sharecode"]);
+    _sleepDataFuture = fetchWeeklySleepData(profile["sharecode"]);
 
     return Scaffold(
       appBar: AppBar(
@@ -337,74 +377,92 @@ class _ManageProfileViewState extends State<ManageProfileView> {
               child: Row(
                 children: [
                   //pie chart card
-                  Card(
-                    color: Colors.grey[200],
-                    elevation: 5,
-                    margin: EdgeInsets.all(5),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Container(
-                      width: 300, // Fixed width for the card
-                      padding: EdgeInsets.all(15),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Center(
-                            child: ZaksPersonalTextStyle(
-                              text: 'Sleep Pie',
-                              textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          SizedBox(height: 10),
-                          SizedBox(
-                            height: 200,
-                            child: SfCircularChart(
-                              annotations: <CircularChartAnnotation>[
-                                CircularChartAnnotation(
-                                  widget: Text(
-                                    'Sleep\nData',
-                                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                )
-                              ],
-                              series:
-                  <DoughnutSeries<Map<String, dynamic>, String>>[
-                                // DoughnutSeries<Map<String, dynamic>, String>(
-                                //   dataSource: [
-                                //     {'label': 'Asleep', 'value': 70, 'color': Colors.green},
-                                //     {'label': 'Awake', 'value': 30, 'color': Colors.orangeAccent},
-                                //   ],
-                                //   xValueMapper: (data, ) => data['label'],
-                                //   yValueMapper: (data, ) => data['value'],
-                                //   pointColorMapper: (data, _) => data['color'],
-                                //   dataLabelSettings: DataLabelSettings(isVisible: true),
-                                //   animationDuration: 1500,
-                                // ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(height: 50),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                  FutureBuilder<Map<String, int>>(
+                    future: _sleepDataFuture,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error loading sleep data');
+                      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                        return Text('No sleep data available');
+                      }
+
+                      final sleepData = snapshot.data!;
+
+                      return Card( // ✅ Proper return here
+                        color: Colors.grey[200],
+                        elevation: 5,
+                        margin: EdgeInsets.all(5),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Container(
+                          width: 300,
+                          padding: EdgeInsets.all(15),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              ZaksPersonalTextStyle(
-                                text: 'Asleep: 🟢',
-                                textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                              Text(
+                                'Awakenings\nthis week',
+                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
                               ),
-                              SizedBox(width: 10),
-                              ZaksPersonalTextStyle(
-                                text: 'Awake: 🟠',
-                                textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                              SizedBox(height: 10),
+                              SizedBox(
+                                height: 200,
+                                child: SfCircularChart(
+                                  annotations: <CircularChartAnnotation>[
+                                    CircularChartAnnotation(
+                                      widget: Text(
+                                        '',
+                                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    )
+                                  ],
+                                  series: <DoughnutSeries<Map<String, dynamic>, String>>[
+                                    DoughnutSeries<Map<String, dynamic>, String>(
+                                      dataSource: sleepData.entries
+                                          .where((entry) =>
+                                              ['Random', 'Nightmare', 'Bathroom', 'Energised']
+                                                  .contains(entry.key) &&
+                                              entry.value > 0)
+                                          .map((entry) => {
+                                                'label': entry.key,
+                                                'value': entry.value,
+                                                'color': _getCategoryColor(entry.key),
+                                              })
+                                          .toList(),
+                                      xValueMapper: (data, _) => data['label'],
+                                      yValueMapper: (data, _) => data['value'],
+                                      pointColorMapper: (data, _) => data['color'],
+                                      dataLabelSettings: DataLabelSettings(
+                                        isVisible: true,
+                                        labelPosition: ChartDataLabelPosition.inside, // ✅ No lines
+                                      ),
+                                      animationDuration: 1500,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(height: 20),
+                              Column(
+                                children: [
+                                  _buildLegendRow('Random', '🔵'),
+                                  _buildLegendRow('Nightmare', '🔴'),
+                                  _buildLegendRow('Bathroom', '🟠'),
+                                  _buildLegendRow('Energised', '🟢'),
+                                ],
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                    ),
+                        ),
+                      );
+                    },
                   ),
+                                      
                   //Calendar Card
                   Card(
                     color: Colors.grey[200],
@@ -519,89 +577,97 @@ class _ManageProfileViewState extends State<ManageProfileView> {
             ),
 
             //Card for the top reasons
-            Card(
-              color: Colors.grey[200],
-              elevation: 5,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Top Reasons for Waking Up (Last 28 Days)',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    SizedBox(height: 10),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Bathroom',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        Text(
-                          '8 times',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Divider(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Bad Dream',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        Text(
-                          '6 times',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Divider(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Other',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        Text(
-                          '3 times',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            // Card(
+            //   color: Colors.grey[200],
+            //   elevation: 5,
+            //   shape: RoundedRectangleBorder(
+            //     borderRadius: BorderRadius.circular(15),
+            //   ),
+            //   child: Padding(
+            //     padding: const EdgeInsets.all(16.0),
+            //     child: Column(
+            //       mainAxisSize: MainAxisSize.min,
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: [
+            //         Text(
+            //           'Sleep Metrics This Week',
+            //           style: TextStyle(
+            //             fontSize: 18,
+            //             fontWeight: FontWeight.bold,
+            //           ),
+            //         ),
+            //         SizedBox(height: 20),
+                    
+            //         // Fetch the data for this week
+            //         FutureBuilder<Map<String, dynamic>>(
+            //           future: WeeklyReportBottomCard(profile['shareCode']), // Pass the correct shareCode
+            //           builder: (context, snapshot) {
+            //             if (snapshot.connectionState == ConnectionState.waiting) {
+            //               return Center(child: CircularProgressIndicator());
+            //             }
+            //             if (!snapshot.hasData || snapshot.hasError) {
+            //               return Text('Error loading data');
+            //             }
+
+            //             var data = snapshot.data!;
+            //             return Column(
+            //               children: [
+            //                 // Average Sleep Time This Week
+            //                 Row(
+            //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //                   children: [
+            //                     Text(
+            //                       'Avg Sleep Time This Week',
+            //                       style: TextStyle(fontSize: 16),
+            //                     ),
+            //                     Text(
+            //                       '${data['avgSleepTimeThisWeek']} hours',
+            //                       style: TextStyle(fontSize: 16),
+            //                     ),
+            //                   ],
+            //                 ),
+            //                 SizedBox(height: 20),
+            //                 Divider(),
+            //                 SizedBox(height: 20),
+            //                 // Average Improvement Since Last Week
+            //                 Row(
+            //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //                   children: [
+            //                     Text(
+            //                       'Avg Improvement',
+            //                       style: TextStyle(fontSize: 16),
+            //                     ),
+            //                     Text(
+            //                       '${data['avgImprovement'].toStringAsFixed(2)} hours',
+            //                       style: TextStyle(fontSize: 16),
+            //                     ),
+            //                   ],
+            //                 ),
+            //                 SizedBox(height: 20),
+            //                 Divider(),
+            //                 SizedBox(height: 20),
+            //                 // Total Awakenings This Week
+            //                 Row(
+            //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //                   children: [
+            //                     Text(
+            //                       'Total Awakenings This Week',
+            //                       style: TextStyle(fontSize: 16),
+            //                     ),
+            //                     Text(
+            //                       '${data['totalAwakeningsThisWeek']} times',
+            //                       style: TextStyle(fontSize: 16),
+            //                     ),
+            //                   ],
+            //                 ),
+            //               ],
+            //             );
+            //           },
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
 
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -646,6 +712,31 @@ class _ManageProfileViewState extends State<ManageProfileView> {
       bottomNavigationBar: CustomBottomNavBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
+      ),
+    );
+  }
+
+  Color _getCategoryColor(String category) {
+    switch (category) {
+      case 'Random': return Colors.blue;
+      case 'Nightmare': return Colors.red;
+      case 'Bathroom': return Colors.orange;
+      case 'Energised': return Colors.green;
+      default: return Colors.grey;
+    }
+  }
+
+  Widget _buildLegendRow(String label, String emoji) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            '$label: $emoji',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        ],
       ),
     );
   }
