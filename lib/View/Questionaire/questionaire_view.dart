@@ -1,6 +1,10 @@
 import 'package:elaros_gp4/Controller/improvement_plan_controller.dart';
 import 'package:elaros_gp4/Controller/auth_controller.dart'; // Import the Auth Controller
+import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
+import 'package:elaros_gp4/View/Settings/settings_view.dart';
 import 'package:elaros_gp4/View/Sleep%20Goal/sleep_plan_view.dart';
+import 'package:elaros_gp4/View/Sleep%20Tracker/sleep_tracker_view.dart';
+import 'package:elaros_gp4/Widgets/custom_bottom_nav_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -174,7 +178,7 @@ class QuestionnaireViewState extends State<QuestionnaireView> {
       return SizedBox(
         height: 200,
         child: Card(
-          color: Colors.white, // Apply the same color to the cards
+          color: const Color.fromARGB(162, 23, 29, 62),
           margin: EdgeInsets.all(16.0),
           elevation: 4,
           child: Padding(
@@ -184,7 +188,10 @@ class QuestionnaireViewState extends State<QuestionnaireView> {
               children: [
                 Text(
                   question.questionTitle,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.amber),
                 ),
                 SizedBox(height: 5),
                 ...List.generate(question.questionText.length, (qIndex) {
@@ -193,12 +200,14 @@ class QuestionnaireViewState extends State<QuestionnaireView> {
                     children: [
                       Text(
                         question.questionText[qIndex],
-                        style: TextStyle(fontSize: 15),
+                        style: TextStyle(fontSize: 13, color: Colors.amber),
                       ),
                       SizedBox(height: 10),
                       ...question.answers[qIndex].map((answer) {
                         return RadioListTile<String>(
-                          title: Text(answer, style: TextStyle(fontSize: 14)),
+                          title: Text(answer,
+                              style:
+                                  TextStyle(fontSize: 12, color: Colors.amber)),
                           value: answer,
                           groupValue: _answers[index]?[qIndex],
                           onChanged: (value) {
@@ -225,6 +234,31 @@ class QuestionnaireViewState extends State<QuestionnaireView> {
     }).toList();
   }
 
+  int _selectedIndex = 1;
+
+  void _onItemTapped(int index) {
+    if (index == 0) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SleepTracking()),
+      );
+    } else if (index == 1) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => DashboardView()),
+      );
+    } else if (index == 2) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SettingsView()),
+      );
+    } else if (index != 2) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
@@ -244,7 +278,7 @@ class QuestionnaireViewState extends State<QuestionnaireView> {
       );
     }
 
-    if (_hasCompletedQuestionnaire) {
+    /*  if (_hasCompletedQuestionnaire) {
       return Scaffold(
         backgroundColor: const Color.fromARGB(255, 249, 232, 184),
         appBar: AppBar(
@@ -265,8 +299,21 @@ class QuestionnaireViewState extends State<QuestionnaireView> {
         ),
       );
     }
+  */
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor:
+            Color.fromARGB(255, 24, 30, 58), // Dark blue background
+        title: Text(
+          "Questionnaire",
+          style: TextStyle(
+            color: const Color.fromARGB(
+                255, 252, 174, 41), // Amber color for title text
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Color.fromARGB(255, 216, 163, 6)),
+      ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -274,8 +321,8 @@ class QuestionnaireViewState extends State<QuestionnaireView> {
             end: Alignment.topCenter,
             colors: [
               Color.fromARGB(255, 25, 27, 53),
-              Color.fromARGB(255, 28, 29, 53),
-              Color.fromARGB(220, 10, 18, 43),
+              Color.fromARGB(255, 36, 38, 88),
+              Color.fromARGB(220, 16, 37, 100),
             ],
           ),
         ),
@@ -322,6 +369,10 @@ class QuestionnaireViewState extends State<QuestionnaireView> {
           }
         },
         child: Icon(Icons.arrow_forward),
+      ),
+      bottomNavigationBar: CustomBottomNavBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
       ),
     );
   }
