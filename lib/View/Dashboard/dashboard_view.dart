@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elaros_gp4/Controller/user_data_retrieve.dart';
 import 'package:elaros_gp4/View/Education/education_view.dart';
@@ -26,10 +27,24 @@ class DashboardView extends StatefulWidget {
 class _DashboardViewState extends State<DashboardView> {
   int _selectedIndex = 1;
   String? factDashboard;
+  late AudioPlayer _audioPlayer;
 
   void initState(){
     super.initState();
     loadFunFact();
+    _audioPlayer = AudioPlayer();
+    _playBackgroundMusic();
+  }
+
+  void _playBackgroundMusic() async {
+    await _audioPlayer.play(AssetSource('Assets/backgroundmusic.mp3'), volume: 0.5);
+    _audioPlayer.setReleaseMode(ReleaseMode.loop); // Loop the music
+  }
+
+  @override
+  void dispose() {
+    _audioPlayer.dispose();
+    super.dispose();
   }
 
   void loadFunFact() async{
