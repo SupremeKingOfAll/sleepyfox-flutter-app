@@ -1,23 +1,23 @@
-import 'package:elaros_gp4/View/SleepStory/sleepy_fox_card.dart';
-import 'package:elaros_gp4/Widgets/Text%20Styles/zaks_personal_text_style.dart';
 import 'package:flutter/material.dart';
 
-import '../../Widgets/custom_bottom_nav_bar.dart';
-import '../Dashboard/dashboard_view.dart';
-import '../Settings/settings_view.dart';
-import '../Sleep Tracker/sleep_tracker_view.dart';
+import '../../../Widgets/custom_bottom_nav_bar.dart';
+import '../../Dashboard/dashboard_view.dart';
+import '../../Settings/settings_view.dart';
+import '../../Sleep Tracker/sleep_tracker_view.dart';
 
-class SleepStoryView extends StatefulWidget {
-  const SleepStoryView({super.key});
+class DogStory extends StatefulWidget {
+  const DogStory({super.key});
 
   @override
-  State<SleepStoryView> createState() => _SleepStoryViewState();
+  State<DogStory> createState() => _SleepyStoryState();
 }
 
-class _SleepStoryViewState extends State<SleepStoryView> {
+class _SleepyStoryState extends State<DogStory> {
   int _selectedIndex = 1;
-
   void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
     if (index == 0) {
       Navigator.pushReplacement(
         context,
@@ -33,16 +33,11 @@ class _SleepStoryViewState extends State<SleepStoryView> {
         context,
         MaterialPageRoute(builder: (context) => SettingsView()),
       );
-    } else if (index != 2) {
-      setState(() {
-        _selectedIndex = index;
-      });
     }
   }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return  Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
           color: Colors.amber.shade500,
@@ -75,44 +70,21 @@ class _SleepStoryViewState extends State<SleepStoryView> {
         decoration: const BoxDecoration(
           image: DecorationImage(
             image:
-                AssetImage('Assets/900w-xy8Cv39_lA0.png'), // Background image
+            AssetImage('Assets/900w-xy8Cv39_lA0.png'), // Background image
             fit: BoxFit.cover,
           ),
         ),
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(height: 10),
-              SleepyFoxCard(
-                title: "The sleepy fox story",
-                imagePath: 'Assets/FoxMascProfPic.png',
-                routeName: '/TheSleepyStory',
-              ),
-              SizedBox(height: 10),
-              SleepyFoxCard(
-                title: "The sleepy bear story",
-                imagePath: 'Assets/bearstory1.png',
-                routeName: '/TheSleepyStory',
-              ),
-              SizedBox(height: 10),
-              SleepyFoxCard(
-                title: "John Cena goes to sleep",
-                imagePath: 'Assets/blue-phone-0njfrpcuzj98bp30.jpg',
-                routeName: '/TheSleepyStory',
-              ),
-              SizedBox(height: 10),
-              SleepyFoxCard(
-                title: "John Cena knockout",
-                imagePath: 'Assets/FoxMascProfPic.png',
-                routeName: '/TheSleepyStory',),
-            ],
-          ),
+
         ),
+
       ),
+
       bottomNavigationBar: CustomBottomNavBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
       ),
     );
   }
+
 }

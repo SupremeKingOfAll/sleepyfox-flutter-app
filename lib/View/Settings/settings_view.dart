@@ -42,15 +42,29 @@ class _SettingsViewState extends State<SettingsView> {
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.black,
-        iconTheme: const IconThemeData(color: Colors.amber),
-        title: const Text("Settings", style: TextStyle(color: Colors.amber)),
-        actions: const [
+        iconTheme: IconThemeData(
+          color: Colors.amber.shade500,
+        ),
+        backgroundColor: Color.fromARGB(255, 0, 0, 0),
+        title: Text(
+          "Settings",
+          style: TextStyle(
+            color: const Color.fromARGB(
+                255, 252, 174, 41), // Light amber for the subtitle text
+          ),
+        ),
+        actions: [
           Padding(
             padding: EdgeInsets.only(right: 16),
             child: Align(
               alignment: Alignment.centerRight,
-              child: Text("Sleepy fox", style: TextStyle(color: Colors.amber)),
+              child: Text(
+                "Sleepy fox",
+                style: TextStyle(
+                  color: const Color.fromARGB(
+                      255, 252, 174, 41), // Light amber for the subtitle text
+                ),
+              ),
             ),
           ),
         ],

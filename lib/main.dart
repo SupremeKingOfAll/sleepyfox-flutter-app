@@ -10,6 +10,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'View/Education/education_view.dart';
 import 'View/Profiles/Manage Profile/manage_pofile_view.dart';
 import 'View/Profiles/Profile History/profile_history_view.dart';
+import 'View/SleepStory/Stories/sleepy_story.dart';
 import 'View/SleepStory/sleep_story_view.dart';
 import 'firebase_options.dart';
 import 'View/Login/login_view.dart';
@@ -47,8 +48,10 @@ class MyApp extends StatelessWidget {
         '/ResetPassword': (context) => const ResetPassword(),
         '/Settings': (context) => const SettingsView(),
         '/AccountSettings': (context) => const AccountSettings(),
-        '/SleepHistory': (context) => const SleepTrackingOverview(),
-        '/PrivacySettings': (context) => const PrivacySettings(),
+        '/SleepHistory' : (context) => const SleepTrackingOverview(),
+        '/PrivacySettings' : (context) => const PrivacySettings(),
+        '/SleepStoryView' : (context) => const SleepStoryView(),
+        '/TheSleepyStory' : (context) => const SleepyStory(),
         '/SleepStoryView': (context) => const SleepStoryView(),
         // '/Notifications' : (context) => const NotificationsView(),
       },
