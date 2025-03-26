@@ -101,6 +101,7 @@ flutter:
     - Assets/foxasleepdashbfix.png
     - Assets/childprofiledash.png
     - Assets/childgirlprofiledash.png
+    - Assets/backgroundmusic.mp3
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
