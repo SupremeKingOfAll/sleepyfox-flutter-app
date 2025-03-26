@@ -1,3 +1,7 @@
+import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
+import 'package:elaros_gp4/View/Settings/settings_view.dart';
+import 'package:elaros_gp4/View/Sleep%20Tracker/sleep_tracker_view.dart';
+import 'package:elaros_gp4/Widgets/custom_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -48,12 +52,54 @@ class _SleepPlanState extends State<SleepPlan> {
     }
   }
 
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    if (index == 0) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SleepTracking()),
+      );
+    } else if (index == 1) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => DashboardView()),
+      );
+    } else if (index == 2) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => SettingsView()),
+      );
+    } else if (index != 2) {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 4,
-        title: const Text("Your Personalised Sleep Plan"),
+        backgroundColor: Color.fromARGB(255, 24, 30, 58),
+        title: Text("Personlised Sleep Plan",
+            style: TextStyle(
+              color: const Color.fromARGB(
+                  255, 252, 174, 41), // Amber color for title text
+            )),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 16),
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Text("Sleepy Fox",
+                  style: TextStyle(
+                    color: const Color.fromARGB(
+                        255, 252, 174, 41), // Amber color for title text
+                  )),
+            ),
+          ),
+        ],
       ),
       backgroundColor:
           Colors.transparent, // Ensure the Scaffold background is transparent
@@ -68,7 +114,7 @@ class _SleepPlanState extends State<SleepPlan> {
                 colors: [
                   Color.fromARGB(255, 25, 27, 53),
                   Color.fromARGB(255, 28, 29, 53),
-                  Color.fromARGB(255, 16, 29, 69),
+                  Color.fromARGB(255, 32, 52, 111),
                 ],
               ),
             ),
@@ -167,6 +213,10 @@ class _SleepPlanState extends State<SleepPlan> {
             },
           ),
         ],
+      ),
+      bottomNavigationBar: CustomBottomNavBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
       ),
     );
   }
