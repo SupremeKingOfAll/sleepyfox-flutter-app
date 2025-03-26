@@ -5,6 +5,7 @@ import 'package:elaros_gp4/View/Profiles/select_profile_dashboard_view.dart';
 import 'package:elaros_gp4/View/Questionaire/questionaire_view.dart';
 import 'package:elaros_gp4/View/Settings/about_us_settings.dart';
 import 'package:elaros_gp4/View/Settings/account_settings.dart';
+import 'package:elaros_gp4/View/Settings/privacy_settings.dart';
 import 'package:elaros_gp4/View/Settings/settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -51,6 +52,7 @@ class MyApp extends StatelessWidget {
         '/Settings': (context) => const SettingsView(),
         '/AccountSettings': (context) => const AccountSettings(),
         '/SleepHistory' : (context) => const SleepTrackingOverview(),
+        '/PrivacySettings' : (context) => const PrivacySettings(),
         // '/Notifications' : (context) => const NotificationsView(),
       },
     );
