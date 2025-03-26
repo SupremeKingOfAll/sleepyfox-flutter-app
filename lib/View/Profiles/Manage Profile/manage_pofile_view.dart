@@ -10,6 +10,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:elaros_gp4/Services/profile_services.dart';
 import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class ManageProfileView extends StatefulWidget {
   const ManageProfileView({super.key});
@@ -21,6 +22,7 @@ class ManageProfileView extends StatefulWidget {
 class _ManageProfileViewState extends State<ManageProfileView> {
   final ProfileServices _profileServices = ProfileServices();
   List<Map<String, dynamic>> _profiles = [];
+  late Future<Map<String, int>> _sleepDataFuture;
   bool _isLoading = true;
 
   int _selectedIndex = 0;
@@ -105,6 +107,44 @@ class _ManageProfileViewState extends State<ManageProfileView> {
     }
   }
 
+  Future<Map<String, int>> fetchWeeklySleepData(String shareCode) async {
+    try {
+      List<Map<String, dynamic>> allData = await fetchTrackingForProfile(shareCode);
+
+      final now = DateTime.now();
+      final oneWeekAgo = now.subtract(Duration(days: 7));
+
+      Map<String, int> sleepCategories = {
+        'Random': 0,
+        'Nightmare': 0,
+        'Bathroom': 0,
+        'Energised': 0,
+      };
+
+      for (var doc in allData) {
+        DateTime entryDate = (doc['timestamp'] as Timestamp).toDate();
+
+        if (entryDate.isAfter(oneWeekAgo) && entryDate.isBefore(now)) {
+          if (doc['awakenings'] != null && doc['awakenings'] is List) {
+            for (var awakening in doc['awakenings']) {
+              String reason = (awakening['reason'] ?? 'Random').trim();
+              if (sleepCategories.containsKey(reason)) {
+                sleepCategories[reason] = sleepCategories[reason]! + 1;
+              } else {
+                sleepCategories['Random'] = sleepCategories['Random']! + 1;
+              }
+            }
+          }
+        }
+      }
+
+      return sleepCategories;
+    } catch (e) {
+      print("Error fetching weekly sleep data: $e");
+      return {};
+    }
+  }
+
   Future<List<Color>> getCalendarColors(String shareCode) async {
     try {
       final trackingData = await fetchTrackingForProfile(shareCode);
@@ -166,7 +206,7 @@ class _ManageProfileViewState extends State<ManageProfileView> {
     }
   }
 
-
+  
   //prof delete
   Future<void> _deleteProfile(String profileId) async {
     try {
@@ -194,7 +234,7 @@ class _ManageProfileViewState extends State<ManageProfileView> {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 234, 235, 235),
-          title: Text("Profiles"),
+          title: Text("Profile"),
           actions: [
             Padding(
               padding: EdgeInsets.only(right: 16),
@@ -214,292 +254,350 @@ class _ManageProfileViewState extends State<ManageProfileView> {
     final profile = _profiles[index]; // Index of selected profile
     print(profile["sharecode"]);
     fetchTrackingForProfile(profile["sharecode"]);
+    _sleepDataFuture = fetchWeeklySleepData(profile["sharecode"]);
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 234, 235, 235),
-        title: Text("Profiles"),
+        iconTheme: IconThemeData(
+          color: Colors.amber.shade500,
+        ),
+        backgroundColor: Color.fromARGB(255, 0, 0, 0),
+        title: Text("Profile",
+          style: TextStyle(
+            color: const Color.fromARGB(
+                255, 252, 174, 41), // Light amber for the subtitle text
+          ),
+        ),
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 16),
             child: Align(
               alignment: Alignment.centerRight,
-              child: Text("Sleepy fox"),
+              child: Text("Sleepy fox",                style: TextStyle(
+                color: const Color.fromARGB(
+                    255, 252, 174, 41), // Light amber for the subtitle text
+              ),
+              ),
             ),
           ),
         ],
       ),
-      body: SingleChildScrollView(
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image:
+                AssetImage('Assets/wp11179213.png'), // Background image
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Column(
-          children: [
-            // TOP PROFILE SECTION
-            Padding(
-              padding: const EdgeInsets.all(8.2),
-              child: Card(
-                color: Colors.grey[200],
-                child: Center(
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    // PROFILE PICTURE
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Image.asset(
-                          "Assets/SleepyFoxLogo512.png",
-                          width: 100,
-                          height: 100,
-                        ),
-                        _isLoading
-                            ? CircularProgressIndicator()
-                            : Padding(
-                                padding: const EdgeInsets.all(20.0),
-                                child: Column(
-                                  children: [
-                                    ZaksPersonalTextStyle(
-                                      text: profile['name'],
-                                      textStyle: TextStyle(
-                                          fontSize: 40), // Here ProfileIndex
+          children: [ 
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  // TOP PROFILE SECTION
+                  Padding(
+                    padding: const EdgeInsets.all(8.2),
+                    child: Card(
+                      color: const Color.fromARGB(103, 12, 30, 53),
+                      child: Center(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          // PROFILE PICTURE
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Image.asset(
+                                "Assets/SleepyFoxLogo512.png",
+                                width: 100,
+                                height: 100,
+                              ),
+                              _isLoading
+                                  ? CircularProgressIndicator()
+                                  : Padding(
+                                      padding: const EdgeInsets.all(20.0),
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            profile["name"],
+                                            style: TextStyle(
+                                              fontSize: 42,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.amber[300],
+                                            ),
+                                          ),
+                                          Container(height: 0),
+                                          Text(
+                                            "Age: ${profile['age'].toString()}",
+                                            style: TextStyle(
+                                              fontSize: 42,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.amber[300],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
-                                    Container(height: 0),
-                                    ZaksPersonalTextStyle(
-                                      text: "Age: ${profile['age'].toString()}",
-                                      //and here as well ProfileIndex
-                                      textStyle: TextStyle(fontSize: 30),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+            
+                  // Decorative Bar
+                  SizedBox(
+                    height: 20,
+                  ),
+            
+                  // PROFILE SLEEP ANALYSIS
+            
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        //pie chart card
+                        FutureBuilder<Map<String, int>>(
+                          future: _sleepDataFuture,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            } else if (snapshot.hasError) {
+                              return Text('Error loading sleep data');
+                            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                              return Text('No sleep data available');
+                            }
+            
+                            final sleepData = snapshot.data!;
+            
+                            return Card( 
+                              color: const Color.fromARGB(103, 12, 30, 53),
+                              elevation: 5,
+                              margin: EdgeInsets.all(5),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Container(
+                                width: 300,
+                                padding: EdgeInsets.all(15),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Awakenings\nthis week',
+                                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.amber[300]),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    SizedBox(height: 10),
+                                    SizedBox(
+                                      height: 200,
+                                      child: SfCircularChart(
+                                        annotations: <CircularChartAnnotation>[
+                                          CircularChartAnnotation(
+                                            widget: Text(
+                                              '',
+                                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          )
+                                        ],
+                                        series: <DoughnutSeries<Map<String, dynamic>, String>>[
+                                          DoughnutSeries<Map<String, dynamic>, String>(
+                                            dataSource: sleepData.entries
+                                                .where((entry) =>
+                                                    ['Random', 'Nightmare', 'Bathroom', 'Energised']
+                                                        .contains(entry.key) &&
+                                                    entry.value > 0)
+                                                .map((entry) => {
+                                                      'label': entry.key,
+                                                      'value': entry.value,
+                                                      'color': _getCategoryColor(entry.key),
+                                                    })
+                                                .toList(),
+                                            xValueMapper: (data, _) => data['label'],
+                                            yValueMapper: (data, _) => data['value'],
+                                            pointColorMapper: (data, _) => data['color'],
+                                            dataLabelSettings: DataLabelSettings(
+                                              isVisible: true,
+                                              labelPosition: ChartDataLabelPosition.inside,
+                                            ),
+                                            animationDuration: 1500,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(height: 20),
+                                    Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            _buildLegendRow('Random', '🔵'),
+                                            _buildLegendRow('  Nightmare', '🔴'),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            _buildLegendRow('Bathroom', '🟠'),
+                                            _buildLegendRow('  Energised', '🟢'),
+                                          ],
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
                               ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-
-            // Decorative Bar
-            SizedBox(
-              height: 20,
-            ),
-
-            // Padding(
-            //   padding: const EdgeInsets.all(8.2),
-            //   child: Card(
-            //     color: Colors.grey[200],
-            //     child: Padding(
-            //       padding: const EdgeInsets.all(8.0),
-            //       child: Column(
-            //         crossAxisAlignment: CrossAxisAlignment.start,
-            //         children: [
-            //           ZaksPersonalTextStyle(text: 'Sleep Analysis', textStyle: TextStyle(fontSize: 30)),
-            //           SizedBox(height: 10),
-            //           Container(
-            //             padding: EdgeInsets.all(16),
-            //             decoration: BoxDecoration(
-            //               borderRadius: BorderRadius.circular(12),
-            //             ),
-            //             child: Column(
-            //               crossAxisAlignment: CrossAxisAlignment.center,
-            //               children: [
-            //                 Text('Average Sleep Duration',
-            //                     style:
-            //                     TextStyle(fontSize: 20, color: Colors.black)),
-            //                 SizedBox(height: 5),
-            //                 Text('7.5 hours',
-            //                     style: TextStyle(
-            //                         fontSize: 24, fontWeight: FontWeight.bold)),
-            //                 SizedBox(height: 15),
-            //                 Divider(
-            //                   indent: 10,
-            //                 ),
-            //                 Row(
-            //                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //                   children: [
-            //                     ZaksPersonalTextStyle(text: 'Current Mood:', textStyle: TextStyle(fontSize: 20)),
-            //                     ZaksPersonalTextStyle(text: 'Happy', textStyle: TextStyle(fontSize: 18))
-            //
-            //                   ],
-            //                 ),
-            //               ],
-            //             ),
-            //           ),
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            // PROFILE SLEEP ANALYSIS
-
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  //pie chart card
-                  Card(
-                    color: Colors.grey[200],
-                    elevation: 5,
-                    margin: EdgeInsets.all(5),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Container(
-                      width: 300, // Fixed width for the card
-                      padding: EdgeInsets.all(15),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Center(
-                              child: ZaksPersonalTextStyle(
-                                  text: 'Sleep Pie',
-                                  textStyle: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold))),
-                          SizedBox(height: 10),
-                          SizedBox(
-                            height: 200,
-                            child: PieChart(
-                              PieChartData(
-                                sections: [
-                                  PieChartSectionData(
-                                    color: Colors.green,
-                                    value: 70,
-                                  ),
-                                  PieChartSectionData(
-                                    color: Colors.orangeAccent,
-                                    value: 30,
-                                  ),
-                                ],
-                              ),
-                            ),
+                            );
+                          },
+                        ),
+                                            
+                        //Calendar Card
+                        Card(
+                          color: const Color.fromARGB(103, 12, 30, 53),
+                          elevation: 5,
+                          margin: EdgeInsets.all(10),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
                           ),
-                          SizedBox(
-                            height: 50,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              ZaksPersonalTextStyle(
-                                  text: 'Asleep: 🟢',
-                                  textStyle: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold)),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              ZaksPersonalTextStyle(
-                                  text: 'Awake: 🟠',
-                                  textStyle: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold)),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  //Calendar Card
-                  Card(
-                    color: Colors.grey[200],
-                    elevation: 5,
-                    margin: EdgeInsets.all(10),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Container(
-                      width: 350,
-                      padding: EdgeInsets.all(15),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ZaksPersonalTextStyle(
-                            text: 'Sleep Calendar',
-                            textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 10),
-                          FutureBuilder<List<Color>>(
-                            future: getCalendarColors(profile["sharecode"]), // Call the function here
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState == ConnectionState.waiting) {
-                                return CircularProgressIndicator(); // Show loading spinner while data is being fetched
-                              }
-
-                              if (snapshot.hasError) {
-                                return Center(child: Text('Error fetching data'));
-                              }
-
-                              if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                                return Center(child: Text('No data available for this month'));
-                              }
-
-                              List<Color> calendarColors = snapshot.data!;
-
-                              return SizedBox(
-                                height: 200,
-                                child: GridView.builder(
-                                  physics: NeverScrollableScrollPhysics(),
-                                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 7,
-                                    mainAxisSpacing: 4,
-                                    crossAxisSpacing: 4,
-                                  ),
-                                  itemCount: 28,
-                                  itemBuilder: (context, index) {
-                                    return Container(
-                                      decoration: BoxDecoration(
-                                        color: calendarColors[index], // Use color from the data
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          '${index + 1}',
-                                          style: TextStyle(color: Colors.white),
+                          child: Container(
+                            width: 350,          
+                            padding: EdgeInsets.all(15),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [                    
+                                Text(
+                                  'Sleep Calender',
+                                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.amber[300]),
+                                ),
+                                SizedBox(height: 50),
+                                FutureBuilder<List<Color>>(
+                                  future: getCalendarColors(profile["sharecode"]), // Call the function here
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState == ConnectionState.waiting) {
+                                      return CircularProgressIndicator(); // show loading spinner while data is being fetched
+                                    }
+            
+                                    if (snapshot.hasError) {
+                                      return Center(child: Text('Error fetching data'));
+                                    }
+            
+                                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                                      return Center(child: Text('No data available for this month'));
+                                    }
+            
+                                    List<Color> calendarColors = snapshot.data!;
+            
+                                    return SizedBox(
+                                      height: 200,
+                                      child: GridView.builder(
+                                        physics: NeverScrollableScrollPhysics(),
+                                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 7,
+                                          mainAxisSpacing: 4,
+                                          crossAxisSpacing: 4,
                                         ),
+                                        itemCount: 28,
+                                        itemBuilder: (context, index) {
+                                          return Container(
+                                            decoration: BoxDecoration(
+                                              color: calendarColors[index], // Use color from the data
+                                              borderRadius: BorderRadius.circular(8),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                '${index + 1}',
+                                                style: TextStyle(color: Colors.white),
+                                              ),
+                                            ),
+                                          );
+                                        },
                                       ),
                                     );
                                   },
                                 ),
-                              );
+                                SizedBox(height: 10),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Excellent: 🟢',
+                                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.amber[300]),
+                                        ),
+                                        SizedBox(width: 20),
+                                        Text(
+                                          'Could be better: 🟠',
+                                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.amber[300]),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 16),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Bad: 🟡',
+                                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.amber[300]),
+                                        ),
+                                        SizedBox(width: 20),
+                                        Text(
+                                          'Really Bad: 🔴',
+                                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.amber[300]),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+            
+            
+            
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 100,
+                          ),
+                          GuideButton(
+                            //Share Profile Button
+                            text: 'Share Profile',
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return ProfilePopUp(
+                                        content: profile['sharecode'],
+                                        title:
+                                            'Share Code'); //PopUp Dialog can be found in widgets/PopUp
+                                  });
                             },
                           ),
-                          SizedBox(height: 10),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  ZaksPersonalTextStyle(
-                                    text: 'Excellent: 🟢',
-                                    textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(width: 20),
-                                  ZaksPersonalTextStyle(
-                                    text: 'Could be better: 🟠',
-                                    textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 16),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  ZaksPersonalTextStyle(
-                                    text: 'Bad: 🟡',
-                                    textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(width: 20),
-                                  ZaksPersonalTextStyle(
-                                    text: 'Really Bad: 🔴',
-                                    textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                            ],
+                          SizedBox(
+                            height: 10,
                           ),
+                          GuideButton(
+                            text: 'Delete Profile',
+                            onPressed: _handleDeleteProfile,
+                          ),
+                          SizedBox(
+                            height: 20,
+                          )
                         ],
                       ),
                     ),
@@ -507,139 +605,38 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                 ],
               ),
             ),
-
-            SizedBox(
-              height: 50,
-            ),
-
-            //Card for the top reasons
-            Card(
-              color: Colors.grey[200],
-              elevation: 5,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Top Reasons for Waking Up (Last 28 Days)',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    SizedBox(height: 10),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Bathroom',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        Text(
-                          '8 times',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Divider(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Bad Dream',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        Text(
-                          '6 times',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Divider(),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Other',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        Text(
-                          '3 times',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Container(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 100,
-                    ),
-                    GuideButton(
-                      //Share Profile Button
-                      text: 'Share Profile',
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return ProfilePopUp(
-                                  content: profile['sharecode'],
-                                  title:
-                                      'Share Code'); //PopUp Dialog can be found in widgets/PopUp
-                            });
-                      },
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    GuideButton(
-                      text: 'Delete Profile',
-                      onPressed: _handleDeleteProfile,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    )
-                  ],
-                ),
-              ),
-            ),
-          ],
+          ),
+        ],
         ),
       ),
       bottomNavigationBar: CustomBottomNavBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
+      ),
+    );
+  }
+
+  Color _getCategoryColor(String category) {
+    switch (category) {
+      case 'Random': return Colors.blue;
+      case 'Nightmare': return Colors.red;
+      case 'Bathroom': return Colors.orange;
+      case 'Energised': return Colors.green;
+      default: return Colors.grey;
+    }
+  }
+
+  Widget _buildLegendRow(String label, String emoji) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            '$label: $emoji',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: const Color.fromARGB(255, 255, 204, 52)),
+          ),
+        ],
       ),
     );
   }
