@@ -234,7 +234,6 @@ class _DashboardViewState extends State<DashboardView> {
                         'Assets/ProfPicKid.png'),                     
                     _featureItem('Did You Know?', EducationView(),
                         'Assets/rabbitreadingfix.png', factDashboard),
-                        'Assets/ProfPicKid.png'),
                     FutureBuilder<bool>(
                       future: _isSleepPlanAvailable(),
                       builder: (context, snapshot) {
@@ -304,7 +303,7 @@ class _DashboardViewState extends State<DashboardView> {
           width: double.infinity,
           height: 180,
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 28),
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 28),
              child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
