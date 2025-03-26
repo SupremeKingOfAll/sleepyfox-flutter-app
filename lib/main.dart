@@ -8,6 +8,7 @@ import 'package:elaros_gp4/View/Settings/account_settings.dart';
 import 'package:elaros_gp4/View/Settings/settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:timezone/data/latest.dart' as tz;
 import 'View/Education/education_view.dart';
 import 'View/Profiles/Manage Profile/manage_pofile_view.dart';
 import 'View/Settings/notifications_view.dart';
@@ -21,6 +22,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  tz.initializeTimeZones();
   runApp(MyApp());
 }
 
@@ -49,7 +51,7 @@ class MyApp extends StatelessWidget {
         '/Settings': (context) => const SettingsView(),
         '/AccountSettings': (context) => const AccountSettings(),
         '/SleepHistory' : (context) => const SleepTrackingOverview(),
-        '/Notifications' : (context) => const NotificationsView(),
+        // '/Notifications' : (context) => const NotificationsView(),
       },
     );
   }
