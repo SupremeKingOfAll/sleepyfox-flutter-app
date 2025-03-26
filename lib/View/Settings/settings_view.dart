@@ -39,9 +39,11 @@ class _SettingsViewState extends State<SettingsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.black,
+        iconTheme: const IconThemeData(color: Colors.amber),
         title: const Text("Settings", style: TextStyle(color: Colors.amber)),
         actions: const [
           Padding(
@@ -99,6 +101,8 @@ class _SettingsViewState extends State<SettingsView> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+
+
                       Center(
                         child: Text(
                           "Settings",
@@ -138,7 +142,9 @@ class _SettingsViewState extends State<SettingsView> {
                         title: Text("Privacy",
                             style: TextStyle(
                                 color: Colors.amber, fontSize: 20)),
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pushNamed(context, '/PrivacySettings');
+                        },
                       ),
                       ListTile(
                         leading: Icon(Icons.question_mark,
@@ -147,7 +153,7 @@ class _SettingsViewState extends State<SettingsView> {
                             style: TextStyle(
                                 color: Colors.amber, fontSize: 20)),
                         onTap: () {
-                          Navigator.pushNamed(context, '/GuideView');
+                          //Navigator.pushNamed(context, '/GuideView');
                         },
                       ),
                       ListTile(
@@ -160,10 +166,58 @@ class _SettingsViewState extends State<SettingsView> {
                           Navigator.pushNamed(context, '/AboutUs');
                         },
                       ),
+                      const Divider(color: Colors.amber),
+                      const SizedBox(height: 20),
+
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                backgroundColor: Colors.black,
+                                title: const Text(
+                                  "Confirm Sign Out",
+                                  style: TextStyle(color: Colors.amber),
+                                ),
+                                content: const Text(
+                                  "Are you sure you want to sign out?",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text("Cancel", style: TextStyle(color: Colors.amber)),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context); // Close dialog
+                                      Navigator.pushReplacementNamed(context, '/Login'); // Navigate
+                                    },
+                                    child: const Text("Sign Out", style: TextStyle(color: Colors.red)),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color.fromARGB(255, 128, 13, 13), // Your dark red
+                            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                          ),
+                          child: const Text("Sign Out", style: TextStyle(color: Colors.white)),
+                        ),
+                      ),
+
+
                     ],
                   ),
                 ),
+
               ),
+
             ],
           ),
         ),
