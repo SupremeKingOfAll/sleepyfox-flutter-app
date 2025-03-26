@@ -234,7 +234,7 @@ class _ManageProfileViewState extends State<ManageProfileView> {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 234, 235, 235),
-          title: Text("Profiles"),
+          title: Text("Profile"),
           actions: [
             Padding(
               padding: EdgeInsets.only(right: 16),
@@ -258,14 +258,26 @@ class _ManageProfileViewState extends State<ManageProfileView> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 234, 235, 235),
-        title: Text("Profiles"),
+        iconTheme: IconThemeData(
+          color: Colors.amber.shade500,
+        ),
+        backgroundColor: Color.fromARGB(255, 0, 0, 0),
+        title: Text("Profile",
+          style: TextStyle(
+            color: const Color.fromARGB(
+                255, 252, 174, 41), // Light amber for the subtitle text
+          ),
+        ),
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 16),
             child: Align(
               alignment: Alignment.centerRight,
-              child: Text("Sleepy fox"),
+              child: Text("Sleepy fox",                style: TextStyle(
+                color: const Color.fromARGB(
+                    255, 252, 174, 41), // Light amber for the subtitle text
+              ),
+              ),
             ),
           ),
         ],
