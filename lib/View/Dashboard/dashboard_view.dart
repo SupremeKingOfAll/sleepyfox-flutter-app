@@ -192,7 +192,7 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                     _featureItem('Profiles', SelectProfileView(),
-                        'Assets/ProfPicKid.png'),
+                        'Assets/childgirlprofiledash.png'),
                     _featureItem('Sleep Tracking', SleepTracking(), 
                         'Assets/foxasleepdashbfix.png'),
                     _featureItem('Questionnaire', QuestionnaireView(),
