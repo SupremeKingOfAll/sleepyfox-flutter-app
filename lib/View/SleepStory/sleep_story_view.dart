@@ -1,3 +1,4 @@
+import 'package:elaros_gp4/View/SleepStory/sleepy_fox_card.dart';
 import 'package:elaros_gp4/Widgets/Text%20Styles/zaks_personal_text_style.dart';
 import 'package:flutter/material.dart';
 
@@ -48,7 +49,7 @@ class _SleepStoryViewState extends State<SleepStoryView> {
         ),
         backgroundColor: Color.fromARGB(255, 0, 0, 0),
         title: Text(
-          "Profiles",
+          "Sleep Stories",
           style: TextStyle(
             color: const Color.fromARGB(
                 255, 252, 174, 41), // Light amber for the subtitle text
@@ -81,67 +82,29 @@ class _SleepStoryViewState extends State<SleepStoryView> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, '/TheSleepyStory');
-                },
-                child: Card(
-                  elevation: 12,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  shadowColor: Colors.black.withOpacity(0.4),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(24),
-                      gradient: LinearGradient(
-                        colors: [
-                          Color.fromARGB(255, 23, 28, 55),
-                          Colors.blueGrey.shade700,
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                    ),
-                    width: double.infinity,
-                    height: 180,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 20, horizontal: 28),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "The sleepy fox story",
-                                  style: TextStyle(
-                                    fontSize: 26,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.amber,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Image.asset(
-                              'Assets/FoxMascProfPic.png',
-                              width: 100,
-                              height: 100,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              )
+              SizedBox(height: 10),
+              SleepyFoxCard(
+                title: "The sleepy fox story",
+                imagePath: 'Assets/FoxMascProfPic.png',
+                routeName: '/TheSleepyStory',
+              ),
+              SizedBox(height: 10),
+              SleepyFoxCard(
+                title: "The sleepy bear story",
+                imagePath: 'Assets/FoxMascProfPic.png',
+                routeName: '/TheSleepyStory',
+              ),
+              SizedBox(height: 10),
+              SleepyFoxCard(
+                title: "John Cena goes to sleep",
+                imagePath: 'Assets/FoxMascProfPic.png',
+                routeName: '/TheSleepyStory',
+              ),
+              SizedBox(height: 10),
+              SleepyFoxCard(
+                title: "John Cena knockout",
+                imagePath: 'Assets/FoxMascProfPic.png',
+                routeName: '/TheSleepyStory',),
             ],
           ),
         ),
