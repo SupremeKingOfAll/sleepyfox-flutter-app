@@ -15,6 +15,7 @@ import 'package:elaros_gp4/Services/logout_function.dart';
 import 'package:elaros_gp4/Widgets/custom_bottom_nav_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dashboard_viewlist_resources.dart';
 
 class DashboardView extends StatefulWidget {

@@ -205,6 +205,13 @@ class _SettingsViewState extends State<SettingsView> {
                           Navigator.pushNamed(context, '/AboutUs');
                         },
                       ),
+                      SwitchListTile(
+                        title: Text("Music", style: TextStyle(color: Colors.amber, fontSize: 20)),
+                        secondary: Icon(Icons.music_note, color: Colors.amber, size: 34),
+                        value: _isMusicEnabled,
+                        onChanged: _toggleMusic,
+                        activeColor: Colors.amber,
+                      ),
                       const Divider(color: Colors.amber),
                       const SizedBox(height: 20),
 
