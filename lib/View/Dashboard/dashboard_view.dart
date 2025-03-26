@@ -29,7 +29,8 @@ class _DashboardViewState extends State<DashboardView> {
   String? factDashboard;
   late AudioPlayer _audioPlayer;
 
-  void initState(){
+  @override
+  void initState() {
     super.initState();
     loadFunFact();
     _audioPlayer = AudioPlayer();
@@ -37,8 +38,8 @@ class _DashboardViewState extends State<DashboardView> {
   }
 
   void _playBackgroundMusic() async {
-    await _audioPlayer.play(AssetSource('Assets/backgroundmusic.mp3'), volume: 0.5);
-    _audioPlayer.setReleaseMode(ReleaseMode.loop); // Loop the music
+    await _audioPlayer.setReleaseMode(ReleaseMode.loop);
+    await _audioPlayer.play(AssetSource('backgroundmusic.mp3'), volume: 0.3);
   }
 
   @override
