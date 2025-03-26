@@ -81,25 +81,15 @@ class _SleepPlanState extends State<SleepPlan> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.amber.shade500,
+        ),
         backgroundColor: Color.fromARGB(255, 24, 30, 58),
-        title: Text("Personlised Sleep Plan",
+        title: Text("Personalised Sleep Plan",
             style: TextStyle(
               color: const Color.fromARGB(
                   255, 252, 174, 41), // Amber color for title text
             )),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Text("Sleepy Fox",
-                  style: TextStyle(
-                    color: const Color.fromARGB(
-                        255, 252, 174, 41), // Amber color for title text
-                  )),
-            ),
-          ),
-        ],
       ),
       backgroundColor:
           Colors.transparent, // Ensure the Scaffold background is transparent
@@ -169,9 +159,27 @@ class _SleepPlanState extends State<SleepPlan> {
                       List<String> recommendations = entry.value;
 
                       return Card(
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        color: const Color.fromARGB(162, 23, 29,
+                            62), // Match QuestionnaireView card color
                         margin: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            gradient: const LinearGradient(
+                              colors: [
+                                Color.fromARGB(255, 25, 27, 53),
+                                Color.fromARGB(255, 28, 29, 53),
+                                Color.fromARGB(255, 32, 52, 111),
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                          ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -180,6 +188,8 @@ class _SleepPlanState extends State<SleepPlan> {
                                 style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
+                                  color: Colors
+                                      .amber, // Match QuestionnaireView text color
                                 ),
                               ),
                               const SizedBox(height: 10),
@@ -189,6 +199,7 @@ class _SleepPlanState extends State<SleepPlan> {
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontStyle: FontStyle.italic,
+                                    color: Colors.white70, // Subtext color
                                   ),
                                 ),
                               ] else ...[
@@ -197,7 +208,10 @@ class _SleepPlanState extends State<SleepPlan> {
                                     padding: const EdgeInsets.only(bottom: 8.0),
                                     child: Text(
                                       recommendation,
-                                      style: const TextStyle(fontSize: 16),
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.white, // Match text color
+                                      ),
                                     ),
                                   );
                                 }).toList(),
