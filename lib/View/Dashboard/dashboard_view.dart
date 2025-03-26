@@ -1,8 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elaros_gp4/Controller/user_data_retrieve.dart';
 import 'package:elaros_gp4/View/Education/education_view.dart';
 import 'package:elaros_gp4/View/Profiles/select_profile_dashboard_view.dart';
 import 'package:elaros_gp4/View/Questionaire/questionaire_view.dart';
 import 'package:elaros_gp4/View/Settings/settings_view.dart';
+import 'package:elaros_gp4/View/Sleep%20Goal/sleep_plan_view.dart';
 import 'package:elaros_gp4/View/Sleep%20Tracker/sleep_tracker_view.dart';
 import 'package:elaros_gp4/View/Sleep%20Review/sleep_review_view.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_guide_style.dart';
@@ -55,6 +57,27 @@ class _DashboardViewState extends State<DashboardView> {
     } catch (e) {
       print("Error logging out: $e");
     }
+  }
+
+  Future<bool> _isSleepPlanAvailable() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) return false;
+
+    try {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+      if (snapshot.exists &&
+          (snapshot.data() as Map<String, dynamic>).containsKey("sleep_plan")) {
+        return true;
+      }
+    } catch (e) {
+      print("Error checking sleep plan availability: $e");
+    }
+
+    return false;
   }
 
   @override
@@ -181,6 +204,32 @@ class _DashboardViewState extends State<DashboardView> {
                         'Education', EducationView(), 'Assets/ProfPicKid.png'),
                     _featureItem('Questionnaire', QuestionnaireView(),
                         'Assets/ProfPicKid.png'),
+                    FutureBuilder<bool>(
+                      future: _isSleepPlanAvailable(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        }
+
+                        if (snapshot.hasData && snapshot.data == true) {
+                          return _featureItem('Sleep Plan', SleepPlan(),
+                              'Assets/ProfPicKid.png');
+                        }
+
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            "Complete the questionnaire to unlock your Sleep Plan!",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontStyle: FontStyle.italic,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),
