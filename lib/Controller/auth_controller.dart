@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:elaros_gp4/services/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthController {
   final AuthService _authService = AuthService();
+
+  String? getCurrentUserId() {
+    User? user = FirebaseAuth.instance.currentUser;
+    return user?.uid; // Returns null if no user is logged in
+  }
 
   bool IfValidEmail(String email) {
     final emailChecker = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
@@ -14,9 +20,13 @@ class AuthController {
   }
 
   /// Handles user sign-up
-  Future<bool> signUp(String username, String email, String password, BuildContext context) async {
-    if (username.trim().isEmpty || email.trim().isEmpty || password.trim().isEmpty) {
-      _showErrorMessage(context, "Username, email, or password cannot be empty.");
+  Future<bool> signUp(String username, String email, String password,
+      BuildContext context) async {
+    if (username.trim().isEmpty ||
+        email.trim().isEmpty ||
+        password.trim().isEmpty) {
+      _showErrorMessage(
+          context, "Username, email, or password cannot be empty.");
       return false;
     }
 
@@ -25,10 +35,10 @@ class AuthController {
       return false;
     }
     if (!isValidPassword(password)) {
-      _showErrorMessage(context, "Password must be between 6 and 50 characters.");
+      _showErrorMessage(
+          context, "Password must be between 6 and 50 characters.");
       return false;
     }
-
 
     String? errorMessage = await _authService.signUp(email, password);
 
@@ -36,11 +46,9 @@ class AuthController {
       // Store the username in Firestore or your chosen database
       await _authService.storeUserProfile(username, email);
       return true; // Sign-up successful
-    }
-    else
-    {
-
-      final signUpCustomMessage = _SignUpFormatErrorMessage(errorMessage.trim());
+    } else {
+      final signUpCustomMessage =
+          _SignUpFormatErrorMessage(errorMessage.trim());
       _showErrorMessage(context, signUpCustomMessage);
       return false;
     }
@@ -60,14 +68,17 @@ class AuthController {
   }
 
   /// Handles user login
-  Future<bool> loginUser(String email, String password, BuildContext context) async {
+  Future<bool> loginUser(
+      String email, String password, BuildContext context) async {
     if (email.trim().isEmpty || password.trim().isEmpty) {
-      _showErrorMessage(context, "Looks like either your email address or password were incorrect. Wanna try again?");
+      _showErrorMessage(context,
+          "Looks like either your email address or password were incorrect. Wanna try again?");
       return false;
     }
 
     if (!IfValidEmail(email)) {
-      _showErrorMessage(context, "Looks like either your email address or password were incorrect. Wanna try again?");
+      _showErrorMessage(context,
+          "Looks like either your email address or password were incorrect. Wanna try again?");
       return false;
     }
 

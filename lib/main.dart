@@ -6,6 +6,7 @@ import 'package:elaros_gp4/View/Questionaire/questionaire_view.dart';
 import 'package:elaros_gp4/View/Settings/about_us_settings.dart';
 import 'package:elaros_gp4/View/Settings/account_settings.dart';
 import 'package:elaros_gp4/View/Settings/settings_view.dart';
+import 'package:elaros_gp4/View/Sleep%20Goal/sleep_plan_view.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'View/Education/education_view.dart';
@@ -45,7 +46,7 @@ class MyApp extends StatelessWidget {
         '/Register': (context) => const SignUpPage(),
         '/Login': (context) => const LoginPage(),
         '/ResetPassword': (context) => const ResetPassword(),
-        '/SleepHistory' : (context) => const SleepTrackingOverview(),
+        '/SleepHistory': (context) => const SleepTrackingOverview(),
       },
     );
   }
