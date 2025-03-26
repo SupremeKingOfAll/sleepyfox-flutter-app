@@ -29,27 +29,27 @@ class _DashboardViewState extends State<DashboardView> {
   int _selectedIndex = 1;
   String? factDashboard;
   late AudioPlayer _audioPlayer;
+  static bool _isMusicPlaying = false;
 
   @override
   void initState() {
     super.initState();
     loadFunFact();
     _audioPlayer = AudioPlayer();
-    _checkMusicSettingAndPlay();
+    _playBackgroundMusic();
   }
 
   void _playBackgroundMusic() async {
-    await _audioPlayer.setReleaseMode(ReleaseMode.loop);
-    await _audioPlayer.play(AssetSource('backgroundmusic.mp3'), volume: 0.3);
-  }
-
-    void _checkMusicSettingAndPlay() async {
     final prefs = await SharedPreferences.getInstance();
     final isMusicEnabled = prefs.getBool('music_enabled') ?? true;
-    if (isMusicEnabled) {
-      _playBackgroundMusic();
+
+    if (isMusicEnabled && !_isMusicPlaying) { // checks if settings allows music and if music isnt already playing(duplicate fix)
+      _isMusicPlaying = true; // set flag first
+      await _audioPlayer.setReleaseMode(ReleaseMode.loop); // loops music
+      await _audioPlayer.play(AssetSource('backgroundmusic.mp3'), volume: 0.3);  // volume set relatively low
     }
   }
+
 
   @override
   void dispose() {
