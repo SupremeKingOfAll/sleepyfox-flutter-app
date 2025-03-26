@@ -18,6 +18,9 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dashboard_viewlist_resources.dart';
 
+AudioPlayer dashboardAudioPlayer = AudioPlayer(); // global variables for sound
+bool isMusicPlaying = false;
+
 class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
 
@@ -28,14 +31,12 @@ class DashboardView extends StatefulWidget {
 class _DashboardViewState extends State<DashboardView> {
   int _selectedIndex = 1;
   String? factDashboard;
-  late AudioPlayer _audioPlayer;
-  static bool _isMusicPlaying = false;
+
 
   @override
   void initState() {
     super.initState();
     loadFunFact();
-    _audioPlayer = AudioPlayer();
     _playBackgroundMusic();
   }
 
@@ -43,17 +44,17 @@ class _DashboardViewState extends State<DashboardView> {
     final prefs = await SharedPreferences.getInstance();
     final isMusicEnabled = prefs.getBool('music_enabled') ?? true;
 
-    if (isMusicEnabled && !_isMusicPlaying) { // checks if settings allows music and if music isnt already playing(duplicate fix)
-      _isMusicPlaying = true; // set flag first
-      await _audioPlayer.setReleaseMode(ReleaseMode.loop); // loops music
-      await _audioPlayer.play(AssetSource('backgroundmusic.mp3'), volume: 0.3);  // volume set relatively low
-    }
+    if (!isMusicEnabled || isMusicPlaying) return;
+
+      await dashboardAudioPlayer.setReleaseMode(ReleaseMode.loop);
+      await dashboardAudioPlayer.play(AssetSource('backgroundmusic.mp3'), volume: 0.5,); 
+      isMusicPlaying = true;
   }
 
 
   @override
   void dispose() {
-    _audioPlayer.dispose();
+    // dont dispose the player so it keeps playing when navigating
     super.dispose();
   }
 

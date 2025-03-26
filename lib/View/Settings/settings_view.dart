@@ -1,8 +1,11 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
 import 'package:elaros_gp4/View/Sleep%20Tracker/sleep_tracker_view.dart';
 import 'package:elaros_gp4/Widgets/custom_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
+
 
 class SettingsView extends StatefulWidget {
   const SettingsView({super.key});
@@ -34,9 +37,23 @@ class _SettingsViewState extends State<SettingsView> {
     setState(() {
       _isMusicEnabled = value;
     });
+    
+      if (value) {
+      // Turn music ON
+      if (!isMusicPlaying) {
+        await dashboardAudioPlayer.setReleaseMode(ReleaseMode.loop);
+        await dashboardAudioPlayer.play(
+          AssetSource('backgroundmusic.mp3'),
+          volume: 0.5,
+        );
+        isMusicPlaying = true;
+      }
+    } else {
+      // Turn music OFF
+      await dashboardAudioPlayer.stop();
+      isMusicPlaying = false;
+    }
   }
-
-
 
   void _onItemTapped(int index) {
     if (index == 0) {
