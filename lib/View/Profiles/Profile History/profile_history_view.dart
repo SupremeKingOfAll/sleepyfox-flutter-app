@@ -218,7 +218,7 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
               onChanged: (String? newValue) {
                 if (newValue != null) {
                   setState(() {
-                    _selectedProfile = newValue;
+                    _selectedProfile = newValue; // Update selected profile
                     _selectedProfileShareCode = _profiles
                         .firstWhere(
                           (profile) => profile['name'] == _selectedProfile,
@@ -226,6 +226,7 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
                     )['sharecode'];
                   });
 
+                  // Fetch records immediately for the newly selected profile
                   if (_selectedProfileShareCode != null) {
                     _fetchAllRecords(_selectedProfileShareCode!);
                   }
