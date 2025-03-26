@@ -84,24 +84,38 @@ class _DashboardViewState extends State<DashboardView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 0, 0, 0), // Dark blue background
-        title: Text(
+        backgroundColor: Color.fromARGB(255, 24, 30, 58), // Dark background
+        title: const Text(
           "Dashboard",
           style: TextStyle(
-            color: const Color.fromARGB(
-                255, 252, 174, 41), // Amber color for title text
+            color:
+                Color.fromARGB(255, 252, 174, 41), // Amber color for title text
           ),
         ),
         actions: [
           Padding(
-            padding: EdgeInsets.only(right: 16),
+            padding: const EdgeInsets.only(right: 16),
             child: Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                "Sleepy fox",
-                style: TextStyle(
-                  color: const Color.fromARGB(
-                      255, 252, 174, 41), // Light amber for the subtitle text
+              alignment: Alignment.centerLeft,
+              child: GestureDetector(
+                onTap: () => _logout(context), // Call the logout function
+                child: Row(
+                  children: const [
+                    Icon(
+                      Icons.logout,
+                      color: Color.fromARGB(
+                          255, 252, 174, 41), // Amber color for icon
+                    ),
+                    SizedBox(width: 5), // Space between icon and text
+                    Text(
+                      "Logout",
+                      style: TextStyle(
+                        color: Color.fromARGB(
+                            255, 252, 174, 41), // Amber color for text
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
