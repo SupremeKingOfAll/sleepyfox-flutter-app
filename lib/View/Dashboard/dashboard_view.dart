@@ -34,12 +34,20 @@ class _DashboardViewState extends State<DashboardView> {
     super.initState();
     loadFunFact();
     _audioPlayer = AudioPlayer();
-    _playBackgroundMusic();
+    _checkMusicSettingAndPlay();
   }
 
   void _playBackgroundMusic() async {
     await _audioPlayer.setReleaseMode(ReleaseMode.loop);
     await _audioPlayer.play(AssetSource('backgroundmusic.mp3'), volume: 0.3);
+  }
+
+    void _checkMusicSettingAndPlay() async {
+    final prefs = await SharedPreferences.getInstance();
+    final isMusicEnabled = prefs.getBool('music_enabled') ?? true;
+    if (isMusicEnabled) {
+      _playBackgroundMusic();
+    }
   }
 
   @override

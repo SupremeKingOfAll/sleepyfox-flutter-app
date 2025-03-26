@@ -12,6 +12,7 @@ class SettingsView extends StatefulWidget {
 
 class _SettingsViewState extends State<SettingsView> {
   int _selectedIndex = 2;
+  bool _isMusicEnabled = true;
 
   void _onItemTapped(int index) {
     if (index == 0) {
