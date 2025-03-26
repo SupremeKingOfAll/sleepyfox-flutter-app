@@ -40,6 +40,7 @@ dependencies:
   intl:
   lottie: ^3.3.1
   fl_chart:
+  syncfusion_flutter_charts: ^29.1.33
 
 
 
@@ -94,6 +95,12 @@ flutter:
     - Assets/900w-xy8Cv39_lA0.png
     - Assets/wp11179213.png
     - Assets/blue-phone-0njfrpcuzj98bp30.jpg
+    - Assets/foxasleepdashb.png
+    - Assets/rabbitreading.png
+    - Assets/rabbitreadingfix.png
+    - Assets/foxasleepdashbfix.png
+    - Assets/childprofiledash.png
+    - Assets/childgirlprofiledash.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

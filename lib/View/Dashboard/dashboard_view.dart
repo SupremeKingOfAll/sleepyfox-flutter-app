@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elaros_gp4/Controller/user_data_retrieve.dart';
 import 'package:elaros_gp4/View/Education/education_view.dart';
@@ -6,7 +7,7 @@ import 'package:elaros_gp4/View/Questionaire/questionaire_view.dart';
 import 'package:elaros_gp4/View/Settings/settings_view.dart';
 import 'package:elaros_gp4/View/Sleep%20Goal/sleep_plan_view.dart';
 import 'package:elaros_gp4/View/Sleep%20Tracker/sleep_tracker_view.dart';
-import 'package:elaros_gp4/View/Sleep%20Review/sleep_review_view.dart';
+import 'package:elaros_gp4/View/Profiles/Profile%20History/profile_history_view.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_guide_style.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_start_track_style.dart';
 import 'package:elaros_gp4/Services/logout_function.dart';
@@ -24,6 +25,19 @@ class DashboardView extends StatefulWidget {
 
 class _DashboardViewState extends State<DashboardView> {
   int _selectedIndex = 1;
+  String? factDashboard;
+
+  void initState(){
+    super.initState();
+    loadFunFact();
+  }
+
+  void loadFunFact() async{
+    String? factRetrieve = await getRandomFunFact();
+    setState(() {
+      factDashboard = factRetrieve;
+    });
+  }
 
   void _onItemTapped(int index) {
     if (index == 0) {
@@ -213,10 +227,13 @@ class _DashboardViewState extends State<DashboardView> {
                       ),
                     ),
                     _featureItem('Profiles', SelectProfileView(),
-                        'Assets/ProfPicKid.png'),
-                    _featureItem(
-                        'Education', EducationView(), 'Assets/ProfPicKid.png'),
+                        'Assets/childgirlprofiledash.png'),
+                    _featureItem('Sleep Tracking', SleepTracking(), 
+                        'Assets/foxasleepdashbfix.png'),
                     _featureItem('Questionnaire', QuestionnaireView(),
+                        'Assets/ProfPicKid.png'),                     
+                    _featureItem('Did You Know?', EducationView(),
+                        'Assets/rabbitreadingfix.png', factDashboard),
                         'Assets/ProfPicKid.png'),
                     FutureBuilder<bool>(
                       future: _isSleepPlanAvailable(),
@@ -258,7 +275,7 @@ class _DashboardViewState extends State<DashboardView> {
     );
   }
 
-  Widget _featureItem(String title, Widget page, String imagePath) {
+  Widget _featureItem(String title, Widget page, String imagePath, [String? subText]) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -288,17 +305,33 @@ class _DashboardViewState extends State<DashboardView> {
           height: 180,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 28),
-            child: Row(
+             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.amber,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: 26,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.amber,
+                        ),
+                      ),
+                      if (subText != null) ...[
+                        SizedBox(height: 8),
+                        Text(
+                          subText,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white70,
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
                 ),
                 SizedBox(width: 20),
@@ -386,5 +419,30 @@ class _DashboardViewState extends State<DashboardView> {
         ),
       ),
     );
+  }
+
+  Future<String?> getRandomFunFact() async {
+    try {
+      // all documents from the FunFacts collection
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('FunFacts')
+          .get();
+
+      // checks if collection is empty
+      if (snapshot.docs.isEmpty) {
+        print('No fun facts found.');
+        return null;
+      }
+
+      // random document gets picked
+      int randomIndex = Random().nextInt(snapshot.docs.length);
+      DocumentSnapshot randomDoc = snapshot.docs[randomIndex];
+
+      // returns the fact thats stored in the document
+      return randomDoc['fact'] as String?;
+    } catch (e) {
+      print('Error fetching fun fact: $e');
+      return null;
+    }
   }
 }
