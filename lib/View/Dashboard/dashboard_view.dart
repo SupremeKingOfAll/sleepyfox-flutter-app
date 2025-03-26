@@ -1,11 +1,11 @@
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elaros_gp4/Controller/user_data_retrieve.dart';
 import 'package:elaros_gp4/View/Education/education_view.dart';
 import 'package:elaros_gp4/View/Profiles/select_profile_dashboard_view.dart';
 import 'package:elaros_gp4/View/Questionaire/questionaire_view.dart';
 import 'package:elaros_gp4/View/Settings/settings_view.dart';
+import 'package:elaros_gp4/View/Sleep%20Goal/sleep_plan_view.dart';
 import 'package:elaros_gp4/View/Sleep%20Tracker/sleep_tracker_view.dart';
 import 'package:elaros_gp4/View/Profiles/Profile%20History/profile_history_view.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_guide_style.dart';
@@ -73,28 +73,63 @@ class _DashboardViewState extends State<DashboardView> {
     }
   }
 
+  Future<bool> _isSleepPlanAvailable() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) return false;
+
+    try {
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+
+      if (snapshot.exists &&
+          (snapshot.data() as Map<String, dynamic>).containsKey("sleep_plan")) {
+        return true;
+      }
+    } catch (e) {
+      print("Error checking sleep plan availability: $e");
+    }
+
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 0, 0, 0), // Dark blue background
-        title: Text(
+        backgroundColor: Color.fromARGB(255, 24, 30, 58), // Dark background
+        title: const Text(
           "Dashboard",
           style: TextStyle(
-            color: const Color.fromARGB(
-                255, 252, 174, 41), // Amber color for title text
+            color:
+                Color.fromARGB(255, 252, 174, 41), // Amber color for title text
           ),
         ),
         actions: [
           Padding(
-            padding: EdgeInsets.only(right: 16),
+            padding: const EdgeInsets.only(right: 16),
             child: Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                "Sleepy fox",
-                style: TextStyle(
-                  color: const Color.fromARGB(
-                      255, 252, 174, 41), // Light amber for the subtitle text
+              alignment: Alignment.centerLeft,
+              child: GestureDetector(
+                onTap: () => _logout(context), // Call the logout function
+                child: Row(
+                  children: const [
+                    Icon(
+                      Icons.logout,
+                      color: Color.fromARGB(
+                          255, 252, 174, 41), // Amber color for icon
+                    ),
+                    SizedBox(width: 5), // Space between icon and text
+                    Text(
+                      "Logout",
+                      style: TextStyle(
+                        color: Color.fromARGB(
+                            255, 252, 174, 41), // Amber color for text
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -199,6 +234,33 @@ class _DashboardViewState extends State<DashboardView> {
                         'Assets/ProfPicKid.png'),                     
                     _featureItem('Did You Know?', EducationView(),
                         'Assets/rabbitreadingfix.png', factDashboard),
+                        'Assets/ProfPicKid.png'),
+                    FutureBuilder<bool>(
+                      future: _isSleepPlanAvailable(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        }
+
+                        if (snapshot.hasData && snapshot.data == true) {
+                          return _featureItem('Sleep Plan', SleepPlan(),
+                              'Assets/ProfPicKid.png');
+                        }
+
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            "Complete the questionnaire to unlock your Sleep Plan!",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontStyle: FontStyle.italic,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
                   ],
                 ),
               ),
