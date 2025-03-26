@@ -421,10 +421,18 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                                     SizedBox(height: 20),
                                     Column(
                                       children: [
-                                        _buildLegendRow('Random', '🔵'),
-                                        _buildLegendRow('Nightmare', '🔴'),
-                                        _buildLegendRow('Bathroom', '🟠'),
-                                        _buildLegendRow('Energised', '🟢'),
+                                        Row(
+                                          children: [
+                                            _buildLegendRow('Random', '🔵'),
+                                            _buildLegendRow('  Nightmare', '🔴'),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            _buildLegendRow('Bathroom', '🟠'),
+                                            _buildLegendRow('  Energised', '🟢'),
+                                          ],
+                                        ),
                                       ],
                                     ),
                                   ],
@@ -443,17 +451,17 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                             borderRadius: BorderRadius.circular(15),
                           ),
                           child: Container(
-                            width: 350,
+                            width: 350,          
                             padding: EdgeInsets.all(15),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ZaksPersonalTextStyle(
-                                  text: 'Sleep Calendar',
-                                  textStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                              children: [                    
+                                Text(
+                                  'Sleep Calender',
+                                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.amber[300]),
                                 ),
-                                SizedBox(height: 10),
+                                SizedBox(height: 50),
                                 FutureBuilder<List<Color>>(
                                   future: getCalendarColors(profile["sharecode"]), // Call the function here
                                   builder: (context, snapshot) {
@@ -507,14 +515,14 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        ZaksPersonalTextStyle(
-                                          text: 'Excellent: 🟢',
-                                          textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                        Text(
+                                          'Excellent: 🟢',
+                                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.amber[300]),
                                         ),
                                         SizedBox(width: 20),
-                                        ZaksPersonalTextStyle(
-                                          text: 'Could be better: 🟠',
-                                          textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                        Text(
+                                          'Could be better: 🟠',
+                                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.amber[300]),
                                         ),
                                       ],
                                     ),
@@ -522,14 +530,14 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        ZaksPersonalTextStyle(
-                                          text: 'Bad: 🟡',
-                                          textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                        Text(
+                                          'Bad: 🟡',
+                                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.amber[300]),
                                         ),
                                         SizedBox(width: 20),
-                                        ZaksPersonalTextStyle(
-                                          text: 'Really Bad: 🔴',
-                                          textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                        Text(
+                                          'Really Bad: 🔴',
+                                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.amber[300]),
                                         ),
                                       ],
                                     ),
