@@ -372,17 +372,17 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                               ],
                               series:
                   <DoughnutSeries<Map<String, dynamic>, String>>[
-                                DoughnutSeries<Map<String, dynamic>, String>(
-                                  dataSource: [
-                                    {'label': 'Asleep', 'value': 70, 'color': Colors.green},
-                                    {'label': 'Awake', 'value': 30, 'color': Colors.orangeAccent},
-                                  ],
-                                  xValueMapper: (data, ) => data['label'],
-                                  yValueMapper: (data, ) => data['value'],
-                                  pointColorMapper: (data, _) => data['color'],
-                                  dataLabelSettings: DataLabelSettings(isVisible: true),
-                                  animationDuration: 1500,
-                                ),
+                                // DoughnutSeries<Map<String, dynamic>, String>(
+                                //   dataSource: [
+                                //     {'label': 'Asleep', 'value': 70, 'color': Colors.green},
+                                //     {'label': 'Awake', 'value': 30, 'color': Colors.orangeAccent},
+                                //   ],
+                                //   xValueMapper: (data, ) => data['label'],
+                                //   yValueMapper: (data, ) => data['value'],
+                                //   pointColorMapper: (data, _) => data['color'],
+                                //   dataLabelSettings: DataLabelSettings(isVisible: true),
+                                //   animationDuration: 1500,
+                                // ),
                               ],
                             ),
                           ),
