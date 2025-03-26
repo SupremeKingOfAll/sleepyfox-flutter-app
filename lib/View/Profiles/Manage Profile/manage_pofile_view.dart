@@ -274,7 +274,7 @@ class _ManageProfileViewState extends State<ManageProfileView> {
         decoration: const BoxDecoration(
           image: DecorationImage(
             image:
-                AssetImage('Assets/900w-xy8Cv39_lA0.png'), // Background image
+                AssetImage('Assets/wp11179213.png'), // Background image
             fit: BoxFit.cover,
           ),
         ),
@@ -288,7 +288,7 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                   Padding(
                     padding: const EdgeInsets.all(8.2),
                     child: Card(
-                      color: Colors.grey[200],
+                      color: const Color.fromARGB(103, 12, 30, 53),
                       child: Center(
                         child: Container(
                           width: MediaQuery.of(context).size.width,
@@ -309,16 +309,22 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                                       padding: const EdgeInsets.all(20.0),
                                       child: Column(
                                         children: [
-                                          ZaksPersonalTextStyle(
-                                            text: profile['name'],
-                                            textStyle: TextStyle(
-                                                fontSize: 40), // Here ProfileIndex
+                                          Text(
+                                            profile["name"],
+                                            style: TextStyle(
+                                              fontSize: 42,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.amber[300],
+                                            ),
                                           ),
                                           Container(height: 0),
-                                          ZaksPersonalTextStyle(
-                                            text: "Age: ${profile['age'].toString()}",
-                                            //and here as well ProfileIndex
-                                            textStyle: TextStyle(fontSize: 30),
+                                          Text(
+                                            "Age: ${profile['age'].toString()}",
+                                            style: TextStyle(
+                                              fontSize: 42,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.amber[300],
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -355,8 +361,8 @@ class _ManageProfileViewState extends State<ManageProfileView> {
             
                             final sleepData = snapshot.data!;
             
-                            return Card( // ✅ Proper return here
-                              color: Colors.grey[200],
+                            return Card( 
+                              color: const Color.fromARGB(103, 12, 30, 53),
                               elevation: 5,
                               margin: EdgeInsets.all(5),
                               shape: RoundedRectangleBorder(
@@ -371,7 +377,7 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                                   children: [
                                     Text(
                                       'Awakenings\nthis week',
-                                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.amber[300]),
                                       textAlign: TextAlign.center,
                                     ),
                                     SizedBox(height: 10),
@@ -405,7 +411,7 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                                             pointColorMapper: (data, _) => data['color'],
                                             dataLabelSettings: DataLabelSettings(
                                               isVisible: true,
-                                              labelPosition: ChartDataLabelPosition.inside, // ✅ No lines
+                                              labelPosition: ChartDataLabelPosition.inside,
                                             ),
                                             animationDuration: 1500,
                                           ),
@@ -430,7 +436,7 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                                             
                         //Calendar Card
                         Card(
-                          color: Colors.grey[200],
+                          color: const Color.fromARGB(103, 12, 30, 53),
                           elevation: 5,
                           margin: EdgeInsets.all(10),
                           shape: RoundedRectangleBorder(
@@ -452,7 +458,7 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                                   future: getCalendarColors(profile["sharecode"]), // Call the function here
                                   builder: (context, snapshot) {
                                     if (snapshot.connectionState == ConnectionState.waiting) {
-                                      return CircularProgressIndicator(); // Show loading spinner while data is being fetched
+                                      return CircularProgressIndicator(); // show loading spinner while data is being fetched
                                     }
             
                                     if (snapshot.hasError) {
@@ -608,7 +614,7 @@ class _ManageProfileViewState extends State<ManageProfileView> {
         children: [
           Text(
             '$label: $emoji',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: const Color.fromARGB(255, 255, 204, 52)),
           ),
         ],
       ),
