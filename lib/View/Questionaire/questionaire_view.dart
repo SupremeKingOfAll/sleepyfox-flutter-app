@@ -175,59 +175,61 @@ class QuestionnaireViewState extends State<QuestionnaireView> {
       int index = entry.key;
       var question = entry.value;
 
-      return SizedBox(
-        height: 200,
-        child: Card(
-          color: const Color.fromARGB(162, 23, 29, 62),
-          margin: EdgeInsets.all(16.0),
-          elevation: 4,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  question.questionTitle,
-                  style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.amber),
+      return Card(
+        color: const Color.fromARGB(162, 23, 29, 62),
+        margin: const EdgeInsets.all(16.0),
+        elevation: 4,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                question.questionTitle,
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.amber,
                 ),
-                SizedBox(height: 5),
-                ...List.generate(question.questionText.length, (qIndex) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        question.questionText[qIndex],
-                        style: TextStyle(fontSize: 13, color: Colors.amber),
-                      ),
-                      SizedBox(height: 10),
-                      ...question.answers[qIndex].map((answer) {
-                        return RadioListTile<String>(
-                          title: Text(answer,
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.amber)),
-                          value: answer,
-                          groupValue: _answers[index]?[qIndex],
-                          onChanged: (value) {
-                            setState(() {
-                              _answers[index] ??= {};
-                              _answers[index]![qIndex] = value!;
-                            });
-                          },
-                        );
-                      }),
-                      SizedBox(height: 10),
-                      if (qIndex < question.questionText.length - 1)
-                        Divider(color: Colors.grey, indent: 25, endIndent: 25),
-                      if (qIndex < question.questionText.length - 1)
-                        SizedBox(height: 10),
-                    ],
-                  );
-                }),
-              ],
-            ),
+              ),
+              const SizedBox(height: 5),
+              ...List.generate(question.questionText.length, (qIndex) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      question.questionText[qIndex],
+                      style: const TextStyle(fontSize: 10, color: Colors.amber),
+                    ),
+                    const SizedBox(height: 5),
+                    ...question.answers[qIndex].map((answer) {
+                      return RadioListTile<String>(
+                        title: Text(
+                          answer,
+                          style: const TextStyle(
+                              fontSize: 10, color: Colors.amber),
+                        ),
+                        value: answer,
+                        groupValue: _answers[index]?[qIndex],
+                        onChanged: (value) {
+                          setState(() {
+                            _answers[index] ??= {};
+                            _answers[index]![qIndex] = value!;
+                          });
+                        },
+                        contentPadding: EdgeInsets.zero,
+                        dense: true,
+                      );
+                    }).toList(),
+                    if (qIndex < question.questionText.length - 1)
+                      const Divider(
+                          color: Colors.grey, indent: 25, endIndent: 25),
+                    if (qIndex < question.questionText.length - 1)
+                      const SizedBox(height: 5),
+                  ],
+                );
+              }),
+            ],
           ),
         ),
       );
@@ -376,5 +378,4 @@ class QuestionnaireViewState extends State<QuestionnaireView> {
       ),
     );
   }
-
 }
