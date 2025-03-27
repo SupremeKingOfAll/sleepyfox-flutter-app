@@ -224,10 +224,10 @@ class _DashboardViewState extends State<DashboardView> {
                         padding: const EdgeInsets.all(8.0),
                         child: InfoContainer(
                           onPressed: () {
-                            Navigator.pushNamed(context, '/EducationView');
+                            Navigator.pushNamed(context, '/SleepStoryView');
                           },
-                          title: 'Healthy Habits',
-                          subtitle: 'Better Rest Routine',
+                          title: 'Bedtime Stories',
+                          subtitle: 'Click to Read',
                           imagePath: 'Assets/ProfPicKid.png',
                         ),
                       ),
