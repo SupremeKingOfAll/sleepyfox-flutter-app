@@ -32,7 +32,6 @@ class _DashboardViewState extends State<DashboardView> {
   int _selectedIndex = 1;
   String? factDashboard;
 
-
   @override
   void initState() {
     super.initState();
@@ -46,11 +45,10 @@ class _DashboardViewState extends State<DashboardView> {
 
     if (!isMusicEnabled || isMusicPlaying) return;
 
-      await dashboardAudioPlayer.setReleaseMode(ReleaseMode.loop);
-      await dashboardAudioPlayer.play(AssetSource('backgroundmusic.mp3'), volume: 0.5,); 
-      isMusicPlaying = true;
+    await dashboardAudioPlayer.setReleaseMode(ReleaseMode.loop);
+    await dashboardAudioPlayer.play(AssetSource('backgroundmusic.mp3'));
+    isMusicPlaying = true;
   }
-
 
   @override
   void dispose() {
@@ -58,7 +56,7 @@ class _DashboardViewState extends State<DashboardView> {
     super.dispose();
   }
 
-  void loadFunFact() async{
+  void loadFunFact() async {
     String? factRetrieve = await getRandomFunFact();
     setState(() {
       factDashboard = factRetrieve;
@@ -244,22 +242,9 @@ class _DashboardViewState extends State<DashboardView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Sleepy Fox Features',
-                      style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.amber,
-                      ),
-                    ),
+                    SizedBox(height: 2),
                     _featureItem('Profiles', SelectProfileView(),
                         'Assets/childgirlprofiledash.png'),
-                    _featureItem('Sleep Tracking', SleepTracking(), 
-                        'Assets/foxasleepdashbfix.png'),
-                    _featureItem('Questionnaire', QuestionnaireView(),
-                        'Assets/ProfPicKid.png'),                     
-                    _featureItem('Did You Know?', EducationView(),
-                        'Assets/rabbitreadingfix.png', factDashboard),
                     FutureBuilder<bool>(
                       future: _isSleepPlanAvailable(),
                       builder: (context, snapshot) {
@@ -286,6 +271,10 @@ class _DashboardViewState extends State<DashboardView> {
                         );
                       },
                     ),
+                    _featureItem('Questionnaire', QuestionnaireView(),
+                        'Assets/ProfPicKid.png'),
+                    _featureItem('Did You Know?', EducationView(),
+                        'Assets/rabbitreadingfix.png', factDashboard),
                   ],
                 ),
               ),
@@ -300,7 +289,8 @@ class _DashboardViewState extends State<DashboardView> {
     );
   }
 
-  Widget _featureItem(String title, Widget page, String imagePath, [String? subText]) {
+  Widget _featureItem(String title, Widget page, String imagePath,
+      [String? subText]) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -317,20 +307,21 @@ class _DashboardViewState extends State<DashboardView> {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
               colors: [
-                Color.fromARGB(255, 23, 28, 55),
-                Colors.blueGrey.shade700
+                Color.fromARGB(255, 25, 27, 53),
+                Color.fromARGB(255, 28, 29, 53),
+                Color.fromARGB(255, 32, 52, 111),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
           ),
           width: double.infinity,
-          height: 180,
+          height: 171,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 28),
-             child: Row(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
@@ -341,8 +332,7 @@ class _DashboardViewState extends State<DashboardView> {
                       Text(
                         title,
                         style: TextStyle(
-                          fontSize: 26,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 22,
                           color: Colors.amber,
                         ),
                       ),
@@ -449,9 +439,8 @@ class _DashboardViewState extends State<DashboardView> {
   Future<String?> getRandomFunFact() async {
     try {
       // all documents from the FunFacts collection
-      QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection('FunFacts')
-          .get();
+      QuerySnapshot snapshot =
+          await FirebaseFirestore.instance.collection('FunFacts').get();
 
       // checks if collection is empty
       if (snapshot.docs.isEmpty) {
