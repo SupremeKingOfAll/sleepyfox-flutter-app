@@ -97,13 +97,13 @@ class _SleepStoryViewState extends State<SleepStoryView> {
               SizedBox(height: 10),
               SleepyFoxCard(
                 title: "Barkley's Story",
-                imagePath: 'Assets/blue-phone-0njfrpcuzj98bp30.jpg',
+                imagePath: 'Assets/Dog1.png',
                 routeName: '/DogStory',
               ),
               SizedBox(height: 10),
               SleepyFoxCard(
                 title: "Luna's Story",
-                imagePath: 'Assets/FoxMascProfPic.png',
+                imagePath: 'Assets/CatStory1.png',
                 routeName: '/CatStory',),
             ],
           ),
