@@ -72,19 +72,6 @@ class _EducationViewState extends State<EducationView> {
               color: const Color.fromARGB(
                   255, 252, 174, 41), // Amber color for title text
             )),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Text("Sleepy Fox",
-                  style: TextStyle(
-                    color: const Color.fromARGB(
-                        255, 252, 174, 41), // Amber color for title text
-                  )),
-            ),
-          ),
-        ],
       ),
       body: Container(
         decoration: const BoxDecoration(
