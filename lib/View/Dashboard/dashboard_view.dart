@@ -15,7 +15,11 @@ import 'package:elaros_gp4/Services/logout_function.dart';
 import 'package:elaros_gp4/Widgets/custom_bottom_nav_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dashboard_viewlist_resources.dart';
+
+AudioPlayer dashboardAudioPlayer = AudioPlayer(); // global variables for sound
+bool isMusicPlaying = false;
 
 class DashboardView extends StatefulWidget {
   const DashboardView({super.key});
@@ -27,23 +31,30 @@ class DashboardView extends StatefulWidget {
 class _DashboardViewState extends State<DashboardView> {
   int _selectedIndex = 1;
   String? factDashboard;
-  late AudioPlayer _audioPlayer;
 
-  void initState(){
+
+  @override
+  void initState() {
     super.initState();
     loadFunFact();
-    _audioPlayer = AudioPlayer();
     _playBackgroundMusic();
   }
 
   void _playBackgroundMusic() async {
-    await _audioPlayer.play(AssetSource('Assets/backgroundmusic.mp3'), volume: 0.5);
-    _audioPlayer.setReleaseMode(ReleaseMode.loop); // Loop the music
+    final prefs = await SharedPreferences.getInstance();
+    final isMusicEnabled = prefs.getBool('music_enabled') ?? true;
+
+    if (!isMusicEnabled || isMusicPlaying) return;
+
+      await dashboardAudioPlayer.setReleaseMode(ReleaseMode.loop);
+      await dashboardAudioPlayer.play(AssetSource('backgroundmusic.mp3'), volume: 0.5,); 
+      isMusicPlaying = true;
   }
+
 
   @override
   void dispose() {
-    _audioPlayer.dispose();
+    // dont dispose the player so it keeps playing when navigating
     super.dispose();
   }
 

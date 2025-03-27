@@ -42,6 +42,7 @@ dependencies:
   fl_chart:
   syncfusion_flutter_charts: ^29.1.33
   audioplayers: ^6.4.0
+  shared_preferences: ^2.5.2
 
 
 

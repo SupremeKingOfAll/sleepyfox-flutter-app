@@ -1,7 +1,11 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
 import 'package:elaros_gp4/View/Sleep%20Tracker/sleep_tracker_view.dart';
 import 'package:elaros_gp4/Widgets/custom_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
+
 
 class SettingsView extends StatefulWidget {
   const SettingsView({super.key});
@@ -12,6 +16,44 @@ class SettingsView extends StatefulWidget {
 
 class _SettingsViewState extends State<SettingsView> {
   int _selectedIndex = 2;
+  bool _isMusicEnabled = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadMusicSetting();
+  }
+
+  void _loadMusicSetting() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isMusicEnabled = prefs.getBool('music_enabled') ?? true;
+    });
+  }
+
+  void _toggleMusic(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('music_enabled', value);
+    setState(() {
+      _isMusicEnabled = value;
+    });
+    
+      if (value) {
+      // Turn music ON
+      if (!isMusicPlaying) {
+        await dashboardAudioPlayer.setReleaseMode(ReleaseMode.loop);
+        await dashboardAudioPlayer.play(
+          AssetSource('backgroundmusic.mp3'),
+          volume: 0.5,
+        );
+        isMusicPlaying = true;
+      }
+    } else {
+      // Turn music OFF
+      await dashboardAudioPlayer.stop();
+      isMusicPlaying = false;
+    }
+  }
 
   void _onItemTapped(int index) {
     if (index == 0) {
@@ -179,6 +221,13 @@ class _SettingsViewState extends State<SettingsView> {
                         onTap: () {
                           Navigator.pushNamed(context, '/AboutUs');
                         },
+                      ),
+                      SwitchListTile(
+                        title: Text("Music", style: TextStyle(color: Colors.amber, fontSize: 20)),
+                        secondary: Icon(Icons.music_note, color: Colors.amber, size: 34),
+                        value: _isMusicEnabled,
+                        onChanged: _toggleMusic,
+                        activeColor: Colors.amber,
                       ),
                       const Divider(color: Colors.amber),
                       const SizedBox(height: 20),
