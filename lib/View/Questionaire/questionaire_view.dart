@@ -175,10 +175,20 @@ class QuestionnaireViewState extends State<QuestionnaireView> {
       int index = entry.key;
       var question = entry.value;
 
-      return Card(
-        color: const Color.fromARGB(162, 23, 29, 62),
+      return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          gradient: const LinearGradient(
+            colors: [
+              Color.fromARGB(255, 25, 27, 53),
+              Color.fromARGB(255, 39, 40, 73),
+              Color.fromARGB(255, 32, 52, 111),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
         margin: const EdgeInsets.all(16.0),
-        elevation: 4,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -222,6 +232,7 @@ class QuestionnaireViewState extends State<QuestionnaireView> {
                           contentPadding:
                               EdgeInsets.zero, // Remove internal padding
                           dense: true, // Make the tile more compact
+                          activeColor: Colors.amber,
                         ),
                       );
                     }).toList(),
@@ -273,7 +284,6 @@ class QuestionnaireViewState extends State<QuestionnaireView> {
   Widget build(BuildContext context) {
     if (_isLoading) {
       return Scaffold(
-        backgroundColor: const Color.fromARGB(255, 249, 232, 184),
         appBar: AppBar(
           elevation: 4,
           title: Row(

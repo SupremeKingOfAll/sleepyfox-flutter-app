@@ -235,10 +235,8 @@ class _SleepTrackingState extends State<SleepTracking> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.amber.shade500,
-        ),
-        backgroundColor: Color.fromARGB(255, 0, 0, 0), // Dark blue background
+        backgroundColor:
+            Color.fromARGB(255, 24, 30, 58), // Dark blue background
         title: Text(
           "Sleep Tracker",
           style: TextStyle(
@@ -246,6 +244,7 @@ class _SleepTrackingState extends State<SleepTracking> {
                 255, 252, 174, 41), // Amber color for title text
           ),
         ),
+        iconTheme: const IconThemeData(color: Color.fromARGB(255, 216, 163, 6)),
       ),
       body: Container(
         decoration: const BoxDecoration(
