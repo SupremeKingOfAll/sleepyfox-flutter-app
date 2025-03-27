@@ -372,6 +372,14 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                             }
             
                             final sleepData = snapshot.data!;
+
+                                // awakening reasons
+                            final awakeningCategories = ['Random', 'Nightmare', 'Bathroom', 'Energised'];
+
+                            // check if all == 0
+                            final hasAwakenings = sleepData.entries
+                                .where((entry) => awakeningCategories.contains(entry.key))
+                                .any((entry) => entry.value > 0);
             
                             return Card( 
                               color: const Color.fromARGB(103, 12, 30, 53),
@@ -407,17 +415,17 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                                         ],
                                         series: <DoughnutSeries<Map<String, dynamic>, String>>[
                                           DoughnutSeries<Map<String, dynamic>, String>(
-                                            dataSource: sleepData.entries
-                                                .where((entry) =>
-                                                    ['Random', 'Nightmare', 'Bathroom', 'Energised']
-                                                        .contains(entry.key) &&
-                                                    entry.value > 0)
-                                                .map((entry) => {
-                                                      'label': entry.key,
-                                                      'value': entry.value,
-                                                      'color': _getCategoryColor(entry.key),
-                                                    })
-                                                .toList(),
+                                            dataSource: hasAwakenings ? sleepData.entries
+                                            .where((entry) => awakeningCategories.contains(entry.key) && entry.value > 0)
+                                            .map((entry) => {
+                                                  'label': entry.key,
+                                                  'value': entry.value,
+                                                  'color': _getCategoryColor(entry.key),
+                                                })
+                                            .toList()
+                                        : [
+                                            {'label': 'No Awakenings', 'value': 1, 'color': Colors.grey},
+                                          ],
                                             xValueMapper: (data, _) => data['label'],
                                             yValueMapper: (data, _) => data['value'],
                                             pointColorMapper: (data, _) => data['color'],
