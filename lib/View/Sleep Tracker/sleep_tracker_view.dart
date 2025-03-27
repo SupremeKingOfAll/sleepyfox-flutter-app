@@ -113,21 +113,13 @@ class _SleepTrackingState extends State<SleepTracking> {
     }
   }
 
-  void _showErrorDialog(String title, String message) { // alerts template for invalid inputs by user
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text("OK"),
-            ),
-          ],
-        );
-      },
+  void _showSnackbar(String message, {bool isSuccess = false}) { // snackbar activates for insufficient information
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: isSuccess ? Colors.green : Colors.red,
+        duration: const Duration(seconds: 3),
+      ),
     );
   }
   Future<void> _saveSleepRecord() async {
@@ -136,11 +128,17 @@ class _SleepTrackingState extends State<SleepTracking> {
       if (user == null) throw Exception("User not logged in");
 
 
-          // both bedtime and wakeup time must be entered before saving
-      if (_bedtimeController.text.trim().isEmpty || _wakeUpController.text.trim().isEmpty || _selectedSleepQuality == null)         
-      {
-        _showErrorDialog("Missing Information", 
-          "Please enter both bedtime and wake-up time and the sleep quality.");
+      // if statements to ensure bedtime,wake up time and quality is entered before saving
+      if (_bedtimeController.text.trim().isEmpty) {
+            _showSnackbar("Please enter your bedtime.");
+            return;
+          }
+      if (_wakeUpController.text.trim().isEmpty) {
+        _showSnackbar("Please enter your wake-up time.");
+        return;
+      }
+      if (_selectedSleepQuality == null) {
+        _showSnackbar("Please select your sleep quality.");
         return;
       }
 
@@ -175,10 +173,16 @@ class _SleepTrackingState extends State<SleepTracking> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Sleep record saved successfully')));
+          const SnackBar(
+            content: Text('Sleep record saved successfully'),
+            backgroundColor: Colors.green,    
+          ));
     } catch (e) {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Failed to save: $e')));
+          .showSnackBar(SnackBar(
+            content: Text('Failed to save: $e'),
+            backgroundColor: Colors.red,
+            ));
     }
   }
 
