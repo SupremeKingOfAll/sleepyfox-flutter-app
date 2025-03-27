@@ -59,11 +59,11 @@ class AuthController {
 
     switch (errorCode) {
       case "email-already-in-use":
-        return "This email is already registered. Try logging in.";
+        return "This email is already registered, try logging in.";
       case "email-already-exists":
-        return "This email is already registered. Try logging in.";
+        return "This email is already registered, try logging in.";
       default:
-        return "An unexpected error occurred. Please try again.";
+        return "An unexpected error occurred, please try again.";
     }
   }
 
@@ -72,13 +72,13 @@ class AuthController {
       String email, String password, BuildContext context) async {
     if (email.trim().isEmpty || password.trim().isEmpty) {
       _showErrorMessage(context,
-          "Looks like either your email address or password were incorrect. Wanna try again?");
+          "Looks like either your email address or password were incorrect, please try again.");
       return false;
     }
 
     if (!IfValidEmail(email)) {
       _showErrorMessage(context,
-          "Looks like either your email address or password were incorrect. Wanna try again?");
+          "Looks like either your email address or password were incorrect, please try again.");
       return false;
     }
 
@@ -99,11 +99,11 @@ class AuthController {
 
     switch (errorCode) {
       case "user-not-found":
-        return "Looks like either your email address or password were incorrect. Wanna try again?";
+        return "Looks like either your email address or password were incorrect, please try again.";
       case "invalid-credential":
-        return "Looks like either your email address or password were incorrect. Wanna try again?";
+        return "Looks like either your email address or password were incorrect, please try again.";
       default:
-        return "An unexpected er  ror occurred. Please try again.";
+        return "An unexpected error occurred, please try again.";
     }
   }
 

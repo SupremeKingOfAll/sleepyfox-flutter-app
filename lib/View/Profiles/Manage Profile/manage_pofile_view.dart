@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
 import 'package:elaros_gp4/View/Settings/settings_view.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_guide_style.dart';
+import 'package:elaros_gp4/Widgets/Buttons/delete_button.dart';
 import 'package:elaros_gp4/Widgets/PopUp/profile_sharecode_popup.dart';
 import 'package:elaros_gp4/Widgets/Text%20Styles/zaks_personal_text_style.dart';
 import 'package:elaros_gp4/Widgets/custom_bottom_nav_bar.dart';
@@ -591,7 +592,7 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                           SizedBox(
                             height: 10,
                           ),
-                          
+
                           SizedBox(
                             height: 20,
                           )
