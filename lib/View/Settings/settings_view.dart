@@ -209,7 +209,7 @@ class _SettingsViewState extends State<SettingsView> {
                             style: TextStyle(
                                 color: Colors.amber, fontSize: 20)),
                         onTap: () {
-                          //Navigator.pushNamed(context, '/GuideView');
+                          Navigator.pushNamed(context, '/GuideView');
                         },
                       ),
                       ListTile(

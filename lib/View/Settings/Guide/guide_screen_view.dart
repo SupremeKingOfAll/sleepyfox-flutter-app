@@ -28,6 +28,7 @@ class _GuideScreenViewState extends State<GuideScreenView> {
       _buildFourthCard(),
       _buildSleepTrackCard(),
       _buildLastCard(),
+      _buildBedtimeCard(),
       _buildFifthCard(),
       // Add more cards here if needed
     ];
@@ -36,7 +37,7 @@ class _GuideScreenViewState extends State<GuideScreenView> {
   Widget _buildFirstCard() {
     return Card(
       elevation: 3,
-      color: Colors.white,
+      color: Colors.white70,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -85,7 +86,7 @@ class _GuideScreenViewState extends State<GuideScreenView> {
   Widget _buildSecondCard() {
     return Card(
       elevation: 3,
-      color: Colors.white,
+      color: Colors.white70,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -149,7 +150,7 @@ class _GuideScreenViewState extends State<GuideScreenView> {
   Widget _buildThirdCard() {
     return Card(
       elevation: 3,
-      color: Colors.white,
+      color: Colors.white70,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -210,10 +211,73 @@ class _GuideScreenViewState extends State<GuideScreenView> {
       ),
     );
   }
+  Widget _buildBedtimeCard() {
+    return Card(
+      elevation: 3,
+      color: Colors.white70,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              'Bedtime Stories',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 10),
+            Column(
+              children: [
+                // Padding(
+                //   padding: const EdgeInsets.only(bottom: 10),
+                //   child: WelcomeTextStyle(
+                //     text: "Sleep Tracker",
+                //     textAlign: TextAlign.center,
+                //   ),
+                // ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: WelcomeTextStyle(
+                    text:
+                    "If you tap on the Bedtime Stories, you can choose and read stories together to prepare for a good night sleep. There are a wide selection of stories to choose from",
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                OrangeButton(
+                  onPressed: () {
+                    setState(() {
+                      _currentIndex = (_currentIndex - 1 + _cards.length) % _cards.length;
+                    });
+                  },
+                  text: 'Back',
+                ),
+                OrangeButton(
+                  text: "Next",
+                  onPressed: () {
+                    setState(() {
+                      _currentIndex = (_currentIndex + 1) % _cards.length;
+                    });
+                  },
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
   Widget _buildAnalysis2Card() {
     return Card(
       elevation: 3,
-      color: Colors.white,
+      color: Colors.white70,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -277,7 +341,7 @@ class _GuideScreenViewState extends State<GuideScreenView> {
   Widget _buildFourthCard() {
     return Card(
       elevation: 3,
-      color: Colors.white,
+      color: Colors.white70,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -340,7 +404,7 @@ class _GuideScreenViewState extends State<GuideScreenView> {
   Widget _buildSleepTrackCard() {
     return Card(
       elevation: 3,
-      color: Colors.white,
+      color: Colors.white70,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -399,7 +463,7 @@ class _GuideScreenViewState extends State<GuideScreenView> {
   Widget _buildFifthCard() {
     return Card(
       elevation: 3,
-      color: Colors.white,
+      color: Colors.white70,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -462,7 +526,7 @@ class _GuideScreenViewState extends State<GuideScreenView> {
   Widget _buildLastCard() {
     return Card(
       elevation: 3,
-      color: Colors.white,
+      color: Colors.white70,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -473,7 +537,7 @@ class _GuideScreenViewState extends State<GuideScreenView> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              'Notifications',
+              'Relaxing Music',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 10),
@@ -489,7 +553,7 @@ class _GuideScreenViewState extends State<GuideScreenView> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20),
                   child: WelcomeTextStyle(
-                    text: "We will notify you for each time your little one has to go to bed. Of course you can silent it just right in the settings.",
+                    text: "The application has a default relaxation music which plays in the background. Of course you can silent it just right in the settings.",
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -513,68 +577,83 @@ class _GuideScreenViewState extends State<GuideScreenView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.yellow[100],
-      body: SingleChildScrollView(
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image:
+            AssetImage('Assets/moonbackground.png'), // Background image
+            fit: BoxFit.cover,
+          ),
+        ),
+
         child: Column(
           children: [
-            Center(
-              child: Container(
+            Expanded(
+              child: SingleChildScrollView(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    Center(
+                      child: Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
 
-                    SizedBox(height: 100),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 500,
-                          height: 200,
-                          child: Center(
-                            child: Row(
+                            SizedBox(height: 100),
+                            Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                StrokeTextDark(
-                                  text: "Sleepy",
-                                  textStyle: TextStyle(fontSize: 70),
-                                ),
-                                StrokeTextLight(
-                                  text: "Fox",
-                                  textStyle: TextStyle(fontSize: 70),
+                                Container(
+                                  width: 500,
+                                  height: 200,
+                                  child: Center(
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        StrokeTextDark(
+                                          text: "Sleepy",
+                                          textStyle: TextStyle(fontSize: 70),
+                                        ),
+                                        StrokeTextLight(
+                                          text: "Fox",
+                                          textStyle: TextStyle(fontSize: 70),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
-                          ),
+                            SizedBox(height: 20),
+                Container(
+                  constraints: BoxConstraints(
+                    minHeight: 0,
+                    maxHeight: double.infinity,
+                  ),
+                  child: _cards[_currentIndex], // Display the current card based on the index
+                ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                    SizedBox(height: 20),
-        Container(
-          constraints: BoxConstraints(
-            minHeight: 0,
-            maxHeight: double.infinity,
-          ),
-          child: _cards[_currentIndex], // Display the current card based on the index
-        ),
+                    SizedBox(                                     //progression bar
+                      width: 400,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: LinearProgressIndicator(
+                          value: (_currentIndex + 1) / _cards.length,
+                          color: Colors.orange,
+                          backgroundColor: Colors.grey[300],
+                          minHeight: 12.0,
+
+                        ),
+                      ),
+                    ),
+
                   ],
                 ),
               ),
             ),
-            SizedBox(                                     //progression bar
-              width: 400,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: LinearProgressIndicator(
-                  value: (_currentIndex + 1) / _cards.length,
-                  color: Colors.orange,
-                  backgroundColor: Colors.grey[300],
-                  minHeight: 12.0,
-
-                ),
-              ),
-            ),
-
           ],
         ),
       ),
