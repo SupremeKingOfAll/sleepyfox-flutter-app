@@ -113,10 +113,36 @@ class _SleepTrackingState extends State<SleepTracking> {
     }
   }
 
+  void _showErrorDialog(String title, String message) { // alerts template for invalid inputs by user
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
   Future<void> _saveSleepRecord() async {
     try {
       final User? user = FirebaseAuth.instance.currentUser;
       if (user == null) throw Exception("User not logged in");
+
+
+          // both bedtime and wakeup time must be entered before saving
+      if (_bedtimeController.text.trim().isEmpty || _wakeUpController.text.trim().isEmpty || _selectedSleepQuality == null)         
+      {
+        _showErrorDialog("Missing Information", 
+          "Please enter both bedtime and wake-up time and the sleep quality.");
+        return;
+      }
 
       // Debugging: Print the naps list before filtering
       print("Before filtering: $naps");
