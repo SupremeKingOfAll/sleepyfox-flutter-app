@@ -89,6 +89,7 @@ class _SleepStoryViewState extends State<SleepStoryView> {
                 title: "Luna's Story",
                 imagePath: 'Assets/CatStory1.png',
                 routeName: '/CatStory',),
+            SizedBox(height: 50),
             ],
           ),
         ),

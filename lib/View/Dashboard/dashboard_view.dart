@@ -249,118 +249,123 @@ class _DashboardViewState extends State<DashboardView> {
                       'Assets/profileboy.png',
                       'Manage Your Child\'s Profile',
                     ),
-                    FutureBuilder<bool>(
-                      future: _isSleepPlanAvailable(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const CircularProgressIndicator(); // Show a loader while checking
-                        }
+                    Center(
+                      child: FutureBuilder<bool>(
+                        future: _isSleepPlanAvailable(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator(); // Show a loader while checking
+                          }
 
-                        if (snapshot.hasData && snapshot.data == true) {
-                          // Show the Sleep Plan button if the sleep plan is available
-                          return _featureItem(
-                            'Sleep Plan',
-                            SleepPlan(),
-                            'Assets/rabbitreadingfix.png',
-                            'View Your Sleep Plan',
-                          );
-                        }
+                          if (snapshot.hasData && snapshot.data == true) {
+                            // Show the Sleep Plan button if the sleep plan is available
+                            return _featureItem(
+                              'Sleep Plan',
+                              SleepPlan(),
+                              'Assets/Catstory4.png',
+                              'View Your Sleep Plan',
+                            );
+                          }
 
-                        // If the sleep plan is not available, return an empty container
-                        return const SizedBox.shrink();
-                      },
+                          // If the sleep plan is not available, return an empty container
+                          return const SizedBox.shrink();
+                        },
+                      ),
                     ),
-                    FutureBuilder<bool>(
-                      future: _isSleepPlanAvailable(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
-                        }
 
-                        if (snapshot.hasData && snapshot.data == false) {
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => QuestionnaireView()),
-                              );
-                            },
-                            child: Card(
-                              elevation: 12,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(24),
-                              ),
-                              shadowColor: Colors.black.withOpacity(0.4),
-                              child: Container(
-                                decoration: BoxDecoration(
+                    Center(
+                      child: FutureBuilder<bool>(
+                        future: _isSleepPlanAvailable(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const CircularProgressIndicator();
+                          }
+
+                          if (snapshot.hasData && snapshot.data == false) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => QuestionnaireView()),
+                                );
+                              },
+                              child: Card(
+                                elevation: 12,
+                                shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(24),
-                                  gradient: const LinearGradient(
-                                    colors: [
-                                      Color.fromARGB(255, 25, 27, 53),
-                                      Color.fromARGB(255, 28, 29, 53),
-                                      Color.fromARGB(255, 32, 52, 111),
-                                    ],
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                  ),
                                 ),
-                                width: double.infinity,
-                                height: 171,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 20, horizontal: 28),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            const Text(
-                                              "Questionnaire",
-                                              style: TextStyle(
-                                                fontSize: 22,
-                                                color: Colors.amber,
+                                shadowColor: Colors.black.withOpacity(0.4),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(24),
+                                    gradient: const LinearGradient(
+                                      colors: [
+                                        Color.fromARGB(255, 25, 27, 53),
+                                        Color.fromARGB(255, 28, 29, 53),
+                                        Color.fromARGB(255, 32, 52, 111),
+                                      ],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                    ),
+                                  ),
+                                  width: double.infinity,
+                                  height: 171,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 20, horizontal: 28),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              const Text(
+                                                "Questionnaire",
+                                                style: TextStyle(
+                                                  fontSize: 22,
+                                                  color: Colors.amber,
+                                                ),
                                               ),
-                                            ),
-                                            const SizedBox(height: 8),
-                                            const Text(
-                                              "Complete the questionnaire to unlock your Sleep Plan!",
-                                              style: TextStyle(
-                                                fontSize: 16,
-                                                color: Colors.white70,
+                                              const SizedBox(height: 8),
+                                              const Text(
+                                                "Complete the questionnaire to unlock your Sleep Plan!",
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.white70,
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      const SizedBox(width: 20),
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(80),
-                                        child: Image.asset(
-                                          'Assets/ProfPicKid.png',
-                                          width: 100,
-                                          height: 100,
-                                          fit: BoxFit.cover,
+                                        const SizedBox(width: 20),
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(80),
+                                          child: Image.asset(
+                                            'Assets/ProfPicKid.png',
+                                            width: 100,
+                                            height: 100,
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          );
-                        }
+                            );
+                          }
 
-                        return const SizedBox.shrink();
-                      },
+                          return const SizedBox.shrink();
+                        },
+                      ),
                     ),
                     _featureItem(
                       'Did You Know?',

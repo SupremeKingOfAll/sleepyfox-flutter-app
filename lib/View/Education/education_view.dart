@@ -111,7 +111,7 @@ class _EducationViewState extends State<EducationView> {
                     ),
                     OrangeButton(
                       text: 'Healthy Sleep Habits',
-                      onPressed: () => _scrollToSection(_cycleKey),
+                      onPressed: () => _scrollToSection(_habitsKey),
                     ),
                   ],
                 ),

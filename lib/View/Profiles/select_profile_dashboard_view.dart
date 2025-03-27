@@ -222,6 +222,7 @@ class _SelectProfileViewState extends State<SelectProfileView> {
                                               SnackBar(
                                                 content: Text(
                                                     "Name and Age are required"),
+                                                backgroundColor: Colors.red,
                                               ),
                                             );
                                             return;
@@ -233,7 +234,20 @@ class _SelectProfileViewState extends State<SelectProfileView> {
                                                 .showSnackBar(
                                               SnackBar(
                                                   content: Text(
-                                                      'Age has to be a number!')),
+                                                      'Age has to be a number!'),
+                                                backgroundColor: Colors.red,
+                                              ),
+                                            );
+                                            return;
+                                          }
+                                          if (age <= 0 || age > 13) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                  content: Text(
+                                                      'Age has to be between 1 and 13!'),
+                                                backgroundColor: Colors.red,
+                                              ),
                                             );
                                             return;
                                           }
@@ -244,7 +258,9 @@ class _SelectProfileViewState extends State<SelectProfileView> {
                                                 .showSnackBar(
                                               SnackBar(
                                                   content: Text(
-                                                      'User not logged in.')),
+                                                      'User not logged in.'),
+                                                backgroundColor: Colors.red,
+                                              ),
                                             );
                                             return;
                                           }
@@ -258,7 +274,9 @@ class _SelectProfileViewState extends State<SelectProfileView> {
                                               .showSnackBar(
                                             SnackBar(
                                                 content: Text(
-                                                    'Profile created successfully!')),
+                                                    'Profile created successfully!'),
+                                              backgroundColor: Colors.green,
+                                            ),
                                           );
                                         },
                                         child: Text('Create'))

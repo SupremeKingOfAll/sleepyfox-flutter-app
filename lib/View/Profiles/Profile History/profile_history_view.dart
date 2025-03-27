@@ -144,16 +144,16 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:
-            Color.fromARGB(255, 24, 30, 58), // Dark blue background
+        backgroundColor: Color.fromARGB(255, 24, 30, 58), // Dark blue background
         title: Text(
           "Sleep History",
           style: TextStyle(
-            color: const Color.fromARGB(
-                255, 249, 171, 37), // Amber color for title text
+            color: Color.fromARGB(255, 249, 171, 37), // Amber color for title text
           ),
         ),
-        iconTheme: const IconThemeData(color: Color.fromARGB(255, 216, 163, 6)),
+        iconTheme: const IconThemeData(
+          color: Color.fromARGB(255, 216, 163, 6), // Color for icons, including the PopupMenuButton icon
+        ),
         actions: [
           PopupMenuButton<String>(
             onSelected: (String filter) {
@@ -167,7 +167,10 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
                 print("No profile selected to fetch records.");
               }
             },
-            icon: const Icon(Icons.filter_alt),
+            icon: Icon(
+              Icons.filter_alt,
+              color: Color.fromARGB(255, 216, 163, 6), // Explicitly set the icon color
+            ),
             itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
               const PopupMenuItem<String>(
                 value: "All",
@@ -185,11 +188,17 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
           ),
           Padding(
             padding: const EdgeInsets.only(right: 16),
-            child: Center(child: Text(_selectedFilter)), // filter in use
+            child: Center(
+              child: Text(
+                _selectedFilter,
+                style: TextStyle(
+                  color: Color.fromARGB(255, 249, 171, 37), // Amber color for the filter text
+                ),
+              ), // filter in use
+            ),
           ),
         ],
-      ),
-      body: _isLoading
+      ),      body: _isLoading
           ? Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
