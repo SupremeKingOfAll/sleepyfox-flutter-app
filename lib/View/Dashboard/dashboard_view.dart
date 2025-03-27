@@ -52,7 +52,6 @@ class _DashboardViewState extends State<DashboardView> {
 
   @override
   void dispose() {
-    // dont dispose the player so it keeps playing when navigating
     super.dispose();
   }
 
@@ -86,7 +85,6 @@ class _DashboardViewState extends State<DashboardView> {
     }
   }
 
-//logout function
   void _logout(BuildContext context) async {
     try {
       await FirebaseAuth.instance.signOut();
@@ -122,12 +120,11 @@ class _DashboardViewState extends State<DashboardView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 24, 30, 58), // Dark background
+        backgroundColor: Color.fromARGB(255, 24, 30, 58),
         title: const Text(
           "Dashboard",
           style: TextStyle(
-            color:
-                Color.fromARGB(255, 252, 174, 41), // Amber color for title text
+            color: Color.fromARGB(255, 252, 174, 41),
           ),
         ),
         actions: [
@@ -136,20 +133,18 @@ class _DashboardViewState extends State<DashboardView> {
             child: Align(
               alignment: Alignment.centerLeft,
               child: GestureDetector(
-                onTap: () => _logout(context), // Call the logout function
+                onTap: () => _logout(context),
                 child: Row(
                   children: const [
                     Icon(
                       Icons.logout,
-                      color: Color.fromARGB(
-                          255, 252, 174, 41), // Amber color for icon
+                      color: Color.fromARGB(255, 252, 174, 41),
                     ),
-                    SizedBox(width: 5), // Space between icon and text
+                    SizedBox(width: 5),
                     Text(
                       "Logout",
                       style: TextStyle(
-                        color: Color.fromARGB(
-                            255, 252, 174, 41), // Amber color for text
+                        color: Color.fromARGB(255, 252, 174, 41),
                         fontSize: 12,
                       ),
                     ),
@@ -163,8 +158,7 @@ class _DashboardViewState extends State<DashboardView> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(
-                'assets/blue-phone-0njfrpcuzj98bp30.jpg'), // Background image
+            image: AssetImage('assets/blue-phone-0njfrpcuzj98bp30.jpg'),
             fit: BoxFit.cover,
           ),
         ),
@@ -181,11 +175,11 @@ class _DashboardViewState extends State<DashboardView> {
                 child: Row(
                   children: [
                     Image.asset(
-                      'assets/SleepyFoxLogo512.png', // Path to your image
-                      width: 40, // Adjust the size as needed
+                      'assets/SleepyFoxLogo512.png',
+                      width: 40,
                       height: 40,
                     ),
-                    SizedBox(width: 10), // Space between image and text
+                    SizedBox(width: 10),
                     UserNameDisplay(),
                   ],
                 ),
@@ -258,23 +252,21 @@ class _DashboardViewState extends State<DashboardView> {
                             return const CircularProgressIndicator(); // Show a loader while checking
                           }
 
-                        if (snapshot.hasData && snapshot.data == true) {
-                          // Show the Sleep Plan button if the sleep plan is available
-                          return _featureItem(
-                            'Sleep Plan',
-                            SleepPlan(),
-                            'assets/rabbitreadingfix.png',
-                            'View Your Sleep Plan',
-                          );
-                        }
-
+                          if (snapshot.hasData && snapshot.data == true) {
+                            // Show the Sleep Plan button if the sleep plan is available
+                            return _featureItem(
+                              'Sleep Plan',
+                              SleepPlan(),
+                              'assets/rabbitreadingfix.png',
+                              'View Your Sleep Plan',
+                            );
+                          }
 
                           // If the sleep plan is not available, return an empty container
                           return const SizedBox.shrink();
                         },
                       ),
                     ),
-
                     Center(
                       child: FutureBuilder<bool>(
                         future: _isSleepPlanAvailable(),
@@ -290,7 +282,8 @@ class _DashboardViewState extends State<DashboardView> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => QuestionnaireView()),
+                                      builder: (context) =>
+                                          QuestionnaireView()),
                                 );
                               },
                               child: Card(
@@ -346,15 +339,16 @@ class _DashboardViewState extends State<DashboardView> {
                                             ],
                                           ),
                                         ),
-                                      ),
-                                      const SizedBox(width: 20),
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(80),
-                                        child: Image.asset(
-                                          'assets/ProfPicKid.png',
-                                          width: 100,
-                                          height: 100,
-                                          fit: BoxFit.cover,
+                                        const SizedBox(width: 20),
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(80),
+                                          child: Image.asset(
+                                            'assets/ProfPicKid.png',
+                                            width: 100,
+                                            height: 100,
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
                                       ],
                                     ),
