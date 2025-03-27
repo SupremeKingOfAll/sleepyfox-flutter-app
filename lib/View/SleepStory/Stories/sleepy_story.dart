@@ -67,7 +67,7 @@ class _SleepyStoryState extends State<SleepyStory> {
           children: [
             SleepStoryCard(
               title: 'The Sleepless Fox',
-              imagePath: '',
+              imagePath: 'Assets/SleepyFoxStory1.png',
               content:
                   'In the heart of an ancient forest, there lived a charming but restless fox named Finn. While most creatures nestled into dreams as the moon climbed high, Finn’s mind was a swirl of thoughts.',
               contenttwo:
@@ -76,7 +76,7 @@ class _SleepyStoryState extends State<SleepyStory> {
             ),
             SleepStoryCard(
               title: 'Tricks for Sleep',
-              imagePath: '',
+              imagePath: 'Assets/FoxStory3.png',
               content:
                   'One particular night, bathed in a silver moonbeam, Finn burrowed into his softest moss bed. He hummed soothing tunes, hoping to coax sleep to his side.',
               contenttwo:
@@ -85,7 +85,7 @@ class _SleepyStoryState extends State<SleepyStory> {
             ),
             SleepStoryCard(
               title: 'Moonlit Whisper',
-              imagePath: '',
+              imagePath: 'Assets/OwlStory1.png',
               content:
                   'A wise old owl named Ophelia swooped down, her feathers gleaming like silver threads under the moonlight. "Finn," she cooed, "I’ve watched you toss and turn."',
               contenttwo:
@@ -94,7 +94,7 @@ class _SleepyStoryState extends State<SleepyStory> {
             ),
             SleepStoryCard(
               title: 'Dreamsong',
-              imagePath: '',
+              imagePath: 'Assets/ProfPicKid.png',
               content:
                   'As Finn hummed along, his heartbeat slowed, matching the rhythm of the forest\'s melody. A warmth spread through him, like moonlight wrapping him in a soft embrace.',
               contenttwo:

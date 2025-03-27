@@ -64,7 +64,7 @@ class _SleepyStoryState extends State<BearStory> {
           children: [
             SleepStoryCard(
               title: 'Bruno the Sleepy Bear',
-              imagePath: 'Assets/SleepyBear.png',
+              imagePath: 'Assets/BearStory2.png',
               content:
                   'Deep in the heart of a quiet forest, there lived a big, gentle bear named Bruno. Bruno loved two things more than anything else—naps and honey.',
               contenttwo:
@@ -73,7 +73,7 @@ class _SleepyStoryState extends State<BearStory> {
             ),
             SleepStoryCard(
               title: 'Searching for Comfort',
-              imagePath: 'Assets/ForestTrail.png',
+              imagePath: 'Assets/bearstory1.png',
               content:
                   'Bruno wandered through the forest, hoping to find something that would help him sleep. He stopped by the bubbling brook, listening to its soothing sounds.',
               contenttwo:
@@ -82,7 +82,7 @@ class _SleepyStoryState extends State<BearStory> {
             ),
             SleepStoryCard(
               title: 'Advice from the Bees',
-              imagePath: 'Assets/HoneyBees.png',
+              imagePath: 'Assets/BearStory3.png',
               content:
                   'At the hollow tree, a hive of friendly bees buzzed around. "Bruno, try a spoonful of honey before bed!" they suggested. "It always makes us feel sweet and sleepy."',
               contenttwo:
@@ -91,7 +91,7 @@ class _SleepyStoryState extends State<BearStory> {
             ),
             SleepStoryCard(
               title: 'A Bedtime Secret',
-              imagePath: 'Assets/WiseOwl.png',
+              imagePath: 'Assets/OwlStory1.png',
               content:
                   'The wise old owl hooted softly from her perch. "Bruno, your cave might be missing its special bedtime touch. Gather some leaves and pine needles to make it extra cozy."',
               contenttwo:
@@ -100,7 +100,7 @@ class _SleepyStoryState extends State<BearStory> {
             ),
             SleepStoryCard(
               title: 'The Best Sleep Ever',
-              imagePath: 'Assets/CozyCave.png',
+              imagePath: 'Assets/BearStoryWalking.png',
               content:
                   'Bruno arranged the leaves and pine needles into a fluffy nest. He snuggled in and let out a deep, happy sigh. The cave felt just right now.',
               contenttwo:

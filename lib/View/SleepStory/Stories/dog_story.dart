@@ -64,7 +64,7 @@ class _SleepyStoryState extends State<DogStory> {
           children: [
             SleepStoryCard(
               title: 'Barkley’s Big Day',
-              imagePath: 'Assets/BarkleyDog.png',
+              imagePath: 'Assets/Dog2.png',
               content:
                   'In a sunny little village, there lived a cheerful dog named Barkley. He had the fluffiest ears, the waggiest tail, and a heart full of curiosity.',
               contenttwo:
@@ -73,7 +73,7 @@ class _SleepyStoryState extends State<DogStory> {
             ),
             SleepStoryCard(
               title: 'The Mysterious Feather',
-              imagePath: 'Assets/Feather.png',
+              imagePath: 'Assets/Dog3.png',
               content:
                   'On the dewy grass of his yard lay a shimmering, colorful feather. Barkley sniffed it with wonder. "Who could this belong to?" he thought.',
               contenttwo:
@@ -82,7 +82,7 @@ class _SleepyStoryState extends State<DogStory> {
             ),
             SleepStoryCard(
               title: 'Forest Friends',
-              imagePath: 'Assets/ForestFriends.png',
+              imagePath: 'Assets/Sq2.png',
               content:
                   'In the forest, Barkley met a chattering squirrel, a wise old turtle, and a shy bunny. He showed them the feather, and each of them had a guess.',
               contenttwo:
@@ -91,7 +91,7 @@ class _SleepyStoryState extends State<DogStory> {
             ),
             SleepStoryCard(
               title: 'The Feather’s Home',
-              imagePath: 'Assets/Peacock.png',
+              imagePath: 'Assets/Peacock1.png',
               content:
                   'At the pond, they found a magnificent peacock fanning his tail feathers. "Oh, thank you for finding my lost feather!" the peacock said, bowing graciously.',
               contenttwo:

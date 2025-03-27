@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
 import 'package:elaros_gp4/View/Settings/settings_view.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_guide_style.dart';
+import 'package:elaros_gp4/Widgets/Buttons/delete_button.dart';
 import 'package:elaros_gp4/Widgets/PopUp/profile_sharecode_popup.dart';
 import 'package:elaros_gp4/Widgets/Text%20Styles/zaks_personal_text_style.dart';
 import 'package:elaros_gp4/Widgets/custom_bottom_nav_bar.dart';
@@ -230,7 +231,7 @@ class _ManageProfileViewState extends State<ManageProfileView> {
   //Not Functional delete profile
   void _handleDeleteProfile() async {
     if (_profiles.isNotEmpty) {
-      await _deleteProfile(_profiles[0]['name']);
+      await _deleteProfile(_profiles[0]['sharecode']);
     }
   }
 
@@ -343,56 +344,96 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                         ),
                       ),
                     ),
+                  ),
+            
+                  // Decorative Bar
+                  SizedBox(
+                    height: 20,
+                  ),
+            
+                  // PROFILE SLEEP ANALYSIS
+            
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        //pie chart card
+                        FutureBuilder<Map<String, int>>(
+                          future: _sleepDataFuture,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return CircularProgressIndicator();
+                            } else if (snapshot.hasError) {
+                              return Text('Error loading sleep data');
+                            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                              return Text('No sleep data available');
+                            }
+            
+                            final sleepData = snapshot.data!;
 
-                    // Decorative Bar
-                    SizedBox(
-                      height: 20,
-                    ),
+                                // awakening reasons
+                            final awakeningCategories = ['Random', 'Nightmare', 'Bathroom', 'Energised'];
 
-                    // PROFILE SLEEP ANALYSIS
-
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          //pie chart card
-                          FutureBuilder<Map<String, int>>(
-                            future: _sleepDataFuture,
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return CircularProgressIndicator();
-                              } else if (snapshot.hasError) {
-                                return Text('Error loading sleep data');
-                              } else if (!snapshot.hasData ||
-                                  snapshot.data!.isEmpty) {
-                                return Text('No sleep data available');
-                              }
-
-                              final sleepData = snapshot.data!;
-
-                              return Card(
-                                color: const Color.fromARGB(103, 12, 30, 53),
-                                elevation: 5,
-                                margin: EdgeInsets.all(5),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                child: Container(
-                                  width: 300,
-                                  padding: EdgeInsets.all(15),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Awakenings\nthis week',
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.amber[300]),
-                                        textAlign: TextAlign.center,
+                            // check if all == 0
+                            final hasAwakenings = sleepData.entries
+                                .where((entry) => awakeningCategories.contains(entry.key))
+                                .any((entry) => entry.value > 0);
+            
+                            return Card( 
+                              color: const Color.fromARGB(103, 12, 30, 53),
+                              elevation: 5,
+                              margin: EdgeInsets.all(5),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Container(
+                                width: 300,
+                                padding: EdgeInsets.all(15),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Awakenings\nthis week',
+                                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.amber[300]),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    SizedBox(height: 10),
+                                    SizedBox(
+                                      height: 200,
+                                      child: SfCircularChart(
+                                        annotations: <CircularChartAnnotation>[
+                                          CircularChartAnnotation(
+                                            widget: Text(
+                                              '',
+                                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          )
+                                        ],
+                                        series: <DoughnutSeries<Map<String, dynamic>, String>>[
+                                          DoughnutSeries<Map<String, dynamic>, String>(
+                                            dataSource: hasAwakenings ? sleepData.entries
+                                            .where((entry) => awakeningCategories.contains(entry.key) && entry.value > 0)
+                                            .map((entry) => {
+                                                  'label': entry.key,
+                                                  'value': entry.value,
+                                                  'color': _getCategoryColor(entry.key),
+                                                })
+                                            .toList()
+                                        : [
+                                            {'label': 'No Awakenings', 'value': 1, 'color': Colors.grey},
+                                          ],
+                                            xValueMapper: (data, _) => data['label'],
+                                            yValueMapper: (data, _) => data['value'],
+                                            pointColorMapper: (data, _) => data['color'],
+                                            dataLabelSettings: DataLabelSettings(
+                                              isVisible: true,
+                                              labelPosition: ChartDataLabelPosition.inside,
+                                            ),
+                                            animationDuration: 1500,
+                                          ),
+                                        ],
                                       ),
                                       SizedBox(height: 10),
                                       SizedBox(
@@ -610,6 +651,43 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                               ),
                             ),
                           ),
+                        ),
+                      ],
+                    ),
+                  ),
+            
+            
+            
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 100,
+                          ),
+                          GuideButton(
+                            //Share Profile Button
+                            text: 'Share Profile',
+                            onPressed: () {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return ProfilePopUp(
+                                        content: profile['sharecode'],
+                                        title:
+                                            'Share Code'); //PopUp Dialog can be found in widgets/PopUp
+                                  });
+                            },
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+
+                          SizedBox(
+                            height: 20,
+                          )
                         ],
                       ),
                     ),
