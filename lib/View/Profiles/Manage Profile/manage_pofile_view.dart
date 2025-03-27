@@ -220,7 +220,7 @@ class _ManageProfileViewState extends State<ManageProfileView> {
   //Not Functional delete profile
   void _handleDeleteProfile() async {
     if (_profiles.isNotEmpty) {
-      await _deleteProfile(_profiles[0]['name']);
+      await _deleteProfile(_profiles[0]['sharecode']);
     }
   }
 
@@ -591,10 +591,7 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                           SizedBox(
                             height: 10,
                           ),
-                          GuideButton(
-                            text: 'Delete Profile',
-                            onPressed: _handleDeleteProfile,
-                          ),
+                          
                           SizedBox(
                             height: 20,
                           )

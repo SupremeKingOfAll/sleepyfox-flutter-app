@@ -39,7 +39,7 @@ class _SettingsViewState extends State<SettingsView> {
     });
     
       if (value) {
-      // Turn music ON
+      // music turns on
       if (!isMusicPlaying) {
         await dashboardAudioPlayer.setReleaseMode(ReleaseMode.loop);
         await dashboardAudioPlayer.play(
@@ -49,7 +49,7 @@ class _SettingsViewState extends State<SettingsView> {
         isMusicPlaying = true;
       }
     } else {
-      // Turn music OFF
+      // music turns off
       await dashboardAudioPlayer.stop();
       isMusicPlaying = false;
     }
