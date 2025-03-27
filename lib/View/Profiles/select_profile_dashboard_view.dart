@@ -101,7 +101,7 @@ class _SelectProfileViewState extends State<SelectProfileView> {
         decoration: const BoxDecoration(
           image: DecorationImage(
             image:
-                AssetImage('Assets/900w-xy8Cv39_lA0.png'), // Background image
+                AssetImage('assets/900w-xy8Cv39_lA0.png'), // Background image
             fit: BoxFit.cover,
           ),
         ),
@@ -126,7 +126,7 @@ class _SelectProfileViewState extends State<SelectProfileView> {
                             return _profileCard(
                               index,
                               profile['name'],
-                              'Assets/FemaleFoxPic.png',
+                              'assets/FemaleFoxPic.png',
                               () {
                                 if (_profiles.length > index) {
                                   Navigator.pushNamed(

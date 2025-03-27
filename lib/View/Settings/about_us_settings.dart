@@ -74,7 +74,7 @@ class _AboutUs extends State<AboutUs> {
               children: [
                 const SizedBox(height: 10),
                 Image.asset(
-                  'Assets/SleepyFoxLogo512.png',
+                  'assets/SleepyFoxLogo512.png',
                   width: 120,
                   height: 120,
                 ),

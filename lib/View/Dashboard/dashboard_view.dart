@@ -164,7 +164,7 @@ class _DashboardViewState extends State<DashboardView> {
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage(
-                'Assets/blue-phone-0njfrpcuzj98bp30.jpg'), // Background image
+                'assets/blue-phone-0njfrpcuzj98bp30.jpg'), // Background image
             fit: BoxFit.cover,
           ),
         ),
@@ -181,7 +181,7 @@ class _DashboardViewState extends State<DashboardView> {
                 child: Row(
                   children: [
                     Image.asset(
-                      'Assets/SleepyFoxLogo512.png', // Path to your image
+                      'assets/SleepyFoxLogo512.png', // Path to your image
                       width: 40, // Adjust the size as needed
                       height: 40,
                     ),
@@ -206,7 +206,7 @@ class _DashboardViewState extends State<DashboardView> {
                           },
                           title: 'Sleep Hygiene',
                           subtitle: 'Sleeping Techniques',
-                          imagePath: 'Assets/GirlSleep.jpeg',
+                          imagePath: 'assets/GirlSleep.jpeg',
                         ),
                       ),
                       Padding(
@@ -217,7 +217,7 @@ class _DashboardViewState extends State<DashboardView> {
                           },
                           title: 'Sleep Cycle',
                           subtitle: 'Deep & REM Sleep',
-                          imagePath: 'Assets/FoxMascProfPic.png',
+                          imagePath: 'assets/FoxMascProfPic.png',
                         ),
                       ),
                       Padding(
@@ -228,7 +228,7 @@ class _DashboardViewState extends State<DashboardView> {
                           },
                           title: 'Bedtime Stories',
                           subtitle: 'Click to Read',
-                          imagePath: 'Assets/ProfPicKid.png',
+                          imagePath: 'assets/ProfPicKid.png',
                         ),
                       ),
                     ],
@@ -246,7 +246,7 @@ class _DashboardViewState extends State<DashboardView> {
                     _featureItem(
                       'Profiles',
                       SelectProfileView(),
-                      'Assets/profileboy.png',
+                      'assets/profileboy.png',
                       'Manage Your Child\'s Profile',
                     ),
                     FutureBuilder<bool>(
@@ -262,7 +262,7 @@ class _DashboardViewState extends State<DashboardView> {
                           return _featureItem(
                             'Sleep Plan',
                             SleepPlan(),
-                            'Assets/rabbitreadingfix.png',
+                            'assets/rabbitreadingfix.png',
                             'View Your Sleep Plan',
                           );
                         }
@@ -345,7 +345,7 @@ class _DashboardViewState extends State<DashboardView> {
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(80),
                                         child: Image.asset(
-                                          'Assets/ProfPicKid.png',
+                                          'assets/ProfPicKid.png',
                                           width: 100,
                                           height: 100,
                                           fit: BoxFit.cover,
@@ -365,7 +365,7 @@ class _DashboardViewState extends State<DashboardView> {
                     _featureItem(
                       'Did You Know?',
                       EducationView(),
-                      'Assets/rabbitreadingfix.png',
+                      'assets/rabbitreadingfix.png',
                       factDashboard,
                     ),
                   ],

@@ -70,7 +70,7 @@ class ResetPasswordState extends State<ResetPassword> {
                 children: [
                   const SizedBox(height: 100),
                   Image.asset(
-                    'Assets/SleepyFoxLogo512.png',
+                    'assets/SleepyFoxLogo512.png',
                     width: 150,
                     height: 150,
                   ),
@@ -109,7 +109,8 @@ class ResetPasswordState extends State<ResetPassword> {
                   ),
                   const SizedBox(height: 35),
                   GestureDetector(
-                    onTap: () => Navigator.pushReplacementNamed(context, '/Login'),
+                    onTap: () =>
+                        Navigator.pushReplacementNamed(context, '/Login'),
                     child: const Text(
                       'Back to Login',
                       style: TextStyle(

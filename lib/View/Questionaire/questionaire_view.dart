@@ -187,45 +187,53 @@ class QuestionnaireViewState extends State<QuestionnaireView> {
               Text(
                 question.questionTitle,
                 style: const TextStyle(
-                  fontSize: 17,
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: Colors.amber,
                 ),
               ),
-              const SizedBox(height: 5),
+              const SizedBox(height: 5), // Spacing below the title
               ...List.generate(question.questionText.length, (qIndex) {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       question.questionText[qIndex],
-                      style: const TextStyle(fontSize: 10, color: Colors.amber),
+                      style: const TextStyle(fontSize: 19, color: Colors.amber),
                     ),
-                    const SizedBox(height: 5),
                     ...question.answers[qIndex].map((answer) {
-                      return RadioListTile<String>(
-                        title: Text(
-                          answer,
-                          style: const TextStyle(
-                              fontSize: 10, color: Colors.amber),
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 1.0), // Reduced vertical padding
+                        child: RadioListTile<String>(
+                          title: Text(
+                            answer,
+                            style: const TextStyle(
+                                fontSize: 19, color: Colors.amber),
+                          ),
+                          value: answer,
+                          groupValue: _answers[index]?[qIndex],
+                          onChanged: (value) {
+                            setState(() {
+                              _answers[index] ??= {};
+                              _answers[index]![qIndex] = value!;
+                            });
+                          },
+                          contentPadding:
+                              EdgeInsets.zero, // Remove internal padding
+                          dense: true, // Make the tile more compact
                         ),
-                        value: answer,
-                        groupValue: _answers[index]?[qIndex],
-                        onChanged: (value) {
-                          setState(() {
-                            _answers[index] ??= {};
-                            _answers[index]![qIndex] = value!;
-                          });
-                        },
-                        contentPadding: EdgeInsets.zero,
-                        dense: true,
                       );
                     }).toList(),
                     if (qIndex < question.questionText.length - 1)
                       const Divider(
-                          color: Colors.grey, indent: 25, endIndent: 25),
+                        color: Colors.grey,
+                        indent: 25,
+                        endIndent: 25,
+                      ),
                     if (qIndex < question.questionText.length - 1)
-                      const SizedBox(height: 5),
+                      const SizedBox(
+                          height: 1), // Reduced spacing below the divider
                   ],
                 );
               }),
@@ -270,7 +278,7 @@ class QuestionnaireViewState extends State<QuestionnaireView> {
           elevation: 4,
           title: Row(
             children: [
-              Image.asset('Assets/SleepyFoxLogo512.png', width: 45, height: 45),
+              Image.asset('assets/SleepyFoxLogo512.png', width: 45, height: 45),
               const SizedBox(width: 10),
               const Text('Questionnaire'),
             ],
@@ -287,7 +295,7 @@ class QuestionnaireViewState extends State<QuestionnaireView> {
           elevation: 4,
           title: Row(
             children: [
-              Image.asset('Assets/SleepyFoxLogo512.png', width: 45, height: 45),
+              Image.asset('assets/SleepyFoxLogo512.png', width: 45, height: 45),
               const SizedBox(width: 10),
               const Text('Questionnaire'),
             ],
