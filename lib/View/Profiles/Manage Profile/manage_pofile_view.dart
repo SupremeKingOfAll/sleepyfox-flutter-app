@@ -221,7 +221,7 @@ class _ManageProfileViewState extends State<ManageProfileView> {
   //Not Functional delete profile
   void _handleDeleteProfile() async {
     if (_profiles.isNotEmpty) {
-      await _deleteProfile(_profiles[0]['name']);
+      await _deleteProfile(_profiles[0]['sharecode']);
     }
   }
 

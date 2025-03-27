@@ -113,10 +113,34 @@ class _SleepTrackingState extends State<SleepTracking> {
     }
   }
 
+  void _showSnackbar(String message, {bool isSuccess = false}) { // snackbar activates for insufficient information
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: isSuccess ? Colors.green : Colors.red,
+        duration: const Duration(seconds: 3),
+      ),
+    );
+  }
   Future<void> _saveSleepRecord() async {
     try {
       final User? user = FirebaseAuth.instance.currentUser;
       if (user == null) throw Exception("User not logged in");
+
+
+      // if statements to ensure bedtime,wake up time and quality is entered before saving
+      if (_bedtimeController.text.trim().isEmpty) {
+            _showSnackbar("Please enter your bedtime.");
+            return;
+          }
+      if (_wakeUpController.text.trim().isEmpty) {
+        _showSnackbar("Please enter your wake-up time.");
+        return;
+      }
+      if (_selectedSleepQuality == null) {
+        _showSnackbar("Please select your sleep quality.");
+        return;
+      }
 
       // Debugging: Print the naps list before filtering
       print("Before filtering: $naps");
@@ -149,10 +173,16 @@ class _SleepTrackingState extends State<SleepTracking> {
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Sleep record saved successfully')));
+          const SnackBar(
+            content: Text('Sleep record saved successfully'),
+            backgroundColor: Colors.green,    
+          ));
     } catch (e) {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Failed to save: $e')));
+          .showSnackBar(SnackBar(
+            content: Text('Failed to save: $e'),
+            backgroundColor: Colors.red,
+            ));
     }
   }
 
