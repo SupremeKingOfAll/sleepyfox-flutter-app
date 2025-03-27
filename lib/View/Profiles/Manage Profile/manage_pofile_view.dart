@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
 import 'package:elaros_gp4/View/Settings/settings_view.dart';
 import 'package:elaros_gp4/Widgets/Buttons/button_guide_style.dart';
-import 'package:elaros_gp4/Widgets/Buttons/delete_button.dart';
 import 'package:elaros_gp4/Widgets/PopUp/profile_sharecode_popup.dart';
 import 'package:elaros_gp4/Widgets/Text%20Styles/zaks_personal_text_style.dart';
 import 'package:elaros_gp4/Widgets/custom_bottom_nav_bar.dart';
@@ -66,7 +65,7 @@ class _ManageProfileViewState extends State<ManageProfileView> {
   Future<void> _fetchProfiles() async {
     try {
       List<Map<String, dynamic>> profiles =
-          await _profileServices.fetchChildProfilesForCurrentUser();
+      await _profileServices.fetchChildProfilesForCurrentUser();
       setState(() {
         _profiles = profiles;
         _isLoading = false;
@@ -79,8 +78,7 @@ class _ManageProfileViewState extends State<ManageProfileView> {
     }
   }
 
-  Future<List<Map<String, dynamic>>> fetchTrackingForProfile(
-      String shareCode) async {
+  Future<List<Map<String, dynamic>>> fetchTrackingForProfile(String shareCode) async {
     try {
       final now = DateTime.now();
       final firstDayOfMonth = DateTime(now.year, now.month, 1);
@@ -95,10 +93,9 @@ class _ManageProfileViewState extends State<ManageProfileView> {
       // Filter the documents locally by the timestamp range
       List<Map<String, dynamic>> filteredData = snapshot.docs
           .where((doc) {
-            final timestamp = (doc['timestamp'] as Timestamp).toDate();
-            return timestamp.isAfter(firstDayOfMonth) &&
-                timestamp.isBefore(lastDayOfMonth);
-          })
+        final timestamp = (doc['timestamp'] as Timestamp).toDate();
+        return timestamp.isAfter(firstDayOfMonth) && timestamp.isBefore(lastDayOfMonth);
+      })
           .map((doc) => doc.data() as Map<String, dynamic>)
           .toList();
 
@@ -112,8 +109,7 @@ class _ManageProfileViewState extends State<ManageProfileView> {
 
   Future<Map<String, int>> fetchWeeklySleepData(String shareCode) async {
     try {
-      List<Map<String, dynamic>> allData =
-          await fetchTrackingForProfile(shareCode);
+      List<Map<String, dynamic>> allData = await fetchTrackingForProfile(shareCode);
 
       final now = DateTime.now();
       final oneWeekAgo = now.subtract(Duration(days: 7));
@@ -152,8 +148,7 @@ class _ManageProfileViewState extends State<ManageProfileView> {
   Future<List<Color>> getCalendarColors(String shareCode) async {
     try {
       final trackingData = await fetchTrackingForProfile(shareCode);
-      final List<Color> calendarColors = List.generate(
-          28, (index) => Colors.grey); // default color (grey for no data)
+      final List<Color> calendarColors = List.generate(28, (index) => Colors.grey); // default color (grey for no data)
 
       // dateFormat to parse
       final dateFormat = DateFormat("dd/MM/yyyy HH:mm");
@@ -161,28 +156,24 @@ class _ManageProfileViewState extends State<ManageProfileView> {
       // goes over every day to colour it
       for (var doc in trackingData) {
         final timestamp = doc['timestamp']; // firebase Timestamp
-        final timestampDate =
-            timestamp.toDate(); // convert to DateTime for flutter to read
+        final timestampDate = timestamp.toDate(); // convert to DateTime for flutter to read
 
         final day = timestampDate.day - 1; // zero-based index (0-27)
 
         // get bedtime and wakeup time from entries
-        final bedtime = dateFormat
-            .parse(doc['bedtime']); // parse string to DateTime using DateFormat
-        final wakeUp = dateFormat
-            .parse(doc['wakeUp']); // parse string to DateTime using DateFormat
+        final bedtime = dateFormat.parse(doc['bedtime']); // parse string to DateTime using DateFormat
+        final wakeUp = dateFormat.parse(doc['wakeUp']); // parse string to DateTime using DateFormat
 
         // Calculate the duration between bedtime and wakeUp
         final sleepDuration = wakeUp.difference(bedtime).inHours;
 
         // handle case where wakeUp is on the next day
         if (wakeUp.isBefore(bedtime)) {
-          wakeUp.add(
-              Duration(days: 1)); // add a day to wakeUp if it's on the next day
+          wakeUp.add(Duration(days: 1)); // add a day to wakeUp if it's on the next day
         }
 
-        Color sleepColor =
-            Colors.grey; // default color for the sleep duration, grey it out
+
+        Color sleepColor = Colors.grey; // default color for the sleep duration, grey it out
         if (sleepDuration >= 8) {
           sleepColor = Colors.green; // 8+ hours: Excellent
         } else if (sleepDuration >= 6) {
@@ -202,9 +193,7 @@ class _ManageProfileViewState extends State<ManageProfileView> {
           calendarColors[bedtimeDayIndex] = sleepColor;
         }
 
-        if (wakeUpDayIndex >= 0 &&
-            wakeUpDayIndex < 28 &&
-            wakeUpDayIndex != bedtimeDayIndex) {
+        if (wakeUpDayIndex >= 0 && wakeUpDayIndex < 28 && wakeUpDayIndex != bedtimeDayIndex) {
           // no overwriting if person sleeps and wakes up same day
           calendarColors[wakeUpDayIndex] = sleepColor;
         }
@@ -213,10 +202,10 @@ class _ManageProfileViewState extends State<ManageProfileView> {
       return calendarColors;
     } catch (e) {
       print("Error fetching tracking data: $e");
-      return List.generate(28,
-          (index) => Colors.grey); // grey calender if entries cant be received
+      return List.generate(28, (index) => Colors.grey); // grey calender if entries cant be received
     }
   }
+
 
   //prof delete
   Future<void> _deleteProfile(String profileId) async {
@@ -269,21 +258,35 @@ class _ManageProfileViewState extends State<ManageProfileView> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:
-            Color.fromARGB(255, 24, 30, 58), // Dark blue background
-        title: Text(
-          "Manage Profile",
+        iconTheme: IconThemeData(
+          color: Colors.amber.shade500,
+        ),
+        backgroundColor: Color.fromARGB(255, 0, 0, 0),
+        title: Text("Profile",
           style: TextStyle(
             color: const Color.fromARGB(
-                255, 252, 174, 41), // Amber color for title text
+                255, 252, 174, 41), // Light amber for the subtitle text
           ),
         ),
-        iconTheme: const IconThemeData(color: Color.fromARGB(255, 216, 163, 6)),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 16),
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Text("Sleepy fox",                style: TextStyle(
+                color: const Color.fromARGB(
+                    255, 252, 174, 41), // Light amber for the subtitle text
+              ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('Assets/wp11179213.png'), // Background image
+            image:
+            AssetImage('Assets/wp11179213.png'), // Background image
             fit: BoxFit.cover,
           ),
         ),
@@ -315,125 +318,87 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                                 _isLoading
                                     ? CircularProgressIndicator()
                                     : Padding(
-                                        padding: const EdgeInsets.all(20.0),
-                                        child: Column(
-                                          children: [
-                                            Text(
-                                              profile["name"],
-                                              style: TextStyle(
-                                                fontSize: 42,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.amber[300],
-                                              ),
-                                            ),
-                                            Container(height: 0),
-                                            Text(
-                                              "Age: ${profile['age'].toString()}",
-                                              style: TextStyle(
-                                                fontSize: 42,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.amber[300],
-                                              ),
-                                            ),
-                                          ],
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        profile["name"],
+                                        style: TextStyle(
+                                          fontSize: 42,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.amber[300],
                                         ),
                                       ),
+                                      Container(height: 0),
+                                      Text(
+                                        "Age: ${profile['age'].toString()}",
+                                        style: TextStyle(
+                                          fontSize: 42,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.amber[300],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ],
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-            
-                  // Decorative Bar
-                  SizedBox(
-                    height: 20,
-                  ),
-            
-                  // PROFILE SLEEP ANALYSIS
-            
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        //pie chart card
-                        FutureBuilder<Map<String, int>>(
-                          future: _sleepDataFuture,
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
-                              return CircularProgressIndicator();
-                            } else if (snapshot.hasError) {
-                              return Text('Error loading sleep data');
-                            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                              return Text('No sleep data available');
-                            }
-            
-                            final sleepData = snapshot.data!;
 
-                                // awakening reasons
-                            final awakeningCategories = ['Random', 'Nightmare', 'Bathroom', 'Energised'];
+                    // Decorative Bar
+                    SizedBox(
+                      height: 20,
+                    ),
 
-                            // check if all == 0
-                            final hasAwakenings = sleepData.entries
-                                .where((entry) => awakeningCategories.contains(entry.key))
-                                .any((entry) => entry.value > 0);
-            
-                            return Card( 
-                              color: const Color.fromARGB(103, 12, 30, 53),
-                              elevation: 5,
-                              margin: EdgeInsets.all(5),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: Container(
-                                width: 300,
-                                padding: EdgeInsets.all(15),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Awakenings\nthis week',
-                                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.amber[300]),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                    SizedBox(height: 10),
-                                    SizedBox(
-                                      height: 200,
-                                      child: SfCircularChart(
-                                        annotations: <CircularChartAnnotation>[
-                                          CircularChartAnnotation(
-                                            widget: Text(
-                                              '',
-                                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          )
-                                        ],
-                                        series: <DoughnutSeries<Map<String, dynamic>, String>>[
-                                          DoughnutSeries<Map<String, dynamic>, String>(
-                                            dataSource: hasAwakenings ? sleepData.entries
-                                            .where((entry) => awakeningCategories.contains(entry.key) && entry.value > 0)
-                                            .map((entry) => {
-                                                  'label': entry.key,
-                                                  'value': entry.value,
-                                                  'color': _getCategoryColor(entry.key),
-                                                })
-                                            .toList()
-                                        : [
-                                            {'label': 'No Awakenings', 'value': 1, 'color': Colors.grey},
-                                          ],
-                                            xValueMapper: (data, _) => data['label'],
-                                            yValueMapper: (data, _) => data['value'],
-                                            pointColorMapper: (data, _) => data['color'],
-                                            dataLabelSettings: DataLabelSettings(
-                                              isVisible: true,
-                                              labelPosition: ChartDataLabelPosition.inside,
-                                            ),
-                                            animationDuration: 1500,
-                                          ),
-                                        ],
+                    // PROFILE SLEEP ANALYSIS
+
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          //pie chart card
+                          FutureBuilder<Map<String, int>>(
+                            future: _sleepDataFuture,
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return CircularProgressIndicator();
+                              } else if (snapshot.hasError) {
+                                return Text('Error loading sleep data');
+                              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                                return Text('No sleep data available');
+                              }
+
+                              final sleepData = snapshot.data!;
+
+                              // awakening reasons
+                              final awakeningCategories = ['Random', 'Nightmare', 'Bathroom', 'Energised'];
+
+                              // check if all == 0
+                              final hasAwakenings = sleepData.entries
+                                  .where((entry) => awakeningCategories.contains(entry.key))
+                                  .any((entry) => entry.value > 0);
+
+                              return Card(
+                                color: const Color.fromARGB(103, 12, 30, 53),
+                                elevation: 5,
+                                margin: EdgeInsets.all(5),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Container(
+                                  width: 300,
+                                  padding: EdgeInsets.all(15),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Awakenings\nthis week',
+                                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.amber[300]),
+                                        textAlign: TextAlign.center,
                                       ),
                                       SizedBox(height: 10),
                                       SizedBox(
@@ -443,47 +408,30 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                                             CircularChartAnnotation(
                                               widget: Text(
                                                 '',
-                                                style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                                                 textAlign: TextAlign.center,
                                               ),
                                             )
                                           ],
-                                          series: <DoughnutSeries<
-                                              Map<String, dynamic>, String>>[
-                                            DoughnutSeries<Map<String, dynamic>,
-                                                String>(
-                                              dataSource: sleepData.entries
-                                                  .where((entry) =>
-                                                      [
-                                                        'Random',
-                                                        'Nightmare',
-                                                        'Bathroom',
-                                                        'Energised'
-                                                      ].contains(entry.key) &&
-                                                      entry.value > 0)
+                                          series: <DoughnutSeries<Map<String, dynamic>, String>>[
+                                            DoughnutSeries<Map<String, dynamic>, String>(
+                                              dataSource: hasAwakenings ? sleepData.entries
+                                                  .where((entry) => awakeningCategories.contains(entry.key) && entry.value > 0)
                                                   .map((entry) => {
-                                                        'label': entry.key,
-                                                        'value': entry.value,
-                                                        'color':
-                                                            _getCategoryColor(
-                                                                entry.key),
-                                                      })
-                                                  .toList(),
-                                              xValueMapper: (data, _) =>
-                                                  data['label'],
-                                              yValueMapper: (data, _) =>
-                                                  data['value'],
-                                              pointColorMapper: (data, _) =>
-                                                  data['color'],
-                                              dataLabelSettings:
-                                                  DataLabelSettings(
+                                                'label': entry.key,
+                                                'value': entry.value,
+                                                'color': _getCategoryColor(entry.key),
+                                              })
+                                                  .toList()
+                                                  : [
+                                                {'label': 'No Awakenings', 'value': 1, 'color': Colors.grey},
+                                              ],
+                                              xValueMapper: (data, _) => data['label'],
+                                              yValueMapper: (data, _) => data['value'],
+                                              pointColorMapper: (data, _) => data['color'],
+                                              dataLabelSettings: DataLabelSettings(
                                                 isVisible: true,
-                                                labelPosition:
-                                                    ChartDataLabelPosition
-                                                        .inside,
+                                                labelPosition: ChartDataLabelPosition.inside,
                                               ),
                                               animationDuration: 1500,
                                             ),
@@ -496,15 +444,13 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                                           Row(
                                             children: [
                                               _buildLegendRow('Random', '🔵'),
-                                              _buildLegendRow(
-                                                  '  Nightmare', '🔴'),
+                                              _buildLegendRow('  Nightmare', '🔴'),
                                             ],
                                           ),
                                           Row(
                                             children: [
                                               _buildLegendRow('Bathroom', '🟠'),
-                                              _buildLegendRow(
-                                                  '  Energised', '🟢'),
+                                              _buildLegendRow('  Energised', '🟢'),
                                             ],
                                           ),
                                         ],
@@ -533,43 +479,31 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                                 children: [
                                   Text(
                                     'Sleep Calender',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.amber[300]),
+                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.amber[300]),
                                   ),
                                   SizedBox(height: 50),
                                   FutureBuilder<List<Color>>(
-                                    future: getCalendarColors(profile[
-                                        "sharecode"]), // Call the function here
+                                    future: getCalendarColors(profile["sharecode"]), // Call the function here
                                     builder: (context, snapshot) {
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.waiting) {
+                                      if (snapshot.connectionState == ConnectionState.waiting) {
                                         return CircularProgressIndicator(); // show loading spinner while data is being fetched
                                       }
 
                                       if (snapshot.hasError) {
-                                        return Center(
-                                            child: Text('Error fetching data'));
+                                        return Center(child: Text('Error fetching data'));
                                       }
 
-                                      if (!snapshot.hasData ||
-                                          snapshot.data!.isEmpty) {
-                                        return Center(
-                                            child: Text(
-                                                'No data available for this month'));
+                                      if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                                        return Center(child: Text('No data available for this month'));
                                       }
 
-                                      List<Color> calendarColors =
-                                          snapshot.data!;
+                                      List<Color> calendarColors = snapshot.data!;
 
                                       return SizedBox(
                                         height: 200,
                                         child: GridView.builder(
-                                          physics:
-                                              NeverScrollableScrollPhysics(),
-                                          gridDelegate:
-                                              SliverGridDelegateWithFixedCrossAxisCount(
+                                          physics: NeverScrollableScrollPhysics(),
+                                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                                             crossAxisCount: 7,
                                             mainAxisSpacing: 4,
                                             crossAxisSpacing: 4,
@@ -578,16 +512,13 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                                           itemBuilder: (context, index) {
                                             return Container(
                                               decoration: BoxDecoration(
-                                                color: calendarColors[
-                                                    index], // Use color from the data
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
+                                                color: calendarColors[index], // Use color from the data
+                                                borderRadius: BorderRadius.circular(8),
                                               ),
                                               child: Center(
                                                 child: Text(
                                                   '${index + 1}',
-                                                  style: TextStyle(
-                                                      color: Colors.white),
+                                                  style: TextStyle(color: Colors.white),
                                                 ),
                                               ),
                                             );
@@ -599,49 +530,34 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                                   SizedBox(height: 10),
                                   Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             'Excellent: 🟢',
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.amber[300]),
+                                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.amber[300]),
                                           ),
                                           SizedBox(width: 20),
                                           Text(
                                             'Could be better: 🟠',
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.amber[300]),
+                                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.amber[300]),
                                           ),
                                         ],
                                       ),
                                       SizedBox(height: 16),
                                       Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(
                                             'Bad: 🟡',
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.amber[300]),
+                                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.amber[300]),
                                           ),
                                           SizedBox(width: 20),
                                           Text(
                                             'Really Bad: 🔴',
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.amber[300]),
+                                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.amber[300]),
                                           ),
                                         ],
                                       ),
@@ -651,46 +567,11 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-            
-            
-            
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            height: 100,
-                          ),
-                          GuideButton(
-                            //Share Profile Button
-                            text: 'Share Profile',
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return ProfilePopUp(
-                                        content: profile['sharecode'],
-                                        title:
-                                            'Share Code'); //PopUp Dialog can be found in widgets/PopUp
-                                  });
-                            },
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-
-                          SizedBox(
-                            height: 20,
-                          )
                         ],
                       ),
                     ),
+
+
 
                     Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -711,17 +592,14 @@ class _ManageProfileViewState extends State<ManageProfileView> {
                                       return ProfilePopUp(
                                           content: profile['sharecode'],
                                           title:
-                                              'Share Code'); //PopUp Dialog can be found in widgets/PopUp
+                                          'Share Code'); //PopUp Dialog can be found in widgets/PopUp
                                     });
                               },
                             ),
                             SizedBox(
                               height: 10,
                             ),
-                            GuideButton(
-                              text: 'Delete Profile',
-                              onPressed: _handleDeleteProfile,
-                            ),
+
                             SizedBox(
                               height: 20,
                             )
@@ -745,16 +623,11 @@ class _ManageProfileViewState extends State<ManageProfileView> {
 
   Color _getCategoryColor(String category) {
     switch (category) {
-      case 'Random':
-        return Colors.blue;
-      case 'Nightmare':
-        return Colors.red;
-      case 'Bathroom':
-        return Colors.orange;
-      case 'Energised':
-        return Colors.green;
-      default:
-        return Colors.grey;
+      case 'Random': return Colors.blue;
+      case 'Nightmare': return Colors.red;
+      case 'Bathroom': return Colors.orange;
+      case 'Energised': return Colors.green;
+      default: return Colors.grey;
     }
   }
 
@@ -766,10 +639,7 @@ class _ManageProfileViewState extends State<ManageProfileView> {
         children: [
           Text(
             '$label: $emoji',
-            style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: const Color.fromARGB(255, 255, 204, 52)),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: const Color.fromARGB(255, 255, 204, 52)),
           ),
         ],
       ),

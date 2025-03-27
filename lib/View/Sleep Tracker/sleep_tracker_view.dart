@@ -247,7 +247,6 @@ class _SleepTrackingState extends State<SleepTracking> {
                 255, 252, 174, 41), // Amber color for title text
           ),
         ),
-        iconTheme: const IconThemeData(color: Color.fromARGB(255, 216, 163, 6)),
       ),
       body: Container(
         decoration: const BoxDecoration(
