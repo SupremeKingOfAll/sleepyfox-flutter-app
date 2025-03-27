@@ -11,14 +11,14 @@ class InfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        gradient: LinearGradient(
+        gradient: const LinearGradient(
+          colors: [
+            Color.fromARGB(255, 25, 27, 53),
+            Color.fromARGB(255, 28, 29, 53),
+            Color.fromARGB(255, 32, 52, 111),
+          ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Color.fromARGB(255, 10, 12, 24),
-            Color.fromARGB(255, 19, 23, 45),
-            const Color.fromARGB(255, 40, 33, 121)
-          ],
         ),
         borderRadius: BorderRadius.circular(8),
       ),

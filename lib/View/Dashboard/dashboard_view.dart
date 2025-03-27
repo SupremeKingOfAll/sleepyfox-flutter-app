@@ -224,10 +224,10 @@ class _DashboardViewState extends State<DashboardView> {
                         padding: const EdgeInsets.all(8.0),
                         child: InfoContainer(
                           onPressed: () {
-                            Navigator.pushNamed(context, '/EducationView');
+                            Navigator.pushNamed(context, '/SleepStoryView');
                           },
-                          title: 'Healthy Habits',
-                          subtitle: 'Better Rest Routine',
+                          title: 'Bedtime Stories',
+                          subtitle: 'Click to Read',
                           imagePath: 'Assets/ProfPicKid.png',
                         ),
                       ),
@@ -243,8 +243,34 @@ class _DashboardViewState extends State<DashboardView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: 2),
-                    _featureItem('Profiles', SelectProfileView(),
-                        'Assets/childgirlprofiledash.png'),
+                    _featureItem(
+                      'Profiles',
+                      SelectProfileView(),
+                      'Assets/profileboy.png',
+                      'Manage Your Child\'s Profile',
+                    ),
+                    FutureBuilder<bool>(
+                      future: _isSleepPlanAvailable(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator(); // Show a loader while checking
+                        }
+
+                        if (snapshot.hasData && snapshot.data == true) {
+                          // Show the Sleep Plan button if the sleep plan is available
+                          return _featureItem(
+                            'Sleep Plan',
+                            SleepPlan(),
+                            'Assets/rabbitreadingfix.png',
+                            'View Your Sleep Plan',
+                          );
+                        }
+
+                        // If the sleep plan is not available, return an empty container
+                        return const SizedBox.shrink();
+                      },
+                    ),
                     FutureBuilder<bool>(
                       future: _isSleepPlanAvailable(),
                       builder: (context, snapshot) {
@@ -253,28 +279,95 @@ class _DashboardViewState extends State<DashboardView> {
                           return const CircularProgressIndicator();
                         }
 
-                        if (snapshot.hasData && snapshot.data == true) {
-                          return _featureItem('Sleep Plan', SleepPlan(),
-                              'Assets/ProfPicKid.png');
+                        if (snapshot.hasData && snapshot.data == false) {
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => QuestionnaireView()),
+                              );
+                            },
+                            child: Card(
+                              elevation: 12,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(24),
+                              ),
+                              shadowColor: Colors.black.withOpacity(0.4),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(24),
+                                  gradient: const LinearGradient(
+                                    colors: [
+                                      Color.fromARGB(255, 25, 27, 53),
+                                      Color.fromARGB(255, 28, 29, 53),
+                                      Color.fromARGB(255, 32, 52, 111),
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
+                                ),
+                                width: double.infinity,
+                                height: 171,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 20, horizontal: 28),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            const Text(
+                                              "Questionnaire",
+                                              style: TextStyle(
+                                                fontSize: 22,
+                                                color: Colors.amber,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            const Text(
+                                              "Complete the questionnaire to unlock your Sleep Plan!",
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.white70,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(width: 20),
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(80),
+                                        child: Image.asset(
+                                          'Assets/ProfPicKid.png',
+                                          width: 100,
+                                          height: 100,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
                         }
 
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            "Complete the questionnaire to unlock your Sleep Plan!",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontStyle: FontStyle.italic,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        );
+                        return const SizedBox.shrink();
                       },
                     ),
-                    _featureItem('Questionnaire', QuestionnaireView(),
-                        'Assets/ProfPicKid.png'),
-                    _featureItem('Did You Know?', EducationView(),
-                        'Assets/rabbitreadingfix.png', factDashboard),
+                    _featureItem(
+                      'Did You Know?',
+                      EducationView(),
+                      'Assets/rabbitreadingfix.png',
+                      factDashboard,
+                    ),
                   ],
                 ),
               ),

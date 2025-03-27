@@ -36,42 +36,27 @@ class _SleepyStoryState extends State<CatStory> {
       );
     }
   }
+
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.amber.shade500,
-        ),
-        backgroundColor: Color.fromARGB(255, 0, 0, 0),
+        backgroundColor:
+            Color.fromARGB(255, 24, 30, 58), // Dark blue background
         title: Text(
-          "Sleep Stories",
+          "Bedtime Stories",
           style: TextStyle(
             color: const Color.fromARGB(
-                255, 252, 174, 41), // Light amber for the subtitle text
+                255, 252, 174, 41), // Amber color for title text
           ),
         ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                "Sleepy fox",
-                style: TextStyle(
-                  color: const Color.fromARGB(
-                      255, 252, 174, 41), // Light amber for the subtitle text
-                ),
-              ),
-            ),
-          ),
-        ],
+        iconTheme: const IconThemeData(color: Color.fromARGB(255, 216, 163, 6)),
       ),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
             image:
-            AssetImage('Assets/900w-xy8Cv39_lA0.png'), // Background image
+                AssetImage('Assets/900w-xy8Cv39_lA0.png'), // Background image
             fit: BoxFit.cover,
           ),
         ),
@@ -81,52 +66,46 @@ class _SleepyStoryState extends State<CatStory> {
               title: 'Luna the Curious Cat',
               imagePath: 'Assets/CatStory3.png',
               content:
-              'In a quiet little town, there lived a curious cat named Luna. She had sleek fur as black as midnight and eyes that sparkled like golden stars.',
+                  'In a quiet little town, there lived a curious cat named Luna. She had sleek fur as black as midnight and eyes that sparkled like golden stars.',
               contenttwo:
-              'Luna loved exploring every nook and cranny of the town. But more than anything, she dreamed of climbing to the top of the tallest rooftop to see the entire world.',
+                  'Luna loved exploring every nook and cranny of the town. But more than anything, she dreamed of climbing to the top of the tallest rooftop to see the entire world.',
               next: 'One moonlit night, Luna spotted the perfect rooftop...',
             ),
-
             SleepStoryCard(
               title: 'The First Leap',
               imagePath: 'Assets/CatStory1.png',
               content:
-              'With her tail swishing, Luna crouched low and leapt onto the first ledge. The wind brushed her whiskers as she balanced carefully on the edge.',
+                  'With her tail swishing, Luna crouched low and leapt onto the first ledge. The wind brushed her whiskers as she balanced carefully on the edge.',
               contenttwo:
-              '"Almost there!" she thought, her heart racing with excitement. Her paws barely made a sound as she padded toward the next jump.',
+                  '"Almost there!" she thought, her heart racing with excitement. Her paws barely made a sound as she padded toward the next jump.',
               next: 'Suddenly, she heard a soft chirping sound...',
             ),
-
             SleepStoryCard(
               title: 'A Feathered Friend',
               imagePath: 'Assets/Sparrow1.png',
               content:
-              'Perched on a nearby branch was a tiny, fluffy sparrow. "What are you doing up here, Luna?" chirped the bird. "I’m climbing to the top of the world," Luna purred.',
+                  'Perched on a nearby branch was a tiny, fluffy sparrow. "What are you doing up here, Luna?" chirped the bird. "I’m climbing to the top of the world," Luna purred.',
               contenttwo:
-              '"Do you want to come with me?" she asked. The sparrow flapped its wings and hopped closer, eager to join the adventure.',
+                  '"Do you want to come with me?" she asked. The sparrow flapped its wings and hopped closer, eager to join the adventure.',
               next: 'Together, they continued the journey...',
             ),
-
             SleepStoryCard(
               title: 'The Rooftop View',
               imagePath: 'Assets/CatStory2.png',
               content:
-              'At last, Luna and her feathered friend reached the top of the tallest rooftop. The town below glittered with tiny lights, and the stars above seemed close enough to touch.',
+                  'At last, Luna and her feathered friend reached the top of the tallest rooftop. The town below glittered with tiny lights, and the stars above seemed close enough to touch.',
               contenttwo:
-              '"It’s even more beautiful than I imagined," Luna whispered. She and the sparrow sat side by side, watching the world sparkle until morning.',
-              next: 'Luna purred softly, already dreaming of her next adventure...',
+                  '"It’s even more beautiful than I imagined," Luna whispered. She and the sparrow sat side by side, watching the world sparkle until morning.',
+              next:
+                  'Luna purred softly, already dreaming of her next adventure...',
             ),
           ],
-
         ),
-
       ),
-
       bottomNavigationBar: CustomBottomNavBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
       ),
     );
   }
-
 }

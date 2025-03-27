@@ -118,7 +118,8 @@ class _PrivacySettingsState extends State<PrivacySettings> {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.amber,
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
@@ -181,18 +182,16 @@ Last updated: March 26, 2025
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black,
-        iconTheme: const IconThemeData(color: Colors.amber),
-        title: const Text("Privacy", style: TextStyle(color: Colors.amber)),
-        actions: const [
-          Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Text("Sleepy fox", style: TextStyle(color: Colors.amber)),
-            ),
-          )
-        ],
+        backgroundColor:
+            Color.fromARGB(255, 24, 30, 58), // Dark blue background
+        title: Text(
+          "Privacy",
+          style: TextStyle(
+            color: const Color.fromARGB(
+                255, 252, 174, 41), // Amber color for title text
+          ),
+        ),
+        iconTheme: const IconThemeData(color: Color.fromARGB(255, 216, 163, 6)),
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -229,7 +228,8 @@ Last updated: March 26, 2025
                             ),
                             shadowColor: Colors.black.withOpacity(0.4),
                             child: Container(
-                              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 20),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 24, horizontal: 20),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(24),
                                 gradient: const LinearGradient(
@@ -255,10 +255,12 @@ Last updated: March 26, 2025
                                       ),
                                     ),
                                   ),
-                                  const Divider(color: Colors.amber, height: 30),
+                                  const Divider(
+                                      color: Colors.amber, height: 30),
                                   _buildToggleTile(
                                     title: "Allow Usage Analytics",
-                                    subtitle: "Help us improve by sending anonymous usage data.",
+                                    subtitle:
+                                        "Help us improve by sending anonymous usage data.",
                                     value: allowAnalytics,
                                     onChanged: (newValue) {
                                       setState(() {
@@ -269,7 +271,8 @@ Last updated: March 26, 2025
                                   const SizedBox(height: 12),
                                   _buildToggleTile(
                                     title: "App Performance Metrics",
-                                    subtitle: "Let us monitor performance for crash analysis.",
+                                    subtitle:
+                                        "Let us monitor performance for crash analysis.",
                                     value: allowPerformanceMetrics,
                                     onChanged: (newValue) {
                                       setState(() {
@@ -296,7 +299,6 @@ Last updated: March 26, 2025
           ),
         ),
       ),
-
       bottomNavigationBar: CustomBottomNavBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,

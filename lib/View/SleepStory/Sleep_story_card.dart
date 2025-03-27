@@ -50,29 +50,29 @@ class SleepStoryCard extends StatelessWidget {
                     child: Text(
                       contenttwo,
                       style: TextStyle(fontSize: 20, color: Colors.amber),
-                      overflow: TextOverflow.visible, // Allow full text to show if it fits
+                      overflow: TextOverflow
+                          .visible, // Allow full text to show if it fits
                       maxLines: null, // Remove any line limit
                     ),
-                  ),                  SizedBox(width: 5,),
-                  Expanded(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.0),
-                      child: Image.asset(
-                        imagePath,
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                      ),
-                    )
-
-
-
                   ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Expanded(
+                      child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: Image.asset(
+                      imagePath,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                    ),
+                  )),
                 ],
-              ),              Text(
+              ),
+              Text(
                 next,
                 style: TextStyle(fontSize: 20, color: Colors.amber),
               ),
-
             ],
           ),
         ),
