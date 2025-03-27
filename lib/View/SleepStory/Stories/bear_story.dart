@@ -36,42 +36,27 @@ class _SleepyStoryState extends State<BearStory> {
       );
     }
   }
+
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.amber.shade500,
-        ),
-        backgroundColor: Color.fromARGB(255, 0, 0, 0),
+        backgroundColor:
+            Color.fromARGB(255, 24, 30, 58), // Dark blue background
         title: Text(
-          "Sleep Stories",
+          "Bedtime Stories",
           style: TextStyle(
             color: const Color.fromARGB(
-                255, 252, 174, 41), // Light amber for the subtitle text
+                255, 252, 174, 41), // Amber color for title text
           ),
         ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                "Sleepy fox",
-                style: TextStyle(
-                  color: const Color.fromARGB(
-                      255, 252, 174, 41), // Light amber for the subtitle text
-                ),
-              ),
-            ),
-          ),
-        ],
+        iconTheme: const IconThemeData(color: Color.fromARGB(255, 216, 163, 6)),
       ),
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
             image:
-            AssetImage('Assets/900w-xy8Cv39_lA0.png'), // Background image
+                AssetImage('Assets/900w-xy8Cv39_lA0.png'), // Background image
             fit: BoxFit.cover,
           ),
         ),
@@ -81,61 +66,55 @@ class _SleepyStoryState extends State<BearStory> {
               title: 'Bruno the Sleepy Bear',
               imagePath: 'Assets/SleepyBear.png',
               content:
-              'Deep in the heart of a quiet forest, there lived a big, gentle bear named Bruno. Bruno loved two things more than anything else—naps and honey.',
+                  'Deep in the heart of a quiet forest, there lived a big, gentle bear named Bruno. Bruno loved two things more than anything else—naps and honey.',
               contenttwo:
-              'But one chilly autumn morning, Bruno found himself unable to sleep. His cozy cave just didn’t feel right, and his dreams refused to come.',
+                  'But one chilly autumn morning, Bruno found himself unable to sleep. His cozy cave just didn’t feel right, and his dreams refused to come.',
               next: 'Bruno decided to go on a little adventure...',
             ),
-
             SleepStoryCard(
               title: 'Searching for Comfort',
               imagePath: 'Assets/ForestTrail.png',
               content:
-              'Bruno wandered through the forest, hoping to find something that would help him sleep. He stopped by the bubbling brook, listening to its soothing sounds.',
+                  'Bruno wandered through the forest, hoping to find something that would help him sleep. He stopped by the bubbling brook, listening to its soothing sounds.',
               contenttwo:
-              'But even the calming water couldn’t make Bruno yawn. "Maybe my friends can help," he thought, and he padded off toward the meadow.',
+                  'But even the calming water couldn’t make Bruno yawn. "Maybe my friends can help," he thought, and he padded off toward the meadow.',
               next: 'Bruno’s first stop was at a hollow tree...',
             ),
-
             SleepStoryCard(
               title: 'Advice from the Bees',
               imagePath: 'Assets/HoneyBees.png',
               content:
-              'At the hollow tree, a hive of friendly bees buzzed around. "Bruno, try a spoonful of honey before bed!" they suggested. "It always makes us feel sweet and sleepy."',
+                  'At the hollow tree, a hive of friendly bees buzzed around. "Bruno, try a spoonful of honey before bed!" they suggested. "It always makes us feel sweet and sleepy."',
               contenttwo:
-              'Bruno thanked the bees and enjoyed a golden drop of honey. It was delicious, but it didn’t bring him the sleepy feeling he hoped for.',
+                  'Bruno thanked the bees and enjoyed a golden drop of honey. It was delicious, but it didn’t bring him the sleepy feeling he hoped for.',
               next: 'Next, Bruno visited the wise old owl...',
             ),
-
             SleepStoryCard(
               title: 'A Bedtime Secret',
               imagePath: 'Assets/WiseOwl.png',
               content:
-              'The wise old owl hooted softly from her perch. "Bruno, your cave might be missing its special bedtime touch. Gather some leaves and pine needles to make it extra cozy."',
+                  'The wise old owl hooted softly from her perch. "Bruno, your cave might be missing its special bedtime touch. Gather some leaves and pine needles to make it extra cozy."',
               contenttwo:
-              'Bruno thought this was a wonderful idea. He spent the rest of the evening collecting the softest materials he could find for his bed.',
+                  'Bruno thought this was a wonderful idea. He spent the rest of the evening collecting the softest materials he could find for his bed.',
               next: 'At last, Bruno returned to his cave...',
             ),
-
             SleepStoryCard(
               title: 'The Best Sleep Ever',
               imagePath: 'Assets/CozyCave.png',
               content:
-              'Bruno arranged the leaves and pine needles into a fluffy nest. He snuggled in and let out a deep, happy sigh. The cave felt just right now.',
+                  'Bruno arranged the leaves and pine needles into a fluffy nest. He snuggled in and let out a deep, happy sigh. The cave felt just right now.',
               contenttwo:
-              'As he drifted off to sleep, Bruno dreamed of honey, buzzing bees, and the friendly forest he loved so much. It truly was the best sleep ever.',
-              next: 'Bruno couldn’t wait to wake up and explore the forest all over again...',
+                  'As he drifted off to sleep, Bruno dreamed of honey, buzzing bees, and the friendly forest he loved so much. It truly was the best sleep ever.',
+              next:
+                  'Bruno couldn’t wait to wake up and explore the forest all over again...',
             ),
           ],
         ),
-
       ),
-
       bottomNavigationBar: CustomBottomNavBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
       ),
     );
   }
-
 }
