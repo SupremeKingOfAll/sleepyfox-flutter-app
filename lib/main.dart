@@ -10,6 +10,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'View/Education/education_view.dart';
 import 'View/Profiles/Manage Profile/manage_pofile_view.dart';
 import 'View/Profiles/Profile History/profile_history_view.dart';
+import 'View/SleepStory/Stories/bear_story.dart';
+import 'View/SleepStory/Stories/cat_story.dart';
+import 'View/SleepStory/Stories/dog_story.dart';
 import 'View/SleepStory/Stories/sleepy_story.dart';
 import 'View/SleepStory/sleep_story_view.dart';
 import 'firebase_options.dart';
@@ -35,7 +38,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const LoginPage(),
+      home: const SleepStoryView(),
       routes: {
         '/EducationView': (context) => const EducationView(),
         '/AboutUs': (context) => const AboutUs(),
@@ -53,6 +56,9 @@ class MyApp extends StatelessWidget {
         '/SleepStoryView' : (context) => const SleepStoryView(),
         '/TheSleepyStory' : (context) => const SleepyStory(),
         '/SleepStoryView': (context) => const SleepStoryView(),
+        '/DogStory' : (context) => const DogStory(),
+        '/CatStory' : (context) => const CatStory(),
+        '/BearStory' : (context) => const BearStory(),
         // '/Notifications' : (context) => const NotificationsView(),
       },
     );
