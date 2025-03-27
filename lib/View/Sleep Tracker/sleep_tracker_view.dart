@@ -40,7 +40,8 @@ class _SleepTrackingState extends State<SleepTracking> {
         // Auto-select the first profile if none is selected
         if (_profiles.isNotEmpty && _selectedProfileId == null) {
           _selectedProfileId = _profiles.first['name'];
-          _selectedProfileShareCode = _profiles[0]['sharecode']; // set sharecode for first profile
+          _selectedProfileShareCode =
+              _profiles[0]['sharecode']; // set sharecode for first profile
         }
       });
     } catch (error) {
@@ -205,7 +206,8 @@ class _SleepTrackingState extends State<SleepTracking> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 0, 0, 0), // Dark blue background
+        backgroundColor:
+            Color.fromARGB(255, 24, 30, 58), // Dark blue background
         title: Text(
           "Sleep Tracker",
           style: TextStyle(
@@ -213,21 +215,7 @@ class _SleepTrackingState extends State<SleepTracking> {
                 255, 252, 174, 41), // Amber color for title text
           ),
         ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                "Sleepy fox",
-                style: TextStyle(
-                  color: const Color.fromARGB(
-                      255, 252, 174, 41), // Light amber for the subtitle text
-                ),
-              ),
-            ),
-          ),
-        ],
+        iconTheme: const IconThemeData(color: Color.fromARGB(255, 216, 163, 6)),
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -296,9 +284,11 @@ class _SleepTrackingState extends State<SleepTracking> {
                           setState(() {
                             _selectedProfileId = newValue;
                             _selectedProfileShareCode = _profiles.firstWhere(
-                              (profile) => profile['name'] == _selectedProfileId,
-                              orElse: () => {}  // Return an empty map if no match is found
-                            )['sharecode'];
+                                (profile) =>
+                                    profile['name'] == _selectedProfileId,
+                                orElse: () =>
+                                    {} // Return an empty map if no match is found
+                                )['sharecode'];
                           });
                         },
                         items:
