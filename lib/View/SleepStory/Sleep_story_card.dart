@@ -5,6 +5,7 @@ class SleepStoryCard extends StatelessWidget {
   final String imagePath;
   final String content;
   final String next;
+  final String contenttwo;
 
   const SleepStoryCard({
     Key? key,
@@ -12,6 +13,7 @@ class SleepStoryCard extends StatelessWidget {
     required this.imagePath,
     required this.content,
     required this.next,
+    required this.contenttwo,
   }) : super(key: key);
 
   @override
@@ -41,16 +43,34 @@ class SleepStoryCard extends StatelessWidget {
                 style: TextStyle(fontSize: 20, color: Colors.amber),
               ),
               SizedBox(height: 10),
-              Expanded(
-                child: Image.asset(
-                  imagePath,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                ),
-              ),
-              Text(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Flexible(
+                    child: Text(
+                      contenttwo,
+                      style: TextStyle(fontSize: 20, color: Colors.amber),
+                      overflow: TextOverflow.visible, // Allow full text to show if it fits
+                      maxLines: null, // Remove any line limit
+                    ),
+                  ),                  SizedBox(width: 5,),
+                  Expanded(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10.0),
+                      child: Image.asset(
+                        imagePath,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                      ),
+                    )
+
+
+
+                  ),
+                ],
+              ),              Text(
                 next,
-                style: TextStyle(fontSize: 14, color: Colors.amber),
+                style: TextStyle(fontSize: 20, color: Colors.amber),
               ),
 
             ],

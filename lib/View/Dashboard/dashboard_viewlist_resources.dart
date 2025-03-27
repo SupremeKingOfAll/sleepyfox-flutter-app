@@ -6,7 +6,6 @@ class InfoContainer extends StatelessWidget {
   final String imagePath;
   final VoidCallback onPressed;
 
-
   const InfoContainer(
       {super.key,
       required this.title,
@@ -22,7 +21,7 @@ class InfoContainer extends StatelessWidget {
         height: 210,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14),
-          color: Colors.grey,
+          color: Color.fromARGB(255, 24, 30, 58),
         ),
         child: Column(
           children: [
@@ -40,7 +39,7 @@ class InfoContainer extends StatelessWidget {
             ),
             const Spacer(),
             Container(
-              color: Colors.white70,
+              color: Color.fromARGB(255, 24, 30, 58),
               height: 60,
               width: double.infinity,
               child: Column(
@@ -49,7 +48,8 @@ class InfoContainer extends StatelessWidget {
                   // Add padding around title
                   Padding(
                     padding: const EdgeInsets.only(left: 10.0, top: 4.0),
-                    child: Text(title),
+                    child: Text(title,
+                        style: const TextStyle(color: Colors.amber)),
                   ),
                   // Add padding around subtitle
                   Expanded(
@@ -60,6 +60,7 @@ class InfoContainer extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
+                          color: Colors.amber,
                         ),
                         overflow: TextOverflow.ellipsis,
                         softWrap: true,

@@ -82,18 +82,43 @@ class _SleepyStoryState extends State<SleepyStory> {
           controller: _pageController,
           children: [
             SleepStoryCard(
-              title: 'Sleepy Fox',
-              imagePath: 'Assets/900w-xy8Cv39_lA0.png',
+              title: 'The Sleepless Fox',
+              imagePath: 'Assets/SleepyFoxStory1.png',
               content:
-              'Once upon a time, in a quiet meadow wrapped in twilight, there lived a little firefly named Luna. Unlike her friends who loved to race and play, Luna adored watching the stars. Every evening, when the sky turned dark and sprinkled with shimmering lights, Luna would buzz to the tallest blade of grass and gaze upward.',
-            next: '01',
+              'In the heart of an ancient forest, there lived a charming but restless fox named Finn. While most creatures nestled into dreams as the moon climbed high, Finn’s mind was a swirl of thoughts.',
+              contenttwo:
+              'He dreamed of chasing fireflies, counting stars, and pondering the mysteries of the world. But tonight, his thoughts felt heavier than usual.',
+              next: 'Finn tried every trick to find sleep...',
             ),
+
             SleepStoryCard(
-              title: 'Starry Night',
-              imagePath: 'Assets/FoxMascProfPic.png',
+              title: 'Tricks for Sleep',
+              imagePath: 'Assets/FoxStory3.png',
               content:
-              'One magical evening, under the soft glow of the moon, Luna discovered a secret about the stars—they whispered dreams to those who listened closely. She floated gently between them, letting their light guide her through her own dazzling adventure.',
-              next: '02',
+              'One particular night, bathed in a silver moonbeam, Finn burrowed into his softest moss bed. He hummed soothing tunes, hoping to coax sleep to his side.',
+              contenttwo:
+              'He even tried counting tree leaves swaying gently in the cool forest breeze. But nothing worked. His eyes stayed wide open, reflecting the shimmering constellations above.',
+              next: 'Just as Finn was about to give up, he heard a voice...',
+            ),
+
+            SleepStoryCard(
+              title: 'Moonlit Whisper',
+              imagePath: 'Assets/OwlStory1.png',
+              content:
+              'A wise old owl named Ophelia swooped down, her feathers gleaming like silver threads under the moonlight. "Finn," she cooed, "I’ve watched you toss and turn."',
+              contenttwo:
+              '"Perhaps the forest itself can lull you into slumber—if you learn its melody." Intrigued, Finn pricked his ears and listened.',
+              next: 'The forest’s sounds started weaving a melody...',
+            ),
+
+            SleepStoryCard(
+              title: 'Dreamsong',
+              imagePath: 'Assets/ProfPicKid.png',
+              content:
+              'As Finn hummed along, his heartbeat slowed, matching the rhythm of the forest\'s melody. A warmth spread through him, like moonlight wrapping him in a soft embrace.',
+              contenttwo:
+              'Before he knew it, his eyelids grew heavy, and Finn drifted into a peaceful slumber. The stars above twinkled brighter, celebrating the fox who found his dreamsong.',
+              next: 'Every night thereafter, Finn hummed his melody, and the forest sang back...',
             ),
           ],
         ),
