@@ -236,8 +236,10 @@ class _SleepTrackingState extends State<SleepTracking> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:
-            Color.fromARGB(255, 24, 30, 58), // Dark blue background
+        iconTheme: IconThemeData(
+          color: Colors.amber.shade500,
+        ),
+        backgroundColor: Color.fromARGB(255, 0, 0, 0), // Dark blue background
         title: Text(
           "Sleep Tracker",
           style: TextStyle(
@@ -404,10 +406,13 @@ class _SleepTrackingState extends State<SleepTracking> {
                           ),
                         ),
                       ),
-                    TextField(
+                      TextField(
                       controller: _notesController,
+                      style: TextStyle(color: Colors.amber, fontSize: 18), // Set text color to amber
                       decoration: const InputDecoration(
                         labelText: "Additional Notes",
+                        labelStyle: TextStyle(color: Colors.amber,),
+                        focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.amber)),
                         border: OutlineInputBorder(),
                       ),
                       maxLines: 3,
