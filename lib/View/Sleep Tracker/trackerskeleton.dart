@@ -13,14 +13,14 @@ class _SleepTrackingState extends State<SleepTracking> {
 
   int _selectedIndex = 0;
 
-    void _onItemTapped(int index) {
-      if (index != 2) {
-        setState(() {
-          _selectedIndex = index;
-        });
-      }
+  void _onItemTapped(int index) {
+    if (index != 2) {
+      setState(() {
+        _selectedIndex = index;
+      });
     }
-    
+  }
+
   void _addAwakening() {
     setState(() {
       awakenings.add(AwakeningEntry());
@@ -160,21 +160,21 @@ class _SleepTrackingState extends State<SleepTracking> {
             ),
           ),
         ),
-              bottomNavigationBar: CustomBottomNavBar(
-              selectedIndex: _selectedIndex,
-              onItemTapped: _onItemTapped,
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {},
-              backgroundColor: const Color.fromARGB(255, 233, 166, 90),
-              shape: const CircleBorder(),
-              child: Image.asset(
-                "Assets/SleepyFoxLogo512.png",
-                width: 40,
-                height: 40,
-              ),
-            ),
-            floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: CustomBottomNavBar(
+          selectedIndex: _selectedIndex,
+          onItemTapped: _onItemTapped,
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          backgroundColor: const Color.fromARGB(255, 233, 166, 90),
+          shape: const CircleBorder(),
+          child: Image.asset(
+            "assets/SleepyFoxLogo512.png",
+            width: 40,
+            height: 40,
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
   }
@@ -185,8 +185,11 @@ class _SleepTrackingState extends State<SleepTracking> {
       children: [
         Text(title,
             style: TextStyle(
-                fontSize: 18, fontWeight: FontWeight.bold, color: Colors.amber)),
-        IconButton(icon: Icon(Icons.add, color: Colors.amber), onPressed: onAdd),
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.amber)),
+        IconButton(
+            icon: Icon(Icons.add, color: Colors.amber), onPressed: onAdd),
       ],
     );
   }
@@ -219,7 +222,8 @@ class _SleepTimeEntryState extends State<SleepTimeEntry> {
       if (time != null) {
         setState(() {
           _controller.text = DateFormat('dd/MM/yyyy HH:mm:ss').format(
-            DateTime(picked.year, picked.month, picked.day, time.hour, time.minute),
+            DateTime(
+                picked.year, picked.month, picked.day, time.hour, time.minute),
           );
         });
       }
@@ -251,13 +255,33 @@ class AwakeningEntry extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Column(children: [IconButton(icon: Text("👻", style: TextStyle(fontSize: 40)), onPressed: () {}), Text("Nightmare")]),
+            Column(children: [
+              IconButton(
+                  icon: Text("👻", style: TextStyle(fontSize: 40)),
+                  onPressed: () {}),
+              Text("Nightmare")
+            ]),
             SizedBox(width: 8),
-            Column(children: [IconButton(icon: Text("🚽", style: TextStyle(fontSize: 40)), onPressed: () {}), Text("Bathroom")]),
+            Column(children: [
+              IconButton(
+                  icon: Text("🚽", style: TextStyle(fontSize: 40)),
+                  onPressed: () {}),
+              Text("Bathroom")
+            ]),
             SizedBox(width: 8),
-            Column(children: [IconButton(icon: Text("❓", style: TextStyle(fontSize: 40)), onPressed: () {}), Text("Random")]),
+            Column(children: [
+              IconButton(
+                  icon: Text("❓", style: TextStyle(fontSize: 40)),
+                  onPressed: () {}),
+              Text("Random")
+            ]),
             SizedBox(width: 8),
-            Column(children: [IconButton(icon: Text("⚡", style: TextStyle(fontSize: 40)), onPressed: () {}), Text("Energised")]),
+            Column(children: [
+              IconButton(
+                  icon: Text("⚡", style: TextStyle(fontSize: 40)),
+                  onPressed: () {}),
+              Text("Energised")
+            ]),
           ],
         ),
         SleepTimeEntry(title: "Start"),
@@ -284,6 +308,5 @@ class NapEntry extends StatelessWidget {
         Divider(),
       ],
     );
-    
   }
 }

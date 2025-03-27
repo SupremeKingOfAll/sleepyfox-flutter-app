@@ -59,7 +59,7 @@ class _SleepStoryViewState extends State<SleepStoryView> {
         decoration: const BoxDecoration(
           image: DecorationImage(
             image:
-                AssetImage('Assets/900w-xy8Cv39_lA0.png'), // Background image
+                AssetImage('assets/900w-xy8Cv39_lA0.png'), // Background image
             fit: BoxFit.cover,
           ),
         ),
@@ -69,27 +69,27 @@ class _SleepStoryViewState extends State<SleepStoryView> {
               SizedBox(height: 10),
               SleepyFoxCard(
                 title: "The Sleepy Fox",
-                imagePath: 'Assets/FoxMascProfPic.png',
+                imagePath: 'assets/FoxMascProfPic.png',
                 routeName: '/TheSleepyStory',
               ),
               SizedBox(height: 10),
               SleepyFoxCard(
                 title: "Bruno The Bear",
-                imagePath: 'Assets/bearstory1.png',
+                imagePath: 'assets/bearstory1.png',
                 routeName: '/BearStory',
               ),
               SizedBox(height: 10),
               SleepyFoxCard(
                 title: "Barkley's Story",
-                imagePath: 'Assets/Dog1.png',
+                imagePath: 'assets/Dog1.png',
                 routeName: '/DogStory',
               ),
               SizedBox(height: 10),
               SleepyFoxCard(
                 title: "Luna's Story",
-                imagePath: 'Assets/CatStory1.png',
-                routeName: '/CatStory',),
-            SizedBox(height: 50),
+                imagePath: 'assets/CatStory1.png',
+                routeName: '/CatStory',
+              ),
             ],
           ),
         ),

@@ -203,7 +203,7 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
               decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(
-                      'Assets/900w-xy8Cv39_lA0.png'), // Background image
+                      'assets/900w-xy8Cv39_lA0.png'), // Background image
                   fit: BoxFit.cover,
                 ),
               ),
@@ -217,7 +217,7 @@ class _SleepTrackingOverviewState extends State<SleepTrackingOverview> {
                   decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage(
-                          'Assets/900w-xy8Cv39_lA0.png'), // Background image
+                          'assets/900w-xy8Cv39_lA0.png'), // Background image
                       fit: BoxFit.cover,
                     ),
                   ),

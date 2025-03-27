@@ -56,7 +56,7 @@ class _SleepyStoryState extends State<CatStory> {
         decoration: const BoxDecoration(
           image: DecorationImage(
             image:
-                AssetImage('Assets/900w-xy8Cv39_lA0.png'), // Background image
+                AssetImage('assets/900w-xy8Cv39_lA0.png'), // Background image
             fit: BoxFit.cover,
           ),
         ),
@@ -64,7 +64,7 @@ class _SleepyStoryState extends State<CatStory> {
           children: [
             SleepStoryCard(
               title: 'Luna the Curious Cat',
-              imagePath: 'Assets/CatStory3.png',
+              imagePath: 'assets/CatStory3.png',
               content:
                   'In a quiet little town, there lived a curious cat named Luna. She had sleek fur as black as midnight and eyes that sparkled like golden stars.',
               contenttwo:
@@ -73,7 +73,7 @@ class _SleepyStoryState extends State<CatStory> {
             ),
             SleepStoryCard(
               title: 'The First Leap',
-              imagePath: 'Assets/CatStory1.png',
+              imagePath: 'assets/CatStory1.png',
               content:
                   'With her tail swishing, Luna crouched low and leapt onto the first ledge. The wind brushed her whiskers as she balanced carefully on the edge.',
               contenttwo:
@@ -82,7 +82,7 @@ class _SleepyStoryState extends State<CatStory> {
             ),
             SleepStoryCard(
               title: 'A Feathered Friend',
-              imagePath: 'Assets/Sparrow1.png',
+              imagePath: 'assets/Sparrow1.png',
               content:
                   'Perched on a nearby branch was a tiny, fluffy sparrow. "What are you doing up here, Luna?" chirped the bird. "I’m climbing to the top of the world," Luna purred.',
               contenttwo:
@@ -91,7 +91,7 @@ class _SleepyStoryState extends State<CatStory> {
             ),
             SleepStoryCard(
               title: 'The Rooftop View',
-              imagePath: 'Assets/CatStory2.png',
+              imagePath: 'assets/CatStory2.png',
               content:
                   'At last, Luna and her feathered friend reached the top of the tallest rooftop. The town below glittered with tiny lights, and the stars above seemed close enough to touch.',
               contenttwo:

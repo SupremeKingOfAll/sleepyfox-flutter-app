@@ -46,7 +46,7 @@ class LoginPageState extends State<LoginPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset('Assets/SleepyFoxLogo512.png',
+                Image.asset('assets/SleepyFoxLogo512.png',
                     width: 150, height: 150),
                 const SizedBox(height: 35),
                 const Text(
