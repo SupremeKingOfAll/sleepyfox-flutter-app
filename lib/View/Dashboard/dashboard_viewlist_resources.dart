@@ -48,8 +48,8 @@ class InfoContainer extends StatelessWidget {
                   // Add padding around title
                   Padding(
                     padding: const EdgeInsets.only(left: 10.0, top: 4.0),
-                    child: Text(title,
-                        style: const TextStyle(color: Colors.amber)),
+                    child:
+                        Text(title, style: const TextStyle(color: Colors.grey)),
                   ),
                   // Add padding around subtitle
                   Expanded(

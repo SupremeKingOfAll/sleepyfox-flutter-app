@@ -63,25 +63,15 @@ class _EducationViewState extends State<EducationView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.amber.shade500,
+        ),
         backgroundColor: Color.fromARGB(255, 24, 30, 58),
         title: Text("Education",
             style: TextStyle(
               color: const Color.fromARGB(
                   255, 252, 174, 41), // Amber color for title text
             )),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Text("Sleepy Fox",
-                  style: TextStyle(
-                    color: const Color.fromARGB(
-                        255, 252, 174, 41), // Amber color for title text
-                  )),
-            ),
-          ),
-        ],
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -308,9 +298,8 @@ class _EducationViewState extends State<EducationView> {
   Future<String?> getRandomFunFact() async {
     try {
       // all documents from the FunFacts collection
-      QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection('FunFacts')
-          .get();
+      QuerySnapshot snapshot =
+          await FirebaseFirestore.instance.collection('FunFacts').get();
 
       // checks if collection is empty
       if (snapshot.docs.isEmpty) {

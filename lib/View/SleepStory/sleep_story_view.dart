@@ -44,32 +44,16 @@ class _SleepStoryViewState extends State<SleepStoryView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.amber.shade500,
-        ),
-        backgroundColor: Color.fromARGB(255, 0, 0, 0),
+        backgroundColor:
+            Color.fromARGB(255, 24, 30, 58), // Dark blue background
         title: Text(
-          "Sleep Stories",
+          "Bedtime Stories",
           style: TextStyle(
             color: const Color.fromARGB(
-                255, 252, 174, 41), // Light amber for the subtitle text
+                255, 252, 174, 41), // Amber color for title text
           ),
         ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                "Sleepy fox",
-                style: TextStyle(
-                  color: const Color.fromARGB(
-                      255, 252, 174, 41), // Light amber for the subtitle text
-                ),
-              ),
-            ),
-          ),
-        ],
+        iconTheme: const IconThemeData(color: Color.fromARGB(255, 216, 163, 6)),
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -84,7 +68,7 @@ class _SleepStoryViewState extends State<SleepStoryView> {
             children: [
               SizedBox(height: 10),
               SleepyFoxCard(
-                title: "The sleepy fox story",
+                title: "The Sleepy Fox",
                 imagePath: 'Assets/FoxMascProfPic.png',
                 routeName: '/TheSleepyStory',
               ),

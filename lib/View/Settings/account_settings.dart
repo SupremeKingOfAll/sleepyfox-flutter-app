@@ -30,7 +30,10 @@ class _AccountSettingsState extends State<AccountSettings> {
     final currentUser = FirebaseAuth.instance.currentUser;
 
     if (currentUser != null) {
-      final doc = await FirebaseFirestore.instance.collection('users').doc(currentUser.uid).get();
+      final doc = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(currentUser.uid)
+          .get();
       final data = doc.data();
 
       if (data != null && mounted) {
@@ -53,7 +56,8 @@ class _AccountSettingsState extends State<AccountSettings> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text("Delete Account"),
-        content: const Text("Are you sure you want to delete your account? This cannot be undone."),
+        content: const Text(
+            "Are you sure you want to delete your account? This cannot be undone."),
         actions: [
           TextButton(
             style: TextButton.styleFrom(
@@ -77,7 +81,10 @@ class _AccountSettingsState extends State<AccountSettings> {
 
       if (currentUser != null) {
         final userId = currentUser.uid;
-        await FirebaseFirestore.instance.collection('users').doc(userId).delete();
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId)
+            .delete();
 
         final providerData = currentUser.providerData;
         if (providerData.isNotEmpty) {
@@ -116,7 +123,8 @@ class _AccountSettingsState extends State<AccountSettings> {
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text("Continue", style: TextStyle(color: Colors.orange)),
+            child:
+                const Text("Continue", style: TextStyle(color: Colors.orange)),
           ),
         ],
       ),
@@ -150,24 +158,16 @@ class _AccountSettingsState extends State<AccountSettings> {
       extendBody: true,
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.amber),
-          onPressed: () => Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => SettingsView()),
+        backgroundColor:
+            Color.fromARGB(255, 24, 30, 58), // Dark blue background
+        title: Text(
+          "Account",
+          style: TextStyle(
+            color: const Color.fromARGB(
+                255, 252, 174, 41), // Amber color for title text
           ),
         ),
-        backgroundColor: Colors.black,
-        title: const Text("Account Settings", style: TextStyle(color: Colors.amber)),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Text("Sleepy fox", style: TextStyle(color: Colors.amber)),
-            ),
-          ),
-        ],
+        iconTheme: const IconThemeData(color: Color.fromARGB(255, 216, 163, 6)),
       ),
       body: Container(
         constraints: const BoxConstraints.expand(),
@@ -211,7 +211,8 @@ class _AccountSettingsState extends State<AccountSettings> {
                         ),
                       ),
                       width: double.infinity,
-                      padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 25),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 50, horizontal: 25),
                       child: Column(
                         children: [
                           Container(
@@ -224,18 +225,30 @@ class _AccountSettingsState extends State<AccountSettings> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text("Username:", style: TextStyle(fontSize: 16, color: Colors.white70)),
+                                Text("Username:",
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.white70)),
                                 const SizedBox(height: 4),
-                                Text(_username, style: const TextStyle(fontSize: 18, color: Colors.amber, fontWeight: FontWeight.bold)),
+                                Text(_username,
+                                    style: const TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.amber,
+                                        fontWeight: FontWeight.bold)),
                                 const SizedBox(height: 16),
-                                Text("Email:", style: TextStyle(fontSize: 16, color: Colors.white70)),
+                                Text("Email:",
+                                    style: TextStyle(
+                                        fontSize: 16, color: Colors.white70)),
                                 const SizedBox(height: 4),
-                                Text(_maskedEmail, style: const TextStyle(fontSize: 18, color: Colors.white)),
+                                Text(_maskedEmail,
+                                    style: const TextStyle(
+                                        fontSize: 18, color: Colors.white)),
                               ],
                             ),
                           ),
                           const SizedBox(height: 35),
-                          GuideButton(text: 'Change Password', onPressed: _confirmChangePassword),
+                          GuideButton(
+                              text: 'Change Password',
+                              onPressed: _confirmChangePassword),
                           // ElevatedButton(
                           //   onPressed: _confirmChangePassword,
                           //   style: ElevatedButton.styleFrom(
@@ -246,7 +259,9 @@ class _AccountSettingsState extends State<AccountSettings> {
                           //   child: const Text("Change Password"),
                           // ),
                           const SizedBox(height: 20),
-                          DeleteButton(text: 'Delete Account', onPressed: _deleteAccount),
+                          DeleteButton(
+                              text: 'Delete Account',
+                              onPressed: _deleteAccount),
                           // ElevatedButton(
                           //   onPressed: _deleteAccount,
                           //   style: ElevatedButton.styleFrom(

@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:elaros_gp4/View/Dashboard/dashboard_view.dart';
 
-
 class SettingsView extends StatefulWidget {
   const SettingsView({super.key});
 
@@ -84,32 +83,16 @@ class _SettingsViewState extends State<SettingsView> {
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.white,
       appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.amber.shade500,
-        ),
-        backgroundColor: Color.fromARGB(255, 0, 0, 0),
+        backgroundColor:
+            Color.fromARGB(255, 24, 30, 58), // Dark blue background
         title: Text(
           "Settings",
           style: TextStyle(
             color: const Color.fromARGB(
-                255, 252, 174, 41), // Light amber for the subtitle text
+                255, 252, 174, 41), // Amber color for title text
           ),
         ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                "Sleepy fox",
-                style: TextStyle(
-                  color: const Color.fromARGB(
-                      255, 252, 174, 41), // Light amber for the subtitle text
-                ),
-              ),
-            ),
-          ),
-        ],
+        iconTheme: const IconThemeData(color: Color.fromARGB(255, 216, 163, 6)),
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -132,52 +115,37 @@ class _SettingsViewState extends State<SettingsView> {
 
               // Glowing Settings Card
               Card(
-                elevation: 12,
+                elevation: 4,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
                 shadowColor: Colors.black.withOpacity(0.4),
                 child: Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 40, horizontal: 25),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 40, horizontal: 25),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
                     gradient: const LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
                       colors: [
-                        Color.fromARGB(220, 10, 18, 43),
-                        Color.fromARGB(255, 28, 29, 53),
                         Color.fromARGB(255, 25, 27, 53),
+                        Color.fromARGB(255, 28, 29, 53),
+                        Color.fromARGB(255, 24, 39, 83),
                       ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
                     ),
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
-
-                      Center(
-                        child: Text(
-                          "Settings",
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.amber,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      const Divider(color: Colors.amber),
-
                       ListTile(
-                        leading: Icon(Icons.person,
-                            color: Colors.amber, size: 34),
+                        leading:
+                            Icon(Icons.person, color: Colors.amber, size: 34),
                         title: Text("Account",
-                            style: TextStyle(
-                                color: Colors.amber, fontSize: 20)),
+                            style:
+                                TextStyle(color: Colors.amber, fontSize: 20)),
                         onTap: () {
                           Navigator.pushNamed(context, '/AccountSettings');
                         },
@@ -186,18 +154,18 @@ class _SettingsViewState extends State<SettingsView> {
                         leading: Icon(Icons.notifications,
                             color: Colors.amber, size: 34),
                         title: Text("Notifications",
-                            style: TextStyle(
-                                color: Colors.amber, fontSize: 20)),
+                            style:
+                                TextStyle(color: Colors.amber, fontSize: 20)),
                         onTap: () {
                           Navigator.pushNamed(context, '/Notifications');
                         },
                       ),
                       ListTile(
-                        leading: Icon(Icons.lock,
-                            color: Colors.amber, size: 34),
+                        leading:
+                            Icon(Icons.lock, color: Colors.amber, size: 34),
                         title: Text("Privacy",
-                            style: TextStyle(
-                                color: Colors.amber, fontSize: 20)),
+                            style:
+                                TextStyle(color: Colors.amber, fontSize: 20)),
                         onTap: () {
                           Navigator.pushNamed(context, '/PrivacySettings');
                         },
@@ -206,32 +174,33 @@ class _SettingsViewState extends State<SettingsView> {
                         leading: Icon(Icons.question_mark,
                             color: Colors.amber, size: 34),
                         title: Text("Guide",
-                            style: TextStyle(
-                                color: Colors.amber, fontSize: 20)),
+                            style:
+                                TextStyle(color: Colors.amber, fontSize: 20)),
                         onTap: () {
                           Navigator.pushNamed(context, '/GuideView');
                         },
                       ),
                       ListTile(
                         leading:
-                        Icon(Icons.help, color: Colors.amber, size: 34),
+                            Icon(Icons.help, color: Colors.amber, size: 34),
                         title: Text("About Us",
-                            style: TextStyle(
-                                color: Colors.amber, fontSize: 20)),
+                            style:
+                                TextStyle(color: Colors.amber, fontSize: 20)),
                         onTap: () {
                           Navigator.pushNamed(context, '/AboutUs');
                         },
                       ),
                       SwitchListTile(
-                        title: Text("Music", style: TextStyle(color: Colors.amber, fontSize: 20)),
-                        secondary: Icon(Icons.music_note, color: Colors.amber, size: 34),
+                        title: Text("Music",
+                            style:
+                                TextStyle(color: Colors.amber, fontSize: 20)),
+                        secondary: Icon(Icons.music_note,
+                            color: Colors.amber, size: 34),
                         value: _isMusicEnabled,
                         onChanged: _toggleMusic,
                         activeColor: Colors.amber,
                       ),
-                      const Divider(color: Colors.amber),
                       const SizedBox(height: 20),
-
                       Center(
                         child: ElevatedButton(
                           onPressed: () {
@@ -250,37 +219,39 @@ class _SettingsViewState extends State<SettingsView> {
                                 actions: [
                                   TextButton(
                                     onPressed: () => Navigator.pop(context),
-                                    child: const Text("Cancel", style: TextStyle(color: Colors.amber)),
+                                    child: const Text("Cancel",
+                                        style: TextStyle(color: Colors.amber)),
                                   ),
                                   TextButton(
                                     onPressed: () {
                                       Navigator.pop(context); // Close dialog
-                                      Navigator.pushReplacementNamed(context, '/Login'); // Navigate
+                                      Navigator.pushReplacementNamed(
+                                          context, '/Login'); // Navigate
                                     },
-                                    child: const Text("Sign Out", style: TextStyle(color: Colors.red)),
+                                    child: const Text("Sign Out",
+                                        style: TextStyle(color: Colors.red)),
                                   ),
                                 ],
                               ),
                             );
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color.fromARGB(255, 128, 13, 13), // Your dark red
-                            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 14),
+                            backgroundColor: const Color.fromARGB(
+                                255, 128, 13, 13), // Your dark red
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 30, vertical: 14),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
                             ),
                           ),
-                          child: const Text("Sign Out", style: TextStyle(color: Colors.white)),
+                          child: const Text("Sign Out",
+                              style: TextStyle(color: Colors.white)),
                         ),
                       ),
-
-
                     ],
                   ),
                 ),
-
               ),
-
             ],
           ),
         ),

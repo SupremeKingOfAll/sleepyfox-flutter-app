@@ -27,17 +27,18 @@ class SleepyFoxCard extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24),
-            gradient: LinearGradient(
+            gradient: const LinearGradient(
               colors: [
-                Color.fromARGB(255, 23, 28, 55),
-                Colors.blueGrey.shade700,
+                Color.fromARGB(255, 25, 27, 53),
+                Color.fromARGB(255, 28, 29, 53),
+                Color.fromARGB(255, 32, 52, 111),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
           ),
           width: double.infinity,
-          height: 180,
+          height: 158,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 28),
             child: Row(
@@ -51,8 +52,7 @@ class SleepyFoxCard extends StatelessWidget {
                       Text(
                         title,
                         style: TextStyle(
-                          fontSize: 26,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
                           color: Colors.amber,
                         ),
                       ),
