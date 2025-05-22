@@ -1,16 +1,30 @@
-# elaros_gp4
+# SleepyFox 🦊
 
-A new Flutter project.
+**SleepyFox** is a mobile app built using Flutter that helps parents track their child's sleep habits. The app was developed as part of a university group project for the Mobile Applications Development module at Sheffield Hallam University.
 
-## Getting Started
+## 📱 Features
 
-This project is a starting point for a Flutter application.
+- 📊 Track daily sleep patterns for children
+- 🛏️ Log bedtime and wake-up routines
+- 🔔 Set reminders and notifications
+- ☁️ Firebase integration for authentication and cloud data storage
+- 📈 Display charts to visualise sleeping habits (e.g., pie/bar chart)
 
-A few resources to get you started if this is your first Flutter project:
+## 🛠️ Built With
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- **Flutter** (Dart)
+- **Firebase** (Authentication, Firestore)
+- **Provider** for state management
+- **Android Studio**
+- Clean MVC folder structure
+- 
+## 🚀 Getting Started
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+To run the app locally:
+
+```bash
+git clone https://github.com/SupremeKingOfAll/sleepyfox-flutter-app.git
+cd sleepyfox-flutter-app
+flutter pub get
+flutter run
+```
