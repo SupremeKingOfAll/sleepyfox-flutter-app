@@ -1,6 +1,11 @@
 # SleepyFox 🦊
 
-**SleepyFox** is a mobile app built using Flutter that helps parents track their child's sleep habits. The app was developed as part of a university group project for the Mobile Applications Development module at Sheffield Hallam University.
+**SleepyFox** is a mobile app built using Flutter that helps parents track their child's sleep habits. This application was developed as part of a university-industry project
+for a real client (SleepyFox). The project involved working to client requirements and delivering a functional mobile solution using Flutter.
+
+## My Contribution
+I contributed primarily to Flutter UI development, Firebase integration,
+state management using Provider, and data visualisation features.
 
 ## 📱 Features
 
